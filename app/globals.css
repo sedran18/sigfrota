@@ -5,7 +5,7 @@
   --foreground: #171717;
   --border: #E5E7EB;
   --text1: #374151;
-  --btn_color: #093a1c;
+  --secondary-color: #093a1c;
 }
 
 /* @media (prefers-color-scheme: dark) {
