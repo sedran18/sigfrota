@@ -1,7 +1,9 @@
-// Daashboard
+// Dashboard
 
 const Admin = () => {
-    return (<></>)
+    return (<>
+        Dashboard
+    </>)
 }
 
 export default Admin;

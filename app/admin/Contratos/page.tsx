@@ -1,5 +1,5 @@
 const Contratos = () => {
-    return (<></>)
+    return (<>Contratos</>)
 }
 
 export default Contratos;

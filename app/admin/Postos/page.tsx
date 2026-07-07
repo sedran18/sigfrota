@@ -1,5 +1,5 @@
 const Postos = () => {
-    return (<></>)
+    return (<>Postos</>)
 }
 
 export default Postos;

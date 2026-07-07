@@ -1,5 +1,5 @@
 const Motoristas = () => {
-    return (<></>)
+    return (<>Motoristas</>)
 }
 
 export default Motoristas;

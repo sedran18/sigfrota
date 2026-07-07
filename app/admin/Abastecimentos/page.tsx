@@ -1,5 +1,5 @@
 const Abastecimentos = () => {
-    return (<></>)
+    return (<>Abastecimentos</>)
 }
 
 export default Abastecimentos;
