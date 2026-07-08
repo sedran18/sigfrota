@@ -48,6 +48,7 @@ const Menu = () => {
                 src="/logo.png" 
                 alt='Logo Curto'
                 fill
+                sizes="(max-width: 640px) 96px, 112px"
                 className="object-contain object-left"
                 priority
             />

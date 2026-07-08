@@ -21,18 +21,16 @@ const DateCalendarPicker = () =>  {
   return (
     <div className="flex flex-col gap-1.5 w-full max-w-[260px]">
       <Popover open={open} onOpenChange={setOpen}>
-        {/* Adicionado o asChild fundamental para não quebrar a estrutura HTML */}
-        <PopoverTrigger className='bg-[var(--secondary-color)] text-white hover:bg-emerald/10 rounded-[7px]'>
+        <PopoverTrigger className='bg-[var(--secondary-color)] text-white hover:bg-[#093a1c]/90 rounded-none'>
           <Button 
             variant="outline" 
             id="date" 
             className={`
               w-full justify-between font-medium text-sm text-left px-3 h-11 transition-all duration-150
-              rounded-[7px] cursor-pointer border border-[1px]
+              rounded-none cursor-pointer border border-[1px]
               ${!date && "text-white font-normal"}
             `}
           >
-            {/* Texto movido para primeiro para manter o padrão de leitura da esquerda para a direita */}
             <span>
               {date?.from ? (
                 date.to ? (
@@ -45,7 +43,7 @@ const DateCalendarPicker = () =>  {
                   format(date.from, "dd/MM/yyyy", { locale: ptBR })
                 )
               ) : (
-                "Selecione um período"
+                "SELECIONE UM PERÍODO"
               )}
             </span>
             <CalendarDays size={18} className="text-white shrink-0 ml-2" />
@@ -53,7 +51,8 @@ const DateCalendarPicker = () =>  {
         </PopoverTrigger>
         
         <PopoverContent 
-          className="w-auto p-0 rounded-none border border-slate-300 shadow-md bg-white" 
+          className="w-auto p-0 rounded-none border border-slate-300 
+          shadow-md bg-slate-900" 
           align="start"
           sideOffset={4}
         >
@@ -69,26 +68,18 @@ const DateCalendarPicker = () =>  {
 
             onSelect={(selectedDate) => {
               setDate(selectedDate);
-
-              if (selectedDate?.from && selectedDate?.to) {
-                setOpen(false);
-              }
             }}
             
             classNames={{
                 selected: "bg-[#093a1c] text-white hover:bg-[#093a1c] hover:text-white focus:bg-[#093a1c] focus:text-white rounded-none font-bold",
-                
-                // Configuração base de cada dia (Hover quadrado)
-                day: " h-9 w-9 p-0 font-normal rounded-none  hover:text-slate-900 transition-colors cursor-pointer text-xs flex items-center justify-center ",
-                
-                // Célula quando o dia está desativado (Datas futuras)
+                month: 'text-white',
+                day: "h-9 w-9 p-0  rounded-none  hover:bg-slate-700 text-white transition-colors cursor-pointer  ",
+                chevron: 'text-white',
                 disabled: "text-slate-300 opacity-50 cursor-not-allowed hover:bg-transparent hover:text-slate-300",
-                today: "border-2 border-[#093a1c] font-bold",
-                // 4. ESTILIZAÇÃO DO RANGE COMPATÍVEL:
-                // Dias que ficam no meio do intervalo ganham um verde bem clarinho ou cinza sutil para indicar continuidade
+                today: "border-2 border-[#093a1c] font-bold ",
                 range_middle: "bg-black text-[#093a1c]  rounded-none font-medium",
-                range_start: "bg-[#093a1c] text-white rounded-none font-bold",
-                range_end: "bg-[#093a1c] text-white rounded-none font-bold"
+                range_start: "bg-emerald text-white rounded-none font-bold",
+                range_end: "bg-emerald text-white rounded-none font-bold"
             }}
             
             />
