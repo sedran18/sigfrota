@@ -1,4 +1,4 @@
-import { House, RefreshCcw, Fuel, CarFront, FileText, Users} from 'lucide-react';
+import { House, RefreshCcw, Fuel, CarFront, FileText, Users, ClipboardList} from 'lucide-react';
 import { type Paginas } from '../types';
 
 export const paginas: Paginas[]  = [
@@ -7,6 +7,11 @@ export const paginas: Paginas[]  = [
     pagina: 'Dashboard',
     link: ''
   }, 
+  {
+    icone: ClipboardList,
+    pagina: 'Solicitações',
+    link: '/solicitacoes'
+  },
   {
     icone: RefreshCcw,
     pagina: 'Abastecimentos',

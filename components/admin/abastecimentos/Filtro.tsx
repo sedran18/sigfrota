@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { ChevronDown, Filter, RotateCcw } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import {
   Popover,
   PopoverContent,
@@ -29,39 +28,37 @@ const Filtro = ({ title, campos }: FiltroProps) => {
   return (
     <div className="w-full md:w-auto md:min-w-[160px] max-w-[240px]">
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger className='bg-slate-900 border border-slate-800'>
-          <Button
-            variant="outline"
-            className={`
-              w-full justify-between font-bold text-xs text-left px-3.5 h-11 transition-all duration-150 rounded-none cursor-pointer
-              bg-slate-900 border border-slate-800 text-slate-200 tracking-wide uppercase
-              hover:bg-slate-800 hover:text-white hover:border-slate-700
-              focus:ring-1 focus:ring-[#093a1c] focus:border-[#093a1c]
-              ${open ? "border-[#093a1c] ring-1 ring-[#093a1c]" : ""}
-              ${selecionados.length > 0 ? "border-[#093a1c]/60 text-white" : ""}
-            `}
-          >
-            <div className="flex items-center gap-2.5 truncate pr-2">
-              <Filter 
-                size={14} 
-                className={`transition-colors shrink-0 ${selecionados.length > 0 ? "text-emerald-400" : "text-slate-400"}`} 
-              />
-              <span className="truncate">{title}</span>
-            </div>
-            
-            <div className="flex items-center gap-1.5 shrink-0">
-              {selecionados.length > 0 && (
-                <span className="flex items-center justify-center bg-[#093a1c] text-emerald-300 font-mono text-[10px] px-1.5 py-0.5 font-bold">
-                  {selecionados.length}
-                </span>
-              )}
-              <ChevronDown 
-                size={14} 
-                className="text-slate-400 shrink-0 transition-transform duration-200" 
-                style={{ transform: open ? 'rotate(180deg)' : 'none' }} 
-              />
-            </div>
-          </Button>
+        <PopoverTrigger 
+          className={`
+            flex w-full items-center justify-between px-3.5 h-11 
+            text-xs font-bold uppercase tracking-wide text-left 
+            bg-slate-900 border border-slate-800 text-slate-200 
+            transition-all duration-150 rounded-none cursor-pointer select-none
+            hover:bg-slate-800 hover:text-white hover:border-slate-700
+            focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800
+            ${open ? "border-emerald-800 ring-1 ring-emerald-800" : ""}
+            ${selecionados.length > 0 ? "border-emerald-800/60 text-white" : ""}
+          `}
+        >
+          <div className="flex items-center gap-2.5 truncate pr-2">
+            <Filter 
+              size={14} 
+              className={`transition-colors shrink-0 ${selecionados.length > 0 ? "text-emerald-400" : "text-slate-400"}`} 
+            />
+            <span className="truncate">{title}</span>
+          </div>
+          
+          <div className="flex items-center gap-1.5 shrink-0">
+            {selecionados.length > 0 && (
+              <span className="flex items-center justify-center bg-emerald-800 text-emerald-300 font-mono text-[10px] px-1.5 py-0.5 font-bold">
+                {selecionados.length}
+              </span>
+            )}
+            <ChevronDown 
+              size={14} 
+              className={`text-slate-400 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`} 
+            />
+          </div>
         </PopoverTrigger>
 
         <PopoverContent
