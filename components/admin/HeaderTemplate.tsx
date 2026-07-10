@@ -16,14 +16,13 @@ const HeaderTemplate = ({
       className="
         w-full 
         bg-white
-        border-b border-slate-200 
         px-5 py-5 md:px-8 md:py-6
         flex flex-col gap-5 
         md:flex-row md:items-center md:justify-between
       "
     >
       <div className="flex flex-col gap-0.5">
-        <h1 className="text-lg md:text-xl font-black tracking-wider text-[var(--secondary-color)] uppercase font-sans">
+        <h1 className="text-lg md:text-2xl font-black tracking-wider text-[var(--secondary-color)] uppercase font-sans">
           {title}
         </h1>
 

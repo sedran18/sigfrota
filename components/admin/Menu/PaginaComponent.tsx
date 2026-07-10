@@ -16,7 +16,7 @@ const PaginaComponent = ({ icone, pagina, link, isActive }: PaginaComponentProps
         flex items-center gap-3 px-4 py-3.5 mx-3 my-1 rounded-lg font-medium transition-all duration-200 group
         ${isActive 
           ? 'bg-[#093a1c] text-white shadow-md shadow-[#093a1c]/20' 
-          : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+          : 'text-[var(--bg2)] hover:bg-slate-100 hover:text-slate-900'
         }
       `}
     >

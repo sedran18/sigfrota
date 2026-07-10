@@ -41,7 +41,7 @@ const Menu = () => {
 
       {/* Mobile */}
 
-     <header className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 px-4 grid grid-cols-3 items-center">
+     <header className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 px-4 grid grid-cols-3 items-center z-40">
         <div className="flex items-center justify-start">
             <div className="h-15 relative w-24 sm:w-28">
             <Image 

@@ -7,8 +7,8 @@ const UserProfile = () => (
           <User size={20} />
         </div>
         <div className="flex flex-col min-w-0">
-          <p className="text-sm font-semibold text-slate-800 truncate">Nome do Usuário</p>
-          <p className="text-xs text-slate-500 truncate">admin@bacia.org</p>
+          <p className="text-sm font-semibold text-slate-800  ">Nome do Usuário</p>
+          <p className="text-xs text-slate-500  ">admin@bacia.org</p>
         </div>
       </div>
       

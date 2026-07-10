@@ -35,11 +35,9 @@ const AddRefueling = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button className="bg-[#093a1c] cursor-pointer hover:bg-[#093a1c]/90 text-white font-bold text-xs tracking-wider uppercase rounded-none h-11 px-4 gap-2 shadow-md">
+      <DialogTrigger className="bg-[#093a1c] cursor-pointer hover:bg-[#093a1c]/90 text-white font-bold text-xs tracking-wider uppercase flex items-center justify-center rounded-none h-11 px-4 gap-2 shadow-md">
           <Plus size={16} />
           Adicionar Abastecimento                
-        </Button>
       </DialogTrigger>
       
       <DialogContent className="sm:max-w-md bg-slate-950 border border-slate-800 text-slate-200 rounded-none p-6 shadow-2xl">

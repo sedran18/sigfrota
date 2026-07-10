@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import Request from "./Request"
+import RequestCard from "./RequestCard"
 import { type RequestData } from "@/lib/types"
 
 const dadosMock: RequestData[] = [
@@ -25,7 +25,7 @@ const dadosMock: RequestData[] = [
     created_by: "Supervisor Frota",
     contract_fuel_id: "CTR-2026-003",
     liters: 38.20,
-    fuel_type: "GASOLINA",
+    fuel_type: "GASOLINA COMUM",
     odometer: 62100,
     status: "COMPLETED",
     created_at: "07/07/2026 16:40",
@@ -38,16 +38,11 @@ const SolicitacaoList = () => {
 
 
   return (
-    <div className="w-full min-h-screen p-4 md:p-6 bg-slate-100 flex flex-col gap-4">
-      <div className="border-b border-slate-200 pb-3 mb-1">
-        <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">
-          Demandas de Abastecimento Ativas ({solicitacoes.length})
-        </h2>
-      </div>
+    <div className="w-full min-h-screen p-4 md:p-3 bg-slate-100 flex flex-col gap-4">
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         {solicitacoes.map((item) => (
-          <Request 
+          <RequestCard
             key={item.id} 
             data={item} 
           />

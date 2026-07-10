@@ -29,7 +29,7 @@ const DateCalendarPicker = () =>  {
             hover:bg-[#093a1c]/90
           "
         >
-          <span className="truncate pr-2">
+          <span className="  pr-2">
             {date?.from ? (
               date.to ? (
                 <>
