@@ -1,22 +1,10 @@
-"use client"
-
+import { ContractType } from "@/lib/types"
+import { dateToStringDate } from "@/lib/utils";
 import { Calendar, FileText, ShieldCheck, ShieldAlert, Edit2 } from "lucide-react"
 
-export interface ContratoData {
-  id: string
-  gas_station_id: string
-  contract_number: number
-  start_date: string
-  end_date: string
-  active: boolean
-  created_at: string
-  updated_at: string
-}
 
-interface ContratoCardProps {
-  data: ContratoData
-}
-const ContratoCard = ({ data }: ContratoCardProps) => {
+
+const ContratoCard = ({ data }: {data: ContractType}) => {
   return (
     <div className="relative flex flex-col justify-between gap-6 p-6 bg-white  
      border border-slate-200 transition-all rounded-none hover:border-slate-400 hover:shadow-lg group border-l-4 border-l-[var(--secondary-color)]">
@@ -25,10 +13,10 @@ const ContratoCard = ({ data }: ContratoCardProps) => {
         <div className="flex flex-col gap-1 min-w-0">
           <div className="flex items-center gap-2 text-xs font-bold  uppercase tracking-wider">
             <FileText size={14} className="shrink-0" />
-            <span>Nº CONTRATO: {data.contract_number}</span>
+            <span>Nº CONTRATO: {data.contractNumber}</span>
           </div>
           <h3 className="text-base font-black  tracking-wide uppercase   mt-0.5">
-            {data.gas_station_id.substring(0, 8).toUpperCase()}
+            {data.gasStation.substring(0, 8).toUpperCase()}
           </h3>
         </div>
         
@@ -48,7 +36,7 @@ const ContratoCard = ({ data }: ContratoCardProps) => {
           <div className="flex flex-col">
             <span className="text-[10px]  font-sans normal-case font-medium">Data de Início</span>
             <span className="text-sm font-black  font-mono tracking-tight">
-              {data.start_date.split(" ")[0]}
+              {dateToStringDate(data.startDate)}
             </span>
           </div>
         </div>
@@ -58,7 +46,7 @@ const ContratoCard = ({ data }: ContratoCardProps) => {
           <div className="flex flex-col">
             <span className="text-[10px]  font-sans normal-case font-medium">Data de Término</span>
             <span className="text-sm font-black  font-mono tracking-tight">
-              {data.end_date.split(" ")[0]}
+              {dateToStringDate(data.endDate)}
             </span>
           </div>
         </div>
@@ -79,4 +67,4 @@ const ContratoCard = ({ data }: ContratoCardProps) => {
   )
 }
 
-export default ContratoCard
+export default ContratoCard;

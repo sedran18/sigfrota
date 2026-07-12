@@ -1,40 +1,24 @@
-"use client"
-
-import * as React from "react"
-import { FileText, Phone, Calendar, Edit2, MapPin } from "lucide-react"
+import { FileText, X, Phone, Edit2, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { GasStationType } from "@/lib/types"
 
-export interface PostoData {
-  id: string
-  name: string
-  cnpj: string
-  phone: string
-  address: string
-  created_at: string
-  updated_at: string
-}
 
-interface PostoCardProps {
-  data: PostoData
-}
-
-const PostoCard = ({ data }: PostoCardProps) => {
-  const formattedDate = data.created_at?.split(" ")[0] || "---"
+const PostoCard = ({ data }: {data: GasStationType}) => {
 
   return (
     <div className="relative flex flex-col justify-between gap-6 p-5 sm:p-6 bg-white text-slate-900 border border-slate-200 transition-all
      rounded-none hover:border-slate-400 hover:shadow-lg group w-full border-l-4 border-l-[var(--secondary-color)]">
       
       <div className="flex flex-col gap-1 min-w-0">
-        <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
-          <Calendar size={14} className="shrink-0" />
-          <span>Cadastrado em: {formattedDate}</span>
-        </div>
         <h3 className="text-base font-black text-slate-900 tracking-wide uppercase   mt-0.5">
           {data.name}
         </h3>
       </div>
 
+      <Button>
+        <X />
+      </Button>
+      
       <div className="flex flex-col gap-4 border-t border-b border-slate-200/80 py-4 text-xs font-bold tracking-wide uppercase text-slate-500">
         <div className="flex items-center gap-3">
           <FileText size={16} className="text-slate-400 shrink-0" />

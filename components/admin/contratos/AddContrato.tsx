@@ -20,11 +20,6 @@ interface AddContratoProps {
 const AddContrato = ({ postos = [] }: AddContratoProps) => {
   const [open, setOpen] = React.useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Contrato cadastrado");
-    setOpen(false);
-  };
 
   const inputStyles = `
     h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 
@@ -52,7 +47,7 @@ const AddContrato = ({ postos = [] }: AddContratoProps) => {
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-white">
+        <form  className="flex flex-col gap-4 text-white">
           
           {/* Posto Vinculado */}
           <div className="flex flex-col gap-1.5">

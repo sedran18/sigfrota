@@ -29,14 +29,14 @@ const AddRequest = () => {
     <Dialog>
       <DialogTrigger 
         className="
-          flex items-center w-full justify-center gap-2 px-4 h-11 
+          flex items-center w-full min-w-55 justify-center gap-2 h-11 
           bg-[#093a1c] text-white text-xs font-bold uppercase tracking-wider 
           rounded-none cursor-pointer shadow-md transition-all duration-150
           hover:bg-[#093a1c]/90
         "
       >
         <Plus size={16} className="shrink-0" />
-        <span>Adicionar Solicitação</span>
+        <span className="">Adicionar Solicitação</span>
       </DialogTrigger>
       
       <DialogContent className="sm:max-w-md bg-slate-950 border border-slate-800 text-slate-200 rounded-none p-6 shadow-2xl">

@@ -1,18 +1,12 @@
-"use client"
-
 import { Fuel } from "lucide-react"
-import VeiculoCard, { VeiculoData } from "./VeiuloCard"
+import VeiculoCard from "./VeiuloCard"
+import { VehicleType } from "@/lib/types"
 
 
-
-interface VeiculosListProps {
-  items: VeiculoData[]
-}
-
-const VeiculosList = ({ items }: VeiculosListProps) => {
+const VeiculosList = ({ items }: {items: VehicleType[]}) => {
   if (!items || items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center text-center p-12 bg-slate-950 border border-slate-800 text-slate-400 rounded-none">
+      <div className="flex m-2 lg:m-10 flex-col items-center justify-center text-center p-12 bg-slate-950 border border-slate-800 text-slate-400 rounded-none">
         <Fuel size={32} className="text-slate-600 mb-2.5" />
         <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Nenhum veículo na frota</h3>
         <p className="text-xs text-slate-500 mt-1 uppercase">Cadastre novas unidades operacionais no painel.</p>
@@ -21,7 +15,7 @@ const VeiculosList = ({ items }: VeiculosListProps) => {
   }
 
   return (
-    <div className="grid  grid-cols-1 gap-4 w-full">
+    <div className="grid m-2 lg:m-10 grid-cols-1 gap-4 w-full">
       {items.map((veiculo) => (
         <VeiculoCard key={veiculo.id} data={veiculo} />
       ))}

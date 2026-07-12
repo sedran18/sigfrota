@@ -10,35 +10,74 @@ export type Paginas =  {
 export type Status = "PENDING" | "COMPLETED" | "CANCELED"
 export type FuelType = "GASOLINA COMUM" | "ETANOL" | "DIESEL S500" | "DIESEL S10" | "GASOLINA ADITIVADA"
 
-export interface RequestData {
+export interface  FuelingRequestType {
   id: string
-  vehicle_id: string
-  driver_id: string
-  created_by: string
-  contract_fuel_id: string
+  vehicleId: string
+  driverId: string
+  createdBy: string
+  contractFuelId: string
   liters: number | "full"
-  fuel_type: FuelType
+  fuelType: FuelType
   odometer: number | null
   status: Status
-  created_at: string
-  updated_at: string
+  createdAt: Date
+  updatedAt: Date
 }
 
-export interface AbastecimentoData {
+export interface  FuelingType {
   id: string
-  vehicle_id: string
-  driver_id: string | null
-  request_id: string
-  posto: string
-  fuel_type: FuelType
+  vehicleId: string
+  driverId?: string
+  requestId: string
+  gasStation: string
+  fuelType: FuelType
   odometer: number
   liters: number
-  price_per_liter: number
-  total_amount: number
-  distance_traveled: number
-  fuel_efficiency: number
-  observations: string | null
-  created_at: string
-  updated_at: string
+  pricePerLiter: number
+  totalAmount: number
+  distanceTraveled: number
+  fuelEfficiency: number
+  observations?: string
+  createdAt: Date
+  updatedAt: Date
 }
 
+export interface DriverType {
+  id: string
+  name: string
+  phone?: string
+  created_at: string
+}
+
+type ConservationStatus = 'GOOD' | 'UNDER_MAINTENANCE' | 'DEFFECTED'
+
+export interface VehicleType {
+  id: string
+  plate: string
+  model: string
+  brand: string
+  year: number
+  fuelType: FuelType
+  tankCapacity: number
+  conservationStatus: ConservationStatus
+  observation?: string
+  averageConsumptionKmL: number
+  currentOdometer: number
+}
+
+export interface GasStationType {
+  id: string
+  name: string
+  cnpj: string
+  address: string
+  phone: string
+}
+
+export interface ContractType {
+  id: string
+  gasStation: string
+  contractNumber: number
+  startDate: Date
+  endDate: Date
+  active: boolean
+}

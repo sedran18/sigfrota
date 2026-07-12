@@ -18,18 +18,17 @@ const DateCalendarPicker = () =>  {
   const today = React.useMemo(() => new Date(), []);
 
   return (
-    <div className="flex flex-col gap-1.5 w-full max-w-[260px]">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger 
           className="
-            flex w-full items-center justify-between h-11 px-3.5
+            flex w-full min-w-55 items-center justify-center h-11 px-3
             bg-[#093a1c] border border-transparent text-white 
             text-xs font-bold uppercase tracking-wider text-left 
             rounded-none cursor-pointer transition-all duration-150 select-none
             hover:bg-[#093a1c]/90
           "
         >
-          <span className="  pr-2">
+          <span className="pr-3">
             {date?.from ? (
               date.to ? (
                 <>
@@ -83,7 +82,6 @@ const DateCalendarPicker = () =>  {
             />
         </PopoverContent>
       </Popover>
-    </div>
   )
 }
 

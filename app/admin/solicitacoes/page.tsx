@@ -3,6 +3,7 @@ import HeaderTemplate from "@/components/admin/HeaderTemplate";
 import BasicFilters from "@/components/admin/BasicFilters";
 import AddRequest from "@/components/admin/solicitacoes/AddRequest";
 import SolicitacaoList from "@/components/admin/solicitacoes/SolicitacaoList";
+import {  fuelingRequestsData } from "@/lib/data/fuelingRequests";
 
 const Solicitacoes = () => {
   return (
@@ -12,7 +13,7 @@ const Solicitacoes = () => {
         <AddRequest />
       </HeaderTemplate>
       <BasicFilters />
-      <SolicitacaoList />
+      <SolicitacaoList items={ fuelingRequestsData}/>
     </div>
   )
 }

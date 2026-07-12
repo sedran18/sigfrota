@@ -31,7 +31,7 @@ const HeaderTemplate = ({
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+      <div className="flex flex-col sm:flex-row  gap-3 w-auto">
         {children}
       </div>
     </header>
