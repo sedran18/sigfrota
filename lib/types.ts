@@ -81,3 +81,8 @@ export interface ContractType {
   endDate: Date
   active: boolean
 }
+
+export type ResponseType<T> = {
+  success: boolean; 
+  data: T
+}

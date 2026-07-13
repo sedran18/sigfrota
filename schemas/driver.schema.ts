@@ -9,3 +9,20 @@ export const DriverSchema = z.object({
 })
 
 export type DriverType = z.infer<typeof DriverSchema>;
+
+export const CreateDriverSchema = DriverSchema.omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+})
+
+export type CreateDriverType = z.infer<typeof CreateDriverSchema>
+
+export const DriverIdSchema = z.uuid({
+  error: "Id precisa ser um UUID válido",
+});
+
+export type DriverIdType = z.infer<typeof DriverIdSchema>;
+
+export const UpdateDriverSchema = CreateDriverSchema.partial();
+export type UpdateDriverType = z.infer<typeof UpdateDriverSchema>;
