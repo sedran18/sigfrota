@@ -1,76 +1,115 @@
+'use server';
+
 import { CreateDriverSchema, CreateDriverType, DriverIdSchema, DriverIdType, DriverType, UpdateDriverSchema, UpdateDriverType} from "@/schemas/driver.schema";
-import { DriversData } from "../data/drivers";
 import { ResponseType } from "../types";
+import { writeFile, readFile } from "fs/promises";
+import { revalidatePath } from "next/cache";
+import path from "path";
+
+const PATH = path.join(process.cwd(), "lib", "data", "drivers.json");
 
 // CREATE
-export const createDriver = (item: CreateDriverType):ResponseType<string> => {
-    try {
-        const {name, phone} = CreateDriverSchema.parse(item);
+export const createDriver = async (item: CreateDriverType):Promise<ResponseType<string>> => {
+        const v = CreateDriverSchema.safeParse(item);
+        if (!v.success) return {success: false, error: v.error.message};
+        const {name, phone} = v.data;
         const id = crypto.randomUUID();
         const createdAt = new Date();
         const updatedAt = createdAt;
 
-        const newDriver = {id, name, phone, createdAt, updatedAt}
-        DriversData.push(newDriver);
-        
-        return {success: true, data: ''}
-    } catch (e) {
-        console.log(e)
-        return {success: false, data: 'Erro ao criar motorista'}
-    }
+
+        const newDriver = {id, name, phone, createdAt, updatedAt};
+        try {
+            const file = await readFile(PATH, 'utf-8');
+            const drivers: DriverType[] = JSON.parse(file)
+            drivers.push(newDriver);
+
+            await writeFile(PATH, JSON.stringify(drivers));
+            revalidatePath("/admin/motoristas")
+            return {success: true, data: 'Motorista criado com sucesso'};
+
+        } catch (err) {
+            console.log(err)
+            return {success: false, error: 'Erro ao salvar motorista'}
+        }
 }
 
 // READ
-export const getDrivers = (
-    id?: DriverIdType
-): ResponseType<DriverType[] | DriverType | string> => {
-
-    if (!id) return {success: true, data: DriversData};
-
-    const v = DriverIdSchema.safeParse(id);
-
-    if (!v.success) return {success: false, data: 'Formato inválido'};
-
-    const driver = DriversData.find(d => d.id === v.data);
-
-    if (!driver) return {success: false, data: "Motorista não encontrado"};
-
-    return {success: true, data: driver};
+export const getDrivers = async (): Promise<ResponseType<DriverType[]>> => {
+    try {
+        const file = await readFile(PATH, 'utf-8');
+        const drivers:DriverType[] = JSON.parse(file);
+        return {success: true, data: drivers }
+    } catch (err) {
+        console.log(err);
+        return {success: false, error: 'Erro ao buscar motoristas'}
+    }
 }
 
+// export const getDriverByID = (id: DriverIdType): ResponseType<DriverType> => {
+//     const v = DriverIdSchema.safeParse(id);
+
+//     if (!v.success) return {success: false, error: v.error.message}
+    
+//     const driver = DriversData.find(d => d.id === v.data);
+
+//     if (!driver) return {success: false, error: "Motorista não encontrado"};
+
+//     return {success: true, data: driver};
+// }
+
 // UPDATE
-export const updateDriver = (id: DriverIdType, campos: UpdateDriverType) => {
+export const updateDriver = async (id: DriverIdType, campos: UpdateDriverType):Promise<ResponseType<DriverType>> => {
     const vId = DriverIdSchema.safeParse(id)
-    if (!vId.success) return {success: false, data: vId.error.message}
+    if (!vId.success) return {success: false, error: vId.error.message}
 
     const vCampos = UpdateDriverSchema.safeParse(campos);
-    if (!vCampos.success) return {success: false, data: vCampos.error.message}
+    if (!vCampos.success) return {success: false, error: vCampos.error.message}
     const {data} =  vCampos;
 
-    const driver = DriversData.find(d => d.id === vId.data);
+    try {
+        const file = await readFile(PATH, 'utf-8');
+        const drivers:DriverType[] = JSON.parse(file);
 
-    if (!driver) return {success: false, data: 'Motorista não encontrado'}
+        const driver = drivers.find(d => d.id === vId.data);
 
-    driver.name = data?.name ?? driver.name;
-    driver.phone = data?.phone ?? driver.phone;
-    driver.updatedAt = new Date();
+        if (!driver) return {success: false, error: 'Motorista não encontrado'}
 
-    return {success: true, data: driver};
+        driver.name = data?.name ?? driver.name;
+        driver.phone = data?.phone ?? driver.phone;
+        driver.updatedAt = new Date();
+
+        await writeFile(PATH, JSON.stringify(drivers))
+        revalidatePath('/admin/motoristas')
+        return {success: true, data: driver};
+    } catch (err) {
+        console.log(err);
+        return {success: false, error: 'Erro ao atualizar motorista'}
+    }
+
 }
 
 // DELETE
-export const removeDriver = (id: DriverIdType): ResponseType<DriverType | string> => {
-    try {
-        const vId = DriverIdSchema.parse(id);
+export const removeDriver = async (id: DriverIdType): Promise<ResponseType<DriverType>> => {
+        const vId = DriverIdSchema.safeParse(id);
+        if (!vId.success) return {success: false, error: vId.error.message}
 
-        const index = DriversData.findIndex(d => d.id === vId);
-        if (index === -1) return {success: false, data: 'Motorista não foi encontrado'}
+        try {
+            const file = await readFile(PATH, 'utf-8');
+            const drivers:DriverType[] = JSON.parse(file);
 
-        const deleted = DriversData.splice(index, 1)[0];
-        return {success: true, data: deleted}
-    } catch (e) {
-        console.log(e);
-        return {success: false, data: 'Erro ao remover motorista'}
-    }
+            const index = drivers.findIndex(d => d.id === vId.data);
+            if (index === -1) return {success: false, error: 'Motorista não foi encontrado'}
+
+            const deleted = drivers.splice(index, 1)[0];
+            await writeFile(PATH, JSON.stringify(drivers));
+            revalidatePath('/admin/motoristas')
+            return {success: true, data: deleted}
+        } catch (err) {
+            console.log(err);
+            return {success:false, error:'Erro ao remover motorista'}
+        }
+
+
 }
 

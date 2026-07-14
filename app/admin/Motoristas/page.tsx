@@ -1,16 +1,26 @@
 import HeaderTemplate from "@/components/admin/HeaderTemplate";
 import AddMotorista from "@/components/admin/motoristas/AddMotorista";
 import MotoristasList from "@/components/admin/motoristas/MotoristasList";
-import { DriversData } from "@/lib/data/drivers";
+import { getDrivers } from "@/lib/mockActions/driver";
 
 
 
-const Motoristas = () => {
+const Motoristas = async () => {
+    const drivers = await getDrivers();
+    
     return (<>
         <HeaderTemplate title="Contratos">
           <AddMotorista />
         </HeaderTemplate>
-        <MotoristasList items={DriversData}/>
+        {
+            drivers.success && drivers.data.length > 0 ?
+                <MotoristasList drivers={drivers.data}/>
+            :
+            <div className="flex m-2 lg:m-10 flex-col res-center justify-center text-center p-12 bg-slate-950 border border-slate-800 text-slate-400 rounded-none">
+                <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Nenhum contrato encontrado</h3>
+                <p className="text-xs text-slate-500 mt-1 uppercase">Cadastre novas unidades .</p>
+            </div>
+        }
     </>)
 }
 

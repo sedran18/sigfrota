@@ -82,7 +82,12 @@ export interface ContractType {
   active: boolean
 }
 
-export type ResponseType<T> = {
-  success: boolean; 
-  data: T
-}
+export type ResponseType<T> = 
+    {
+      success: true;
+      data: T;
+    }
+  | {
+      success: false;
+      error: string;
+    };

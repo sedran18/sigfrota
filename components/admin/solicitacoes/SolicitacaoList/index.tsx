@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from "react"
 import RequestCard from "./RequestCard"
 import {  fuelingRequestType} from "@/lib/types"
