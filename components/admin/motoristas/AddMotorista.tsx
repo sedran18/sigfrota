@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 
 const AddMotorista = ({driver}: {driver?:DriverType}) => {
   const [open, setOpen] = useState(false);
+
   const form = useForm<CreateDriverType>({
     resolver: zodResolver(CreateDriverSchema),
     defaultValues: {
@@ -29,28 +30,22 @@ const AddMotorista = ({driver}: {driver?:DriverType}) => {
   });
 
   useEffect(() => {
-  form.reset({
-    name: driver?.name,
-    phone: driver?.phone,
-  });
-}, [driver, form]);
+    form.reset({...driver});
+  }, [driver, form]);
 
   const router =  useRouter();
 
   const handleSubmit = async (data: CreateDriverType) => {
-    if (driver) {
-      const motorista = await updateDriver(driver.id, data);
-      if (!motorista.success) {
-        form.setError("root", { type: "manual", message: motorista.error});
-        return;
-      }
-    } else {
-      const motorista = await createDriver(data);
-      if (!motorista.success) {
-        form.setError("root", { type: "manual", message: motorista.error });
-        return;
-      }
+    const motorista = driver ? 
+      await updateDriver(driver.id, data)
+    :
+      await createDriver(data);
+
+    if (!motorista.success) {
+      form.setError("root", { type: "manual", message: motorista.error });
+      return;
     }
+
     form.reset();
     router.refresh();
     setOpen(false);
@@ -64,7 +59,7 @@ const AddMotorista = ({driver}: {driver?:DriverType}) => {
 
   const inputStyles = `
     h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 
-     font-medium transition-colors duration-150 text-[10px] md:text-md
+     font-medium transition-colors duration-150 text-[11px]  md:text-md lg:text-[12px]
     focus-visible:ring-2 focus-visible:ring-[#0f5c2c] focus-visible:ring-offset-0
     focus-visible:border-[#0f5c2c] hover:border-slate-700
   `;
@@ -85,11 +80,14 @@ const AddMotorista = ({driver}: {driver?:DriverType}) => {
         setOpen(value);
       }}
     >
-      <DialogTrigger className="bg-[#093a1c] flex items-center justify-center cursor-pointer hover:bg-[#0f5c2c] active:bg-[#093a1c] transition-colors duration-150 text-white font-bold text-xs tracking-wider uppercase rounded-none h-11 px-4 gap-2 shadow-md hover:shadow-lg hover:shadow-[#093a1c]/30">
+      <DialogTrigger className="bg-[#093a1c] flex items-center justify-center cursor-pointer 
+      hover:bg-[#0f5c2c] active:bg-[#093a1c] transition-colors duration-150 
+      text-white font-bold text-xs  tracking-wider uppercase rounded-none 
+      h-11 px-4 gap-2 shadow-md hover:shadow-lg hover:shadow-[#093a1c]/30">
         {driver? <><Edit2 size={16} /> Editar </> : <> <Plus size={16} /> Adicionar Motorista </>} 
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-md bg-slate-950 border border-slate-800 rounded-none p-6 shadow-2xl shadow-black/50 text-white">
+      <DialogContent className="sm:max-w-md bg-slate-950 border border-slate-800 rounded-none p-6 shadow-2xl shadow-black/50 text-white h-[90%] overflow-scroll">
         <DialogHeader className="border-b border-slate-900 pb-4 mb-2 relative">
           <span className="absolute -left-6 top-0 bottom-4 w-[3px] bg-[#093a1c]" />
           <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
@@ -145,7 +143,7 @@ const AddMotorista = ({driver}: {driver?:DriverType}) => {
                 id="driver_phone"
                 type="tel"
                 placeholder="(00) 00000-0000"
-                className={`${inputStyles} font-mono pl-9`}
+                className={`${inputStyles} pl-9`}
               />
             </div>
 

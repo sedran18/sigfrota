@@ -38,4 +38,6 @@ export const UserRoleSchema = z.enum(['ADMIN', 'OPERATOR']);
 export type UserRoleType = z.infer<typeof UserRoleSchema>;
 
 
-
+//Vehicle Fuel Type
+ export const VehicleFuelTypeSchema = z.enum(['GASOLINA', 'ETANOL', 'DIESEL_COMUM', 'DIESEL_S10', 'FLEX']);
+ export type VehicleFuelTypeType = z.infer<typeof VehicleFuelTypeSchema>

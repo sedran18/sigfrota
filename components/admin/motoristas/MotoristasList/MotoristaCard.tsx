@@ -7,8 +7,7 @@ import DeleteDriverCard from "./DeleteDriverCard"
 const MotoristaCard = ({ driver }: {driver: DriverType}) => {
   
   return (
-    <div className="relative flex flex-col justify-between gap-5 p-6 bg-white border border-slate-200 transition-all duration-300 rounded-xl hover:border-slate-350 hover:shadow-lg group border-l-4 border-l-[var(--secondary-color)]">
-      
+    <div className="relative flex flex-col justify-between gap-5 p-6 bg-white border border-slate-200 transition-all duration-300 hover:border-slate-350 hover:shadow-lg group border-l-4 border-l-[var(--secondary-color)]">
       <div className="flex justify-between items-start gap-4">
         <div className="flex flex-col gap-1 min-w-0">
           <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">

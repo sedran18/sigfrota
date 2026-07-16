@@ -58,7 +58,7 @@ export const getDrivers = async (): Promise<ResponseType<DriverType[]>> => {
 //     return {success: true, data: driver};
 // }
 
-// UPDATE
+// UPDATE (put atualmente, talvez mudar para patch depois)
 export const updateDriver = async (id: DriverIdType, campos: UpdateDriverType):Promise<ResponseType<DriverType>> => {
     const vId = DriverIdSchema.safeParse(id)
     if (!vId.success) return {success: false, error: vId.error.message}

@@ -14,7 +14,9 @@ const DeleteDriverCard = ({driverId}: {driverId :DriverIdType}) => {
         if (!areYouSure) return;
         
         const removed = await removeDriver(id);
-        if (!removed.success) alert('Erro ao deletar motorista');
+        if (!removed.success) return alert('Erro ao deletar motorista');
+
+        alert('Motorista removido com sucesso!')
     }
   return (
         <Button 
