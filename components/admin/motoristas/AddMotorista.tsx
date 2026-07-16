@@ -165,7 +165,7 @@ const AddMotorista = ({driver}: {driver?:DriverType}) => {
               className="cursor-pointer bg-[#093a1c] hover:bg-[#0f5c2c] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-xs tracking-wider uppercase rounded-none px-1 sm:px-2 md:px-6 h-11 transition-colors duration-150 flex items-center gap-2"
             >
               {form.formState.isSubmitting && <Loader2 size={14} className="animate-spin" />}
-              Salvar Condutor
+              Salvar 
             </Button>
           </div>
         </form>

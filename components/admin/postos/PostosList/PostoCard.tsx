@@ -1,38 +1,28 @@
-import { FileText, X, Phone, Edit2, MapPin } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { GasStationType } from "@/lib/types"
+import { FileText, MapPin } from "lucide-react"
+import { GasStationType } from "@/schemas/gasStation.schema";
+import DeleteGasStationBtn from "./DeleteGasStationBtn";
+import AddPosto from "../AddPosto";
 
 
-const PostoCard = ({ data }: {data: GasStationType}) => {
-
+const PostoCard = ({ gasStation }: {gasStation: GasStationType}) => {
   return (
     <div className="relative flex flex-col justify-between gap-6 p-5 sm:p-6 bg-white text-slate-900 border border-slate-200 transition-all
      rounded-none hover:border-slate-400 hover:shadow-lg group w-full border-l-4 border-l-[var(--secondary-color)]">
       
       <div className="flex flex-col gap-1 min-w-0">
         <h3 className="text-base font-black text-slate-900 tracking-wide uppercase   mt-0.5">
-          {data.name}
+          {gasStation.name}
         </h3>
       </div>
 
-      <Button>
-        <X />
-      </Button>
+      <DeleteGasStationBtn gasStationiD={gasStation.id} />
       
       <div className="flex flex-col gap-4 border-t border-b border-slate-200/80 py-4 text-xs font-bold tracking-wide uppercase text-slate-500">
         <div className="flex items-center gap-3">
           <FileText size={16} className="text-slate-400 shrink-0" />
           <div className="flex flex-col">
             <span className="text-[10px] font-sans normal-case font-medium text-slate-400">Documentação</span>
-            <span className="text-sm font-black text-slate-900 font-mono tracking-tight">CNPJ: {data.cnpj}</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Phone size={16} className="text-slate-400 shrink-0" />
-          <div className="flex flex-col">
-            <span className="text-[10px] font-sans normal-case font-medium text-slate-400">Contato Direto</span>
-            <span className="text-sm font-black text-slate-900 font-mono tracking-tight">{data.phone || "NÃO INFORMADO"}</span>
+            <span className="text-sm font-black text-slate-900 font-mono tracking-tight">CNPJ: {gasStation.cnpj}</span>
           </div>
         </div>
 
@@ -41,7 +31,7 @@ const PostoCard = ({ data }: {data: GasStationType}) => {
           <div className="flex flex-col min-w-0 w-full">
             <span className="text-[10px] font-sans normal-case font-medium text-slate-400 mb-0.5">Localização</span>
             <span className="text-xs font-bold text-slate-700 uppercase leading-relaxed font-sans tracking-wide break-words">
-              {data.address || "Não informado"}
+              {gasStation.address || "Não informado"}
             </span>
           </div>
         </div>
@@ -50,13 +40,7 @@ const PostoCard = ({ data }: {data: GasStationType}) => {
       <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:items-center gap-3 text-xs">
 
         
-        <Button 
-          type="button"
-          className="flex items-center justify-center gap-1.5 w-full sm:w-auto px-4 h-9 bg-[#093a1c] hover:bg-[#093a1c]/90 text-white text-xs font-bold uppercase tracking-wider rounded-none transition-all cursor-pointer shadow-md"
-        >
-          <Edit2 size={11} />
-          <span>Editar</span>
-        </Button>
+        <AddPosto gasStation={gasStation}/>
       </div>
 
     </div>

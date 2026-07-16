@@ -1,7 +1,6 @@
 "use client"
 
-import * as React from "react";
-import { Plus } from "lucide-react";
+import { Edit2, Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,90 +11,142 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CreateGasStationSchema, CreateGasStationType, GasStationType } from "@/schemas/gasStation.schema";
+import { createGasStation, updateGasStation } from "@/lib/mockActions/gasStation";
+import { formatCNPJ } from "@/lib/utils";
 
 
-const AddPosto = () => {
-  const [open, setOpen] = React.useState(false);
+const AddPosto = ({gasStation} : {gasStation?: GasStationType}) => {
+  const [open, setOpen] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Posto cadastrado");
+  const form = useForm<CreateGasStationType>({
+    resolver: zodResolver(CreateGasStationSchema),
+    defaultValues: {
+      name: '',
+      cnpj: '',
+      address: '',
+    }
+  });
+
+  const {register, formState, handleSubmit, setValue} = form;
+
+  const onSubmit = async (data: CreateGasStationType) => {
+    const res = gasStation ? 
+      await updateGasStation(gasStation.id, data)
+    :
+      await createGasStation(data);
+    
+    if (!res.success) return form.setError('root', {type: 'manual', message: res.error});
+
+    alert(res.data);
+    form.reset();
     setOpen(false);
-  };
+  }
 
   const inputStyles = `
     h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 
     placeholder: font-medium focus-visible:ring-[#093a1c]
   `;
 
+  useEffect(() => {
+    form.reset({...gasStation})
+  }, [gasStation, form]);
+
   return (
-    <Dialog open={open} onOpenChange={setOpen} >
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="bg-[#093a1c] flex items-center justify-center cursor-pointer hover:bg-[#093a1c]/90 text-white font-bold text-xs tracking-wider uppercase rounded-none h-11 px-4 gap-2 shadow-md">
-          <Plus size={16} />
-          Adicionar Posto
+        {
+          gasStation ? 
+            <>
+              <Edit2 size={16} />
+              Editar
+            </>
+          :
+            <>
+              <Plus size={16} />
+              Adicionar Posto
+            </>
+        }
       </DialogTrigger>
-
+      {
+        formState.errors.root && (
+          <span>{formState.errors.root.message}</span>
+        )
+      }
       <DialogContent className="sm:max-w-md bg-slate-950 border border-slate-800 rounded-none p-6 shadow-2xl">
-        <DialogHeader className="border-b border-slate-900 pb-4 mb-2 flex flex-row items-center justify-between">
-          <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
-            Cadastrar Novo Posto
-          </DialogTitle>
-        </DialogHeader>
+        {
+          !gasStation && (
+            <DialogHeader className="border-b border-slate-900 pb-4 mb-2 flex flex-row items-center justify-between">
+              <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
+                Cadastrar Novo Posto
+              </DialogTitle>
+            </DialogHeader>
+          )
+        }
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-white">
+
+
+        <form className="flex flex-col gap-4 text-white" onSubmit={handleSubmit(onSubmit)}>
           
-          {/* Nome do Posto */}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="name" className="text-[10px] font-bold uppercase tracking-wider">
               Nome do Posto
             </Label>
             <Input
+              {...register('name')}
               id="name"
               placeholder="EX: POSTO SANTA MARTA LTDA"
               className={inputStyles}
-              required
             />
+            {
+              formState.errors.name && (
+                <span>{formState.errors.name.message}</span>
+              )
+            }
           </div>
 
-          {/* CNPJ */}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="cnpj" className="text-[10px] font-bold uppercase tracking-wider">
               CNPJ <span className="">*</span>
             </Label>
             <Input
+              {...register('cnpj')}
               id="cnpj"
+              maxLength={18}
+              onChange={(e) => {
+                setValue("cnpj", formatCNPJ(e.target.value));
+              }}
               placeholder="00.000.000/0001-00"
               className={`${inputStyles} font-mono`}
-              required
             />
+            {
+              formState.errors.cnpj && (
+                <span>{formState.errors.cnpj.message}</span>
+              )
+            }
           </div>
 
-          {/* Telefone */}
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="phone" className="text-[10px] font-bold uppercase tracking-wider">
-              Telefone <span className=" font-normal italic">(Opcional)</span>
-            </Label>
-            <Input
-              id="phone"
-              type="tel"
-              placeholder="(00) 00000-0000"
-              className={`${inputStyles} font-mono`}
-            />
-          </div>
-
+          
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="address" className="text-[10px] font-bold uppercase tracking-wider">
               Endereço Completo <span className="">*</span>
             </Label>
             <textarea
+              {...register('address')}
               id="address"
               placeholder="RUA, NÚMERO, BAIRRO, CIDADE - UF"
-              required
               className="w-full min-h-[80px] p-3 text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-100 rounded-none placeholder: outline-none resize-none transition-all focus:border-[#093a1c] uppercase"
             />
+            {
+              formState.errors.address && (
+                <span>{formState.errors.address.message}</span>
+              )
+            }
           </div>
 
-          {/* Ações */}
           <div className="flex justify-end gap-3 border-t border-slate-900 pt-4 mt-2">
             <Button
               type="button"
@@ -107,9 +158,11 @@ const AddPosto = () => {
             </Button>
             <Button
               type="submit"
+              disabled={formState.isSubmitting}
               className="cursor-pointer bg-[#093a1c] hover:bg-[#093a1c]/90 text-white font-bold text-xs tracking-wider uppercase rounded-none px-6 h-11"
             >
-              Salvar Registro
+              {formState.isSubmitting && <Loader2 size={14} className="animate-spin" />}
+              Salvar
             </Button>
           </div>
         </form>

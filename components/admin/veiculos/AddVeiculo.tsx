@@ -1,6 +1,6 @@
 "use client"
 
-import { Plus, Car, Edit2 } from "lucide-react";
+import { Plus, Car, Edit2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -100,6 +100,11 @@ const AddVeiculo = ({ vehicle }: { vehicle?: VehicleType }) => {
           </DialogTitle>
         </DialogHeader>
 
+        {
+          formState.errors.root && (
+            <span>{formState.errors.root.message}</span>
+          )
+        }
         <form className="flex flex-col gap-5 sm:gap-6" onSubmit={handleSubmit(onSubmit)}>
           
           {/* Linha 1 - Placa, Marca, Modelo */}
@@ -247,7 +252,8 @@ const AddVeiculo = ({ vehicle }: { vehicle?: VehicleType }) => {
               disabled={formState.isSubmitting}
               className="bg-[#093a1c] hover:bg-[#0f5c2c] active:bg-[#093a1c] text-white font-bold text-xs tracking-wider uppercase rounded-none px-8 h-11 order-1 sm:order-2"
             >
-              Salvar Veículo
+              {formState.isSubmitting && <Loader2 size={14} className="animate-spin" />}
+              Salvar
             </Button>
           </div>
         </form>

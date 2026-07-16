@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "id": "48ef4b28-7435-463f-a8b1-1099c886dda5",
+    "plate": "ABC1FBB",
+    "model": "strada",
+    "brand": "fiat",
+    "year": 2024,
+    "fuelType": "GASOLINA",
+    "tankCapacity": 50,
+    "conservationStatus": "GOOD",
+    "observation": "",
+    "averageConsumptionKmL": 11,
+    "currentOdometer": 342432,
+    "createdAt": "2026-07-16T19:07:03.891Z",
+    "updatedAt": "2026-07-16T19:08:22.760Z"
+  }
+]

@@ -19,14 +19,14 @@ export const createVehicle = async (item:CreateVehicleType): Promise<ResponseTyp
     const createdAt = new Date();
     const updatedAt = createdAt;
 
-    const vehicle = {id,...item,createdAt, updatedAt };
+    const vehicle = {id,...v.data,createdAt, updatedAt };
 
     try {
         const file = await readFile(PATH, 'utf-8');
         const vehicles: VehicleType[] = JSON.parse(file);
         vehicles.push(vehicle);
 
-        await writeFile(PATH, JSON.stringify(vehicles));
+        await writeFile(PATH, JSON.stringify(vehicles, null, 2));
 
         revalidatePath('/admin/veiculos');
         return {success: true, data: 'Veículo criado com sucesso'}
@@ -61,9 +61,9 @@ export const updateVehicle = async (id: VehicleIdType, campos: CreateVehicleType
 
         const vehicle = vehicles.find(v => v.id === id);
         if (!vehicle) return {success: false, error: 'Veículo não encontrado'};
-        Object.assign(vehicle, campos, {updatedAt: new Date()});
+        Object.assign(vehicle, vCampos.data, {updatedAt: new Date()});
 
-        await writeFile(PATH, JSON.stringify(vehicles));
+        await writeFile(PATH, JSON.stringify(vehicles, null, 2));
         revalidatePath('/admin/veiculos')
         return {success: true, data: 'Objeto atualizado com sucesso'}
 
@@ -81,7 +81,7 @@ export const deleteVehicle = async (id: VehicleIdType): Promise<ResponseType<Veh
         const file = await readFile(PATH, 'utf-8');
         const vehicles: VehicleType[] = JSON.parse(file);
 
-        const index = vehicles.findIndex(motorista => motorista.id === v.data);
+        const index = vehicles.findIndex(veiculo => veiculo.id === v.data);
         const deleted = vehicles.splice(index, 1)[0];
 
         await writeFile(PATH, JSON.stringify(vehicles));

@@ -12,19 +12,18 @@ const PATH = path.join(process.cwd(), "lib", "data", "drivers.json");
 export const createDriver = async (item: CreateDriverType):Promise<ResponseType<string>> => {
         const v = CreateDriverSchema.safeParse(item);
         if (!v.success) return {success: false, error: v.error.message};
-        const {name, phone} = v.data;
         const id = crypto.randomUUID();
         const createdAt = new Date();
         const updatedAt = createdAt;
 
 
-        const newDriver = {id, name, phone, createdAt, updatedAt};
+        const newDriver = {id, ...v.data, createdAt, updatedAt};
         try {
             const file = await readFile(PATH, 'utf-8');
             const drivers: DriverType[] = JSON.parse(file)
             drivers.push(newDriver);
 
-            await writeFile(PATH, JSON.stringify(drivers));
+            await writeFile(PATH, JSON.stringify(drivers, null, 2));
             revalidatePath("/admin/motoristas")
             return {success: true, data: 'Motorista criado com sucesso'};
 
@@ -79,7 +78,7 @@ export const updateDriver = async (id: DriverIdType, campos: UpdateDriverType):P
         driver.phone = data?.phone ?? driver.phone;
         driver.updatedAt = new Date();
 
-        await writeFile(PATH, JSON.stringify(drivers))
+        await writeFile(PATH, JSON.stringify(drivers, null, 2))
         revalidatePath('/admin/motoristas')
         return {success: true, data: driver};
     } catch (err) {
@@ -109,7 +108,5 @@ export const removeDriver = async (id: DriverIdType): Promise<ResponseType<Drive
             console.log(err);
             return {success:false, error:'Erro ao remover motorista'}
         }
-
-
 }
 
