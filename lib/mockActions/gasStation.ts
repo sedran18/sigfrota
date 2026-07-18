@@ -20,6 +20,26 @@ export const getGasStations = async ():Promise<ResponseType<GasStationType[]>> =
     }
 }
 
+export const getGasStationById = async (id: GasStationIdType): Promise<ResponseType<GasStationType>> => {
+    const v = GasStationIdSchema.safeParse(id);
+    if(!v.success) return {success: false, error: v.error.message};
+
+    try {   
+        const file = await readFile(PATH, 'utf-8');
+        const gasStations: GasStationType[] = JSON.parse(file);
+        const gasStation = gasStations.find(g => g.id === v.data);
+
+        if (!gasStation) return {success:false, error: 'Posto não encontrado!'};
+
+        return {success: true, data: gasStation}
+
+    } catch (err) {
+        console.log(err);
+        return {success: false, error: 'Erro ao acessar posto'}
+    }
+
+}
+
 export const createGasStation = async (data:CreateGasStationType):Promise<ResponseType<string>> => {
     const v = CreateGasStationSchema.safeParse(data);
 

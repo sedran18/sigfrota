@@ -1,6 +1,5 @@
 import { FileText, MapPin } from "lucide-react"
 import { GasStationType } from "@/schemas/gasStation.schema";
-import DeleteGasStationBtn from "./DeleteGasStationBtn";
 import AddPosto from "../AddPosto";
 
 
@@ -15,8 +14,6 @@ const PostoCard = ({ gasStation }: {gasStation: GasStationType}) => {
         </h3>
       </div>
 
-      <DeleteGasStationBtn gasStationiD={gasStation.id} />
-      
       <div className="flex flex-col gap-4 border-t border-b border-slate-200/80 py-4 text-xs font-bold tracking-wide uppercase text-slate-500">
         <div className="flex items-center gap-3">
           <FileText size={16} className="text-slate-400 shrink-0" />

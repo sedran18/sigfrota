@@ -12,14 +12,26 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { GasStationType } from "@/schemas/gasStation.schema";
+import { useForm, FormProvider} from "react-hook-form";
+import {  CreateContractSchema, CreateContractType } from "@/schemas/contract.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import AddContractFuel from "./AddContractFuel";
 
-interface AddContratoProps {
-  postos: { id: string; name: string }[];
-}
-
-const AddContrato = ({ postos = [] }: AddContratoProps) => {
+const AddContrato = ({ postos = [] }: {postos: GasStationType[]}) => {
   const [open, setOpen] = React.useState(false);
 
+  const form = useForm<CreateContractType>({
+    resolver: zodResolver(CreateContractSchema),
+    defaultValues: {
+      active: true,
+      contractFuels: []
+    }
+  })
+
+//deixar padrão o contractId
+
+  const {register, formState} = form;
 
   const inputStyles = `
     h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 
@@ -49,45 +61,62 @@ const AddContrato = ({ postos = [] }: AddContratoProps) => {
 
         <form  className="flex flex-col gap-4 text-white">
           
-          {/* Posto Vinculado */}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="gas_station_id" className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
               Posto de Combustível *
             </Label>
-            <select id="gas_station_id" className={selectStyles} defaultValue="" required>
+            <select
+              {...register('gasStationId')}
+              id="gas_station_id" 
+              className={selectStyles} defaultValue="">
               <option value="" disabled hidden>Selecione o posto parceiro</option>
               {postos.map(p => (
                 <option value={p.id} key={p.id} className="bg-slate-950">{p.name}</option>
               ))}
             </select>
+            {
+              formState.errors.gasStationId && (
+                <span>{formState.errors.gasStationId.message}</span>
+              )
+            }
           </div>
 
-          {/* Número do Contrato */}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="contract_number" className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
               Número do Contrato *
             </Label>
             <Input
+              {...register('contractNumber')}
               id="contract_number"
               type="number"
               placeholder="EX: 1024"
               className={`${inputStyles} font-mono`}
               required
             />
+            {
+              formState.errors.contractNumber && (
+                <span>{formState.errors.contractNumber.message}</span>
+              )
+            }
           </div>
 
-          {/* Grid de Datas (Vigência) */}
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="start_date" className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 Data de Início *
               </Label>
               <Input
+                {...register('startDate')}
                 id="start_date"
                 type="date"
                 className={`${inputStyles} font-mono uppercase`}
                 required
               />
+            {
+              formState.errors.startDate && (
+                <span>{formState.errors.startDate.message}</span>
+              )
+            }
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -95,15 +124,20 @@ const AddContrato = ({ postos = [] }: AddContratoProps) => {
                 Data de Término *
               </Label>
               <Input
+                {...register('endDate')}
                 id="end_date"
                 type="date"
                 className={`${inputStyles} font-mono uppercase`}
                 required
               />
+            {
+              formState.errors.endDate && (
+                <span>{formState.errors.endDate.message}</span>
+              )
+            }
             </div>
           </div>
-
-          {/* Status Inicial Ativo */}
+{/* 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="active" className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
               Status do Contrato *
@@ -112,9 +146,15 @@ const AddContrato = ({ postos = [] }: AddContratoProps) => {
               <option value="true" className="bg-slate-950">VIGENTE / ATIVO</option>
               <option value="false" className="bg-slate-950">BLOQUEADO / INATIVO</option>
             </select>
-          </div>
-
-          {/* Ações */}
+          </div> */}
+            <FormProvider {...form}>
+              <AddContractFuel />
+            </FormProvider>
+            {
+              formState.errors.contractFuels && (
+                <span>{formState.errors.contractFuels.message}</span>
+              )
+            }
           <div className="flex justify-end gap-3 border-t border-slate-900 pt-4 mt-2">
             <Button
               type="button"

@@ -1,5 +1,5 @@
 import { VehicleType } from "@/schemas/vehicle.schema"
-import { Gauge, Fuel, ShieldAlert, FileText, Edit2, Calendar } from "lucide-react"
+import { Gauge, Fuel, ShieldAlert, FileText,  Calendar } from "lucide-react"
 import {ConservationStatusType } from "@/schemas/enums.schema"
 import DeleteVehicleBtn from "./DeleteVehicleBtn"
 import AddVeiculo from "../AddVeiculo"
