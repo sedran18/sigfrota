@@ -1,10 +1,10 @@
 import { dateToStringDate } from "@/lib/utils";
-import { ContractType } from "@/schemas/contract.schema";
-import { Calendar, FileText, ShieldCheck, ShieldAlert, Edit2 } from "lucide-react"
+import {  GetContractsResponseType } from "@/schemas/contract.schema";
+import { Calendar, FileText, ShieldCheck, ShieldAlert } from "lucide-react"
 
 
 
-const ContratoCard = ({ contrato, postoName }: {contrato: ContractType, postoName: string}) => {
+const ContratoCard = ({ contrato, postoName }: {contrato: GetContractsResponseType, postoName: string}) => {
   return (
     <div className="relative flex flex-col justify-between gap-6 p-6 bg-white  
      border border-slate-200 transition-all rounded-none hover:border-slate-400 hover:shadow-lg group border-l-4 border-l-[var(--secondary-color)]">
@@ -51,18 +51,57 @@ const ContratoCard = ({ contrato, postoName }: {contrato: ContractType, postoNam
           </div>
         </div>
       </div>
+      <div className="space-y-3">
+        <p className="text-sm font-semibold text-gray-700">
+          Combustíveis
+        </p>
 
-      <div className="flex items-center justify-end pt-1 text-xs ">
-        
-        <button 
-          type="button"
-          className="flex items-center gap-1.5 px-4 h-9 bg-[#093a1c] hover:bg-[#093a1c]/90 text-white text-xs font-bold uppercase tracking-wider rounded-none transition-all cursor-pointer shadow-md"
-        >
-          <Edit2 size={11} />
-          <span>Editar</span>
-        </button>
-      </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {contrato.contractFuels.map((fuel) => (
+            <div
+              key={fuel.id}
+              className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+            >
+              <div className="mb-3 flex items-center justify-between">
+                <h3 className="font-semibold text-gray-900">
+                  {fuel.fuelType}
+                </h3>
 
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p className="text-gray-500">Preço por litro</p>
+                  <p className="font-medium text-gray-900">
+                    R$ {fuel.pricePerLiter.toFixed(2)}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500">Contratados</p>
+                  <p className="font-medium text-gray-900">
+                    {fuel.litersContracted} L
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500">Disponíveis</p>
+                  <p className="font-medium text-green-600">
+                    {fuel.litersAvailable} L
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500">Consumidos</p>
+                  <p className="font-medium text-gray-900">
+                    {fuel.litersConsumed} L
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+  </div>
     </div>
   )
 }

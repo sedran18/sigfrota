@@ -1,5 +1,5 @@
 import z from "zod";
-import { CreateContractFuelSchema } from "./contractFuel.schema";
+import { ContractFuelSchema, CreateContractFuelSchema } from "./contractFuel.schema";
 
 export const ContractSchema = z.object({
   id: z.uuid({
@@ -46,8 +46,8 @@ export const CreateContractSchema = ContractSchema.omit({
     createdAt: true,
     updatedAt: true,
 }).extend({
-    contractFuels: z.array(CreateContractFuelSchema.omit({contractId: true}))
-});
+    contractFuels: z.array(CreateContractFuelSchema.omit({contractId: true})).min(1, "Adicione pelo menos um combustível")
+})
 
 export type CreateContractType = z.infer<typeof CreateContractSchema>;
 
@@ -56,7 +56,7 @@ export type ContractIdType = z.infer<typeof ContractIdSchema>;
 
 
 export const GetContractsResponseSchema = ContractSchema.extend({
-    contractFuels: z.array(CreateContractFuelSchema.omit({contractId: true})).min(1, "Adicione pelo menos um combustível"),
+    contractFuels: z.array(ContractFuelSchema).min(1),
 })
 export type GetContractsResponseType = z.infer<typeof GetContractsResponseSchema>;
 

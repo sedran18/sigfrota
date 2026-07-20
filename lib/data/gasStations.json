@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": "0fa5ff45-9a26-413b-b09a-6e1a3fdf745e",
+    "name": "Santos",
+    "cnpj": "19202416000110",
+    "address": "adasdsdsa",
+    "createdAt": "2026-07-18T23:37:34.825Z",
+    "updatedAt": "2026-07-18T23:37:34.825Z"
+  },
+  {
+    "id": "6cfcac40-e14c-4fa8-bbc0-391eb119d5bd",
+    "name": "Santa Marta",
+    "cnpj": "19202416000110",
+    "address": "12'22312332sadasfas",
+    "createdAt": "2026-07-18T23:37:49.009Z",
+    "updatedAt": "2026-07-18T23:37:49.009Z"
+  }
+]

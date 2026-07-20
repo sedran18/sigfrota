@@ -88,7 +88,7 @@ export const updateDriver = async (id: DriverIdType, campos: UpdateDriverType):P
 
 }
 
-// DELETE
+// DELETE (no db nao vai ser possível deletar por segurança, vai ter que ativar ou desaticar motorista)
 export const removeDriver = async (id: DriverIdType): Promise<ResponseType<DriverType>> => {
         const vId = DriverIdSchema.safeParse(id);
         if (!vId.success) return {success: false, error: vId.error.message}

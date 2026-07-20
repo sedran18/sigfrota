@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { FuelType, FuelTypeSchema } from "@/schemas/enums.schema";
 import {  useFieldArray, useFormContext } from "react-hook-form";
 import { CreateContractType } from "@/schemas/contract.schema";
-import { Fuel, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 
@@ -18,14 +18,11 @@ const AddContractFuel = () => {
   const fuelTypes: FuelType[] = FuelTypeSchema.options;
 
   return (
-    <div className="w-full space-y-4">
-      {/* Header com o botão de adicionar */}
-      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div className="flex items-center gap-2 text-sm font-bold text-slate-700 uppercase tracking-wide">
-          <Fuel size={18} className="text-[var(--secondary-color)]" />
-          <span>Combustíveis do Contrato</span>
-        </div>
-        
+    <div className="w-full space-y-3 pt-2">
+      <div className="flex items-center justify-between border-b border-slate-900 pb-2">
+        <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+          Combustíveis do Contrato
+        </span>
         <Button
           type="button"
           variant="outline"
@@ -37,37 +34,36 @@ const AddContractFuel = () => {
               litersContracted: 0,
             })
           }
-          className="flex items-center gap-1.5 border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg h-9 text-xs font-semibold"
+          className="flex items-center gap-1.5 border-slate-800 bg-slate-900 text-emerald-400 hover:text-white hover:bg-slate-800 rounded-none h-9 text-xs font-bold uppercase tracking-wider"
         >
-          <Plus size={15} />
-          Adicionar Tipo
+          <Plus size={14} />
+          Adicionar
         </Button>
       </div>
 
-      {/* Lista de campos dinâmicos */}
-      <div className="space-y-3">
+      <div className="space-y-3 w-full">
         {fields.length === 0 && (
-          <div className="text-center py-6 border border-dashed border-slate-200 rounded-xl text-xs text-slate-400 font-medium">
+          <div className="text-center py-6 border border-dashed border-slate-900 bg-slate-900/30 text-xs text-slate-500 font-medium">
             Nenhum combustível adicionado a este contrato ainda.
           </div>
         )}
 
         {fields.map((field, index) => (
-          <div 
-            key={field.id} 
-            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-4 bg-slate-50/50 border border-slate-100 rounded-xl transition-all duration-200 hover:border-slate-200"
+          <div
+            key={field.id}
+            className="grid grid-cols-1 sm:grid-cols-12 gap-3 p-3 bg-slate-900/50 border border-slate-900 items-end transition-all duration-200 hover:border-slate-800"
           >
-            {/* Tipo de Combustível */}
-            <div className="flex-1 min-w-[140px]">
-              <label className="text-[10px] text-slate-400 font-semibold uppercase block mb-1 tracking-wider">
+            {/* Combustível */}
+            <div className="sm:col-span-5 flex flex-col gap-1">
+              <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
                 Combustível
               </label>
               <select
                 {...form.register(`contractFuels.${index}.fuelType`)}
-                className="w-full h-9 px-3 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400 transition-colors uppercase tracking-tight"
+                className="w-full h-10 px-2 rounded-none border border-slate-800 bg-slate-950 text-xs font-semibold text-slate-200 focus:outline-none focus:border-[#093a1c] uppercase"
               >
                 {fuelTypes.map((fuelType) => (
-                  <option value={fuelType} key={fuelType}>
+                  <option value={fuelType} key={fuelType} className="bg-slate-950">
                     {fuelType}
                   </option>
                 ))}
@@ -75,49 +71,47 @@ const AddContractFuel = () => {
             </div>
 
             {/* Preço por Litro */}
-            <div className="flex-1">
-              <label className="text-[10px] text-slate-400 font-semibold uppercase block mb-1 tracking-wider">
+            <div className="sm:col-span-3 flex flex-col gap-1">
+              <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
                 Preço / Litro
               </label>
               <Input
                 type="number"
                 step="0.01"
                 placeholder="R$ 0,00"
-                className="h-9 bg-white border-slate-200 text-sm font-semibold text-slate-700 font-mono rounded-lg"
-                {...form.register(
-                  `contractFuels.${index}.pricePerLiter`,
-                  { valueAsNumber: true }
-                )}
+                className="h-10 bg-slate-950 border-slate-800 text-slate-100 font-mono text-xs rounded-none focus-visible:ring-[#093a1c]"
+                {...form.register(`contractFuels.${index}.pricePerLiter`, {
+                  valueAsNumber: true,
+                })}
               />
             </div>
 
             {/* Litros Contratados */}
-            <div className="flex-1">
-              <label className="text-[10px] text-slate-400 font-semibold uppercase block mb-1 tracking-wider">
-                Litros Contratados
+            <div className="sm:col-span-3 flex flex-col gap-1">
+              <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
+                Litros
               </label>
               <Input
                 type="number"
                 placeholder="0"
-                className="h-9 bg-white border-slate-200 text-sm font-semibold text-slate-700 font-mono rounded-lg"
-                {...form.register(
-                  `contractFuels.${index}.litersContracted`,
-                  { valueAsNumber: true }
-                )}
+                className="h-10 bg-slate-950 border-slate-800 text-slate-100 font-mono text-xs rounded-none focus-visible:ring-[#093a1c]"
+                {...form.register(`contractFuels.${index}.litersContracted`, {
+                  valueAsNumber: true,
+                })}
               />
             </div>
 
-            {/* Botão de Remover */}
-            <div className="flex items-end justify-end sm:pt-5">
+            {/* Remover */}
+            <div className="sm:col-span-1 flex justify-end">
               <Button
                 type="button"
                 variant="ghost"
                 size="icon"
                 onClick={() => remove(index)}
-                className="h-9 w-9 text-slate-400 hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors shrink-0"
+                className="h-10 w-10 text-slate-500 hover:text-red-400 hover:bg-red-950/30 rounded-none transition-colors shrink-0"
                 title="Remover combustível"
               >
-                <Trash2 size={15} />
+                <Trash2 size={16} />
               </Button>
             </div>
           </div>

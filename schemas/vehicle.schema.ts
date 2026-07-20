@@ -48,7 +48,7 @@ export const VehicleSchema = z.object({
     .number({ error: 'Quilometragem atual precisa ser um número' })
     .int({ error: 'Quilometragem atual deve ser um número inteiro' })
     .nonnegative({ error: 'Quilometragem atual não pode ser negativa' }),
-
+  // active: z.boolean(),
   createdAt: z.date({ error: 'Data de criação inválida' }),
 
   updatedAt: z.date({ error: 'Data de atualização inválida' }),

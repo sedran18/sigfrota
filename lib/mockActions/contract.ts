@@ -4,7 +4,7 @@ import { ContractIdSchema, ContractIdType, ContractType, CreateContractSchema, C
 import { ResponseType } from "../types";
 import path from "path";
 import { ContractFuelType } from "@/schemas/contractFuel.schema";
-import { getFileJSONToArray, saveArrayToJSON } from "../utils";
+import { getFileJSONToArray, saveArrayToJSON } from "../json-file";
 import { GetContractsResponseType } from "@/schemas/contract.schema";
 import { revalidatePath } from "next/cache";
 
@@ -43,6 +43,9 @@ export const createContract = async (campos: CreateContractType):Promise<Respons
         createdAt, 
         updatedAt
     }
+
+    if (v.data.endDate < v.data.startDate || v.data.endDate < createdAt) return {success:false, error: 'Data inválida'}
+    
     const newContractFuels:ContractFuelType[] = contractFuels.map(c => {
         const cFuelId = crypto.randomUUID();
         const litersAvailable = c.litersContracted;

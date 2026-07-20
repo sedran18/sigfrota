@@ -16,6 +16,8 @@ export const GasStationSchema = z.object({
       error: "CNPJ inválido",
     }),
 
+  // active: z.boolean(),
+
   address: z
     .string({ error: "Endereço tem tipo inválido" })
     .min(5, { error: "Endereço precisa ter no mínimo 5 caracteres" })

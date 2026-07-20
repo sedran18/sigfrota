@@ -14,7 +14,7 @@ const Contratos = async () => {
           <AddContrato postos={resPostos.success ? resPostos.data : []}/>
         </HeaderTemplate>
         {
-            resContratos  .success ? 
+            resContratos.success && resContratos.data.length > 0? 
                 <ContratosList contratos={resContratos.data} postos={resPostos.success ? resPostos.data : []} />
             :
                 <div className="flex flex-col m-2 lg:m-10 items-center justify-center text-center p-12 bg-slate-950 border border-slate-800 text-slate-400 rounded-none">
