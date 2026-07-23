@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum VehicleFuelType {
+  DIESEL_S10
+  DIESEL_COMUM
+  GASOLINA
+  ETANOL
+  FLEX
+}
+
+enum FuelType {
+  ETANOL
+  DIESEL_COMUM
+  DIESEL_S10
+  GASOLINA_ADITIVADA
+  GASOLINA_COMUM
+}
+
+enum ConservationStatus {
+  GOOD
+  UNDER_MAINTENANCE
+  DEFFECTED
+}
+
+enum RequesStatusSchema {
+  PENDING 
+  COMPLETED
+  CANCELED
+}
+
+model Driver {
+  id        String   @id @default(uuid()) @db.Uuid
+  name String @db.VarChar(100)
+  phone String? 
+  active Boolean @default(true)
+
+  fuelingRequests FuelingRequest[]
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("drivers")
+}
+
+model Vehicle {
+  id String @id @default(uuid()) @db.Uuid
+  plate String @unique @db.VarChar(7)
+  model String @db.VarChar(100)
+  brand String @db.VarChar(50)
+  year Int
+  fuelType VehicleFuelType @default(GASOLINA)
+  tankCapacity Decimal @db.Decimal(10, 2)
+  conservationStatus ConservationStatus @default(GOOD)
+  observation String @db.VarChar(500)
+  averageConsumption Decimal @db.Decimal(5,2)
+  currentOdometer Int
+  active Boolean @default(true)
+
+  fuelingRequests FuelingRequest[]
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("vehicles")
+}
+
+model GasStation {
+  id String @id @default(uuid()) @db.Uuid
+  name String @db.VarChar(100)
+  cnpj String @unique @db.VarChar(18)
+  active Boolean @default(true)
+  address String @db.VarChar(255)
+
+  contracts Contract[]
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("gas_stations")
+}
+
+model Contract {
+  id String @id @default(uuid()) @db.Uuid
+
+  contractNumber Int 
+
+  startDate DateTime @db.Date
+  endDate DateTime @db.Date
+
+  gasStationId  String  @db.Uuid
+  gasStation  GasStation  @relation(fields: [gasStationId], references: [id], onDelete: Cascade)
+
+  contractFuels ContractFuel[]
+
+  active Boolean @default(true)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("contracts")
+}
+
+model ContractFuel {
+  id String @id @default(uuid()) @db.Uuid
+
+  contractId  String  @db.Uuid
+  contract  Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  fuelType FuelType
+  pricePerLiter Decimal @db.Decimal(5,2)
+  litersContracted Decimal @db.Decimal(11,2)
+  litersAvailable Decimal @db.Decimal(11,2)
+  litersConsumed Decimal @db.Decimal(11,2)
+
+  fuelingRequests FuelingRequest[]
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("contract_fuels")
+}
+
+model FuelingRequest {
+  id String @id @default(uuid()) @db.Uuid
+
+  vehicleId String @db.Uuid
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+
+  driverId String @db.Uuid
+  driver Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  
+  contractFuelId String @db.Uuid
+  contractFuel ContractFuel @relation(fields: [contractFuelId], references: [id], onDelete: Cascade) 
+
+  liters Decimal @db.Decimal(5,2)
+  fuelType FuelType
+  odometer Int
+  status RequesStatusSchema
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+}
