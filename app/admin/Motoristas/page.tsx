@@ -1,7 +1,7 @@
 import HeaderTemplate from "@/components/admin/HeaderTemplate";
 import AddMotorista from "@/components/admin/motoristas/AddMotorista";
 import MotoristasList from "@/components/admin/motoristas/MotoristasList";
-import { getDrivers } from "@/lib/mockActions/driver";
+import { getDrivers } from "@/lib/actions/driver";
 
 const Motoristas = async () => {
     const drivers = await getDrivers();
