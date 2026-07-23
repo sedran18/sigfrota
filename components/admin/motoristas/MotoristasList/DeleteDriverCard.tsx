@@ -1,7 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button'
-import { updateDriver } from '@/lib/actions/driver';
-import { removeDriver } from '@/lib/mockActions/driver';
+import { removeDriver, updateDriver } from '@/lib/actions/driver';
 import { DriverIdSchema, DriverIdType } from '@/schemas/driver.schema';
 import { X } from 'lucide-react'
 import { Switch } from '@/components/ui/switch';
@@ -23,10 +22,11 @@ const DeleteDriverCard = ({driverId, isUsed, active}: {driverId :DriverIdType, i
         if (!areYouSure) return;
         
         const removed = await removeDriver(id);
-        if (!removed.success) return alert('Erro ao deletar motorista');
+        if (!removed.success) return alert(removed.error);
 
         alert('Motorista removido com sucesso!')
     }
+
     return isUsed ? (
         <Switch
           checked={active}

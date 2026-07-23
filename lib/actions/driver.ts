@@ -90,9 +90,10 @@ export const removeDriver = async (id: DriverIdType): Promise<ResponseType<Drive
             const requestRefuelings = await prisma.fuelingRequest.findFirst({where: {
                 driverId: vId.data
             },
-            select: {
-                id: true,
-            }});
+                select: {
+                    id: true,
+                }
+            });
 
             if (requestRefuelings) return {success:false, error : 'Não é possível apagar motoristas já usados no sistema, tente alterar o status'};
 

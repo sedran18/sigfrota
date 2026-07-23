@@ -26,7 +26,9 @@ export const DriverIdSchema = z.uuid({
 
 export type DriverIdType = z.infer<typeof DriverIdSchema>;
 
-export const UpdateDriverSchema = CreateDriverSchema.partial();
+export const UpdateDriverSchema = CreateDriverSchema.extend({
+    active: z.boolean({error: 'Active precisa ser boolean'}).default(true),
+}).partial();
 export type UpdateDriverType = z.infer<typeof UpdateDriverSchema>;
 
 export const DriverWithUsageSchema = DriverSchema.extend({
