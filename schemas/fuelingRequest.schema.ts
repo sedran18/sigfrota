@@ -5,7 +5,7 @@ export const FuelingRequestSchema = z.object({
     id: z.uuid(),
     vehicleId: z.uuid(),
     driverId: z.uuid(),
-    createdBy: z.uuid(),
+    // createdBy: z.uuid(),
     contractFuelId: z.uuid(),
     liters: z.number().positive().or(z.literal("full")),
     fuelType: FuelTypeSchema,
