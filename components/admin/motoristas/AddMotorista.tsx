@@ -13,13 +13,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateDriverSchema, CreateDriverType, DriverType } from "@/schemas/driver.schema";
-import { createDriver, updateDriver } from "@/lib/mockActions/driver";
+import { CreateDriverSchema, CreateDriverType, DriverWithUsageType} from "@/schemas/driver.schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { createDriver, updateDriver } from "@/lib/actions/driver";
 
-const AddMotorista = ({driver}: {driver?:DriverType}) => {
+
+const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
   const [open, setOpen] = useState(false);
+  const isEditing = !!driver;
 
   const form = useForm<CreateDriverType>({
     resolver: zodResolver(CreateDriverSchema),
@@ -30,14 +32,24 @@ const AddMotorista = ({driver}: {driver?:DriverType}) => {
   });
 
   useEffect(() => {
-    form.reset({...driver});
-  }, [driver, form]);
+      if (driver) {
+        form.reset({
+          name: driver.name,
+          phone: driver.phone ?? "",   
+        });
+      } else {
+        form.reset({ name: "", phone: "" });
+      }
+    }, [driver, form]);
 
   const router =  useRouter();
 
   const handleSubmit = async (data: CreateDriverType) => {
-    const motorista = driver ? 
+    console.log(data);
+    console.log(isEditing);
+    const motorista = isEditing ? 
       await updateDriver(driver.id, data)
+      // alterar depois o update para somente dirty fields (patch e não put request)
     :
       await createDriver(data);
 
