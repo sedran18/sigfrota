@@ -15,8 +15,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateGasStationSchema, CreateGasStationType, GasStationType } from "@/schemas/gasStation.schema";
-import { createGasStation, updateGasStation } from "@/lib/mockActions/gasStation";
 import { formatCNPJ } from "@/lib/utils";
+import { createGasStation, updateGasStation } from "@/lib/actions/gasStation";
 
 
 const AddPosto = ({gasStation} : {gasStation?: GasStationType}) => {
@@ -41,7 +41,6 @@ const AddPosto = ({gasStation} : {gasStation?: GasStationType}) => {
     
     if (!res.success) return form.setError('root', {type: 'manual', message: res.error});
 
-    alert(res.data);
     form.reset();
     setOpen(false);
   }

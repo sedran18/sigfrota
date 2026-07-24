@@ -1,7 +1,7 @@
 import HeaderTemplate from "@/components/admin/HeaderTemplate";
 import AddPosto from "@/components/admin/postos/AddPosto";
 import PostosList from "@/components/admin/postos/PostosList";
-import { getGasStations } from "@/lib/mockActions/gasStation";
+import { getGasStations } from "@/lib/actions/gasStation";
 import { Building2 } from "lucide-react";
 
 const Postos = async () => {

@@ -1,11 +1,10 @@
 'use server';
 
-import { CreateDriverSchema, CreateDriverType, DriverIdSchema, DriverIdType, DriverType, UpdateDriverSchema, UpdateDriverType} from "@/schemas/driver.schema";
+import { CreateDriverSchema, CreateDriverType, DriverIdSchema, DriverIdType, DriverType, UpdateDriverSchema, UpdateDriverType, DriverWithUsageType} from "@/schemas/driver.schema";
 import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
 import { Driver} from "../generated/prisma/client";
-import { DriverWithUsageType } from "@/schemas/driver.schema";
 
 export const createDriver = async (item: CreateDriverType):Promise<ResponseType<string>> => {
         const v = CreateDriverSchema.safeParse(item);

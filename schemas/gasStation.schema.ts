@@ -16,7 +16,7 @@ export const GasStationSchema = z.object({
       error: "CNPJ inválido",
     }),
 
-  // active: z.boolean(),
+  active: z.boolean(),
 
   address: z
     .string({ error: "Endereço tem tipo inválido" })
@@ -31,7 +31,8 @@ export const GasStationSchema = z.object({
 export type GasStationType = z.infer<typeof GasStationSchema>
 
 export const CreateGasStationSchema = GasStationSchema.omit({
-  id: true, 
+  id: true,
+  active: true,
   createdAt: true,
   updatedAt: true
 });
@@ -40,3 +41,15 @@ export type CreateGasStationType = z.infer<typeof CreateGasStationSchema>;
 
 export const GasStationIdSchema = z.uuid({error: 'Id com formato inválido'});
 export type GasStationIdType = z.infer<typeof GasStationIdSchema>
+
+export const UpdateGasStationSchema = CreateGasStationSchema.extend({
+    active: z.boolean({error: 'Active precisa ser boolean'}).default(true),
+}).partial();
+
+export type UpdateGasStationType = z.infer<typeof UpdateGasStationSchema>;
+
+export const GasStationWithUsageSchema = GasStationSchema.extend({
+    isUsed: z.boolean({error: 'isUsed precisa ser boolean'})
+})
+
+export type GasStationWithUsageType = z.infer<typeof GasStationWithUsageSchema>
