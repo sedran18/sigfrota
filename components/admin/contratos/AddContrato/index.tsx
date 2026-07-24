@@ -12,20 +12,19 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { GasStationType } from "@/schemas/gasStation.schema";
+import {GasStationWithUsageType } from "@/schemas/gasStation.schema";
 import { useForm, FormProvider} from "react-hook-form";
 import {  CreateContractSchema, CreateContractType } from "@/schemas/contract.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AddContractFuel from "./AddContractFuel";
-import { createContract } from "@/lib/mockActions/contract";
+import { createContract } from "@/lib/actions/contract";
 
-const AddContrato = ({ postos = [] }: {postos: GasStationType[]}) => {
+const AddContrato = ({ postos = [] }: {postos: GasStationWithUsageType[]}) => {
   const [open, setOpen] = React.useState(false);
 
   const form = useForm<CreateContractType>({
     resolver: zodResolver(CreateContractSchema),
     defaultValues: {
-      active: true,
       contractFuels: []
     }
   })
@@ -33,9 +32,8 @@ const AddContrato = ({ postos = [] }: {postos: GasStationType[]}) => {
 
   const onSubmit = async (data: CreateContractType) => {
         const res = await createContract(data);
-        
         if (!res.success) return form.setError('root', {type: 'manual', message: res.error});
-        alert(res.data);
+        alert('Contrato criado com sucesso');
         form.reset();
         setOpen(false);
   }
@@ -75,7 +73,6 @@ const AddContrato = ({ postos = [] }: {postos: GasStationType[]}) => {
         )}
 
         <form className="flex flex-col gap-4 text-white" onSubmit={handleSubmit(onSubmit)}>
-          {/* Posto de Combustível */}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="gas_station_id" className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">
               Posto de Combustível *
@@ -102,7 +99,6 @@ const AddContrato = ({ postos = [] }: {postos: GasStationType[]}) => {
             )}
           </div>
 
-          {/* Número do Contrato */}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="contract_number" className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">
               Número do Contrato *
@@ -122,7 +118,6 @@ const AddContrato = ({ postos = [] }: {postos: GasStationType[]}) => {
             )}
           </div>
 
-          {/* Datas em Grid Responsivo */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="start_date" className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -161,7 +156,6 @@ const AddContrato = ({ postos = [] }: {postos: GasStationType[]}) => {
             </div>
           </div>
 
-          {/* Subcomponente de Combustíveis */}
           <FormProvider {...form}>
             <AddContractFuel />
           </FormProvider>
@@ -171,7 +165,6 @@ const AddContrato = ({ postos = [] }: {postos: GasStationType[]}) => {
             </span>
           )}
 
-          {/* Ações / Botões */}
           <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3 border-t border-slate-900 pt-4 mt-2">
             <Button
               type="button"

@@ -1,7 +1,7 @@
 import { dateToStringDate } from "@/lib/utils";
 import {  GetContractsResponseType } from "@/schemas/contract.schema";
 import { Calendar, FileText, ShieldCheck, ShieldAlert } from "lucide-react"
-
+import DeleteContratoBtn from "./DeleteContratoBtn";
 
 
 const ContratoCard = ({ contrato, postoName }: {contrato: GetContractsResponseType, postoName: string}) => {
@@ -19,7 +19,6 @@ const ContratoCard = ({ contrato, postoName }: {contrato: GetContractsResponseTy
             {postoName.toUpperCase()}
           </h3>
         </div>
-        
         <span className={`flex items-center gap-1.5 px-3 py-1 text-xs font-black uppercase tracking-wider border shrink-0 ${
           contrato.active 
             ? "bg-emerald-100 border-emerald-300 text-emerald-900" 
@@ -29,6 +28,7 @@ const ContratoCard = ({ contrato, postoName }: {contrato: GetContractsResponseTy
           {contrato.active ? "VIGENTE" : "ENCERRADO"}
         </span>
       </div>
+        <DeleteContratoBtn contractId={contrato.id} isUsed={contrato.isUsed} active={contrato.active} />
 
       <div className="grid grid-cols-2 gap-x-6 gap-y-4 border-t border-b border-slate-200/80 py-4 text-xs font-bold tracking-wide uppercase ">
         <div className="flex items-center gap-3">

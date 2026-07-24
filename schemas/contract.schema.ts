@@ -1,4 +1,4 @@
-import z from "zod";
+import z, { boolean } from "zod";
 import { ContractFuelSchema, CreateContractFuelSchema } from "./contractFuel.schema";
 
 export const ContractSchema = z.object({
@@ -43,6 +43,7 @@ export type ContractType = z.infer<typeof ContractSchema>
 
 export const CreateContractSchema = ContractSchema.omit({
     id: true,
+    active: true,
     createdAt: true,
     updatedAt: true,
 }).extend({
@@ -57,6 +58,12 @@ export type ContractIdType = z.infer<typeof ContractIdSchema>;
 
 export const GetContractsResponseSchema = ContractSchema.extend({
     contractFuels: z.array(ContractFuelSchema).min(1),
+    isUsed: z.boolean()
 })
 export type GetContractsResponseType = z.infer<typeof GetContractsResponseSchema>;
 
+export const UpdateContractSchema = CreateContractSchema.extend({
+    active: z.boolean({error: 'Active precisa ser boolean'}).default(true),
+}).partial();
+
+export type UpdateContractType = z.infer<typeof UpdateContractSchema>;

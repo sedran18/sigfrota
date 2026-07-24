@@ -1,8 +1,8 @@
 import AddContrato from "@/components/admin/contratos/AddContrato";
 import ContratosList from "@/components/admin/contratos/ContratosList";
 import HeaderTemplate from "@/components/admin/HeaderTemplate";
-import { getContracts } from "@/lib/mockActions/contract";
-import { getGasStations } from "@/lib/mockActions/gasStation";
+import { getContracts } from "@/lib/actions/contract";
+import { getGasStations } from "@/lib/actions/gasStation";
 
 const Contratos = async () => {
     const resContratos = await getContracts();
