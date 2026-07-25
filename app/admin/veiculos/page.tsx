@@ -1,7 +1,7 @@
 import HeaderTemplate from "@/components/admin/HeaderTemplate";
 import AddVeiculo from "@/components/admin/veiculos/AddVeiculo";
 import VeiculosList from "@/components/admin/veiculos/VeiculosList";
-import { getVehicles } from "@/lib/mockActions/vehicle";
+import { getVehicles } from "@/lib/actions/vehicle";
 import { Fuel } from "lucide-react";
 
 const Veiculos = async () => {

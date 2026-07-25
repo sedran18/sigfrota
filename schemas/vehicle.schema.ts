@@ -40,10 +40,12 @@ export const VehicleSchema = z.object({
     .nullable()
     .optional(),
 
-  averageConsumptionKmL: z
+  averageConsumption: z
     .number({ error: 'Consumo médio precisa ser um número' })
     .positive({ error: 'Consumo médio deve ser maior que zero' }),
 
+  active: z.boolean(),
+  
   currentOdometer: z
     .number({ error: 'Quilometragem atual precisa ser um número' })
     .int({ error: 'Quilometragem atual deve ser um número inteiro' })
@@ -58,6 +60,7 @@ export type VehicleType = z.infer<typeof VehicleSchema>;
 
 export const CreateVehicleSchema = VehicleSchema.omit({
   id: true,
+  active: true,
   createdAt: true,
   updatedAt: true,
 });
@@ -66,3 +69,15 @@ export type CreateVehicleType = z.infer<typeof CreateVehicleSchema>;
 
 export const VehicleIdSchema = z.uuid({error: 'Id com formato inválido'})
 export type VehicleIdType = z.infer<typeof VehicleIdSchema>
+
+export const UpdateVehicleSchema = CreateVehicleSchema.extend({
+    active: z.boolean({error: 'Active precisa ser boolean'}).default(true),
+}).partial();
+
+export type UpdateVehicleType = z.infer<typeof UpdateVehicleSchema>;
+
+export const VehicleWithUsageSchema = VehicleSchema.extend({
+    isUsed: z.boolean({error: 'isUsed precisa ser boolean'})
+})
+
+export type VehicleWithUsageType = z.infer<typeof VehicleWithUsageSchema>

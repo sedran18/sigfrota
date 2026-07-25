@@ -13,11 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { CreateVehicleSchema, CreateVehicleType, VehicleType } from "@/schemas/vehicle.schema";
+import { CreateVehicleSchema, CreateVehicleType, VehicleWithUsageType } from "@/schemas/vehicle.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createVehicle, updateVehicle } from "@/lib/mockActions/vehicle";
+import { createVehicle, updateVehicle } from "@/lib/actions/vehicle";
 
-const AddVeiculo = ({ vehicle }: { vehicle?: VehicleType }) => {
+const AddVeiculo = ({ vehicle }: { vehicle?: VehicleWithUsageType }) => {
 
   
   
@@ -32,7 +32,7 @@ const AddVeiculo = ({ vehicle }: { vehicle?: VehicleType }) => {
       fuelType: vehicle?.fuelType ?? 'GASOLINA',
       tankCapacity: vehicle?.tankCapacity,
       currentOdometer: vehicle?.currentOdometer,
-      averageConsumptionKmL: vehicle?.averageConsumptionKmL,
+      averageConsumption: vehicle?.averageConsumption,
       conservationStatus: vehicle?.conservationStatus ?? 'GOOD',
       observation: vehicle?.observation,
     }
@@ -49,7 +49,6 @@ const AddVeiculo = ({ vehicle }: { vehicle?: VehicleType }) => {
     
     if (!res.success) return form.setError('root', {type: 'manual', message: res.error});
 
-    alert(res.data);
     form.reset();
     setOpen(false);
   }
@@ -201,14 +200,14 @@ const AddVeiculo = ({ vehicle }: { vehicle?: VehicleType }) => {
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="average_consumption_km_l" className={labelStyles}>Média (KM/L) *</Label>
               <Input 
-                {...register('averageConsumptionKmL', { valueAsNumber: true })}
+                {...register('averageConsumption', { valueAsNumber: true })}
                 id="average_consumption_km_l" 
                 type="number" 
                 step="0.01" 
                 placeholder="10.5" 
                 className={inputStyles} 
               />
-              {formState.errors.averageConsumptionKmL && <span className="text-rose-400 text-xs mt-1">{formState.errors.averageConsumptionKmL.message}</span>}
+              {formState.errors.averageConsumption && <span className="text-rose-400 text-xs mt-1">{formState.errors.averageConsumption.message}</span>}
             </div>
           </div>
 

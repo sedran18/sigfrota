@@ -1,8 +1,8 @@
-import { VehicleType } from "@/schemas/vehicle.schema"
 import { Gauge, Fuel, ShieldAlert, FileText,  Calendar } from "lucide-react"
 import {ConservationStatusType } from "@/schemas/enums.schema"
 import DeleteVehicleBtn from "./DeleteVehicleBtn"
 import AddVeiculo from "../AddVeiculo"
+import { VehicleWithUsageType } from "@/schemas/vehicle.schema"
 
 
 
@@ -12,7 +12,7 @@ const statusConfig: Record<ConservationStatusType, { bg: string, text: string, l
   DEFFECTED: { bg: "bg-rose-100 border-rose-300", text: "text-rose-900", label: "INOPERANTE" }
 }
 
-const VeiculoCard = ({ vehicle }: {vehicle: VehicleType}) => {
+const VeiculoCard = ({ vehicle }: {vehicle: VehicleWithUsageType}) => {
   const currentStatus = statusConfig[vehicle.conservationStatus] || statusConfig.GOOD
 
   return (
@@ -39,7 +39,7 @@ const VeiculoCard = ({ vehicle }: {vehicle: VehicleType}) => {
           {currentStatus.label}
         </span>
         <div>
-          <DeleteVehicleBtn vehicleId={vehicle.id} />
+          <DeleteVehicleBtn vehicleId={vehicle.id} isUsed={vehicle.isUsed} active={vehicle.active}/>
         </div>
       </div>
     
@@ -56,7 +56,7 @@ const VeiculoCard = ({ vehicle }: {vehicle: VehicleType}) => {
           <Fuel size={16} className="text-slate-400 shrink-0" />
           <div className="flex flex-col">
             <span className="text-[10px] text-slate-400 font-sans normal-case font-medium">Consumo Médio</span>
-            <span className="text-sm font-black text-slate-900 font-mono tracking-tight">{vehicle.averageConsumptionKmL.toFixed(1)} KM/L</span>
+            <span className="text-sm font-black text-slate-900 font-mono tracking-tight">{vehicle.averageConsumption.toFixed(1)} KM/L</span>
           </div>
         </div>
 
