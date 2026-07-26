@@ -1,6 +1,6 @@
 'use server';
 
-import { ContractIdSchema, ContractIdType, ContractType, CreateContractSchema, CreateContractType, UpdateContractSchema, UpdateContractType } from "@/schemas/contract.schema";
+import { ContractIdSchema, ContractIdType, ContractType, CreateContractSchema, CreateContractType, } from "@/schemas/contract.schema";
 import { ResponseType } from "../types";
 import { GetContractsResponseType } from "@/schemas/contract.schema";
 import { revalidatePath } from "next/cache";
@@ -84,20 +84,6 @@ export const removeContract = async (id: ContractIdType): Promise<ResponseType<C
         const contractId = vId.data;
 
         try {
-            const contractFuels = await prisma.contractFuel.findFirst({
-                where: {
-                    contractId: contractId,
-                    fuelingRequests: {
-                        some: {}
-                    }
-                },
-                select: {
-                    id: true,
-                }
-            });
-
-            if (contractFuels) return {success:false, error : 'Não é possível apagar contratos já usados no sistema, tente alterar o status'};
-
             const deleted = await prisma.contract.delete({
                 where: {
                     id: contractId,

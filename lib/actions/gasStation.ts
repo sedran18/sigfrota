@@ -95,24 +95,6 @@ export const removeGasStation = async (id: GasStationIdType): Promise<ResponseTy
         if (!vId.success) return {success: false, error: vId.error.message}
 
         try {
-            const contract = await prisma.contract.findFirst({
-                where: {
-                    gasStationId: vId.data,
-                    contractFuels: {
-                    some: {
-                        fuelingRequests: {
-                        some: {}
-                        }
-                    }
-                    }
-                },
-                select: {
-                    id: true,
-                },
-            });
-
-            if (contract) return {success:false, error : 'Não é possível apagar postos já usados no sistema, tente alterar o status'};
-
             const deleted = await prisma.gasStation.delete({
                 where: {
                     id: vId.data,

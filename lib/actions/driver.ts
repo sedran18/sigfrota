@@ -61,7 +61,6 @@ export const updateDriver = async (id: DriverIdType, campos: UpdateDriverType):P
     const {data} =  vCampos;
 
     try {
-        
         const driver = await prisma.driver.update({
             where: {
                 id: vId.data
@@ -85,17 +84,6 @@ export const removeDriver = async (id: DriverIdType): Promise<ResponseType<Drive
         if (!vId.success) return {success: false, error: vId.error.message}
 
         try {
-            // verificar se tem abastecimento com esse motorista depois pq não vai ser possível apagar onde tem solicitações referenciando esse motorista
-            const requestRefuelings = await prisma.fuelingRequest.findFirst({where: {
-                driverId: vId.data
-            },
-                select: {
-                    id: true,
-                }
-            });
-
-            if (requestRefuelings) return {success:false, error : 'Não é possível apagar motoristas já usados no sistema, tente alterar o status'};
-
             const deleted = await prisma.driver.delete({
                 where: {
                     id: vId.data,
