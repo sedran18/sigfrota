@@ -9,10 +9,18 @@ export const FuelingRequestSchema = z.object({
     contractFuelId: z.uuid(),
     liters: z.number().positive().or(z.literal("full")),
     fuelType: FuelTypeSchema,
-    odometer: z.number().int().nonnegative(),
+    odometer: z.number().int().nonnegative().optional(),
     status: RequesStatusSchema,
     createdAt: z.date(),
     updatedAt: z.date(),    
 })
 
 export type FuelingRequestType = z.infer<typeof FuelingRequestSchema>;
+
+export const CreateFuelingRequestSchema = FuelingRequestSchema.omit({
+    id: true,
+    createdAt: true, 
+    updatedAt: true
+});
+
+export type CreateFuelingRequestType = z.infer<typeof CreateFuelingRequestSchema>
