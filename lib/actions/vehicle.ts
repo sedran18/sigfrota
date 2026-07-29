@@ -1,12 +1,21 @@
 'use server';
 
-import { CreateVehicleSchema, CreateVehicleType,  UpdateVehicleSchema,  UpdateVehicleType,  VehicleIdSchema, VehicleIdType, VehicleType, VehicleWithUsageType } from "@/schemas/vehicle.schema";
+import {
+    CreateVehicleSchema, 
+    CreateVehicleType,  
+    UpdateVehicleSchema,  
+    UpdateVehicleType,  
+    VehicleIdSchema, 
+    VehicleIdType,  
+    VehicleType, 
+    VehicleWithUsageType,
+    VehicleSelectSchema,
+    VehicleSelectType,
+} from "@/schemas/vehicle.schema";
 import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
-
-
-
+import { Prisma } from "../generated/prisma/browser";
 
 export const createVehicle = async (item:CreateVehicleType): Promise<ResponseType<string>> => {
     const v = CreateVehicleSchema.safeParse(item);
@@ -37,7 +46,7 @@ export const getVehicles = async (): Promise<ResponseType<VehicleWithUsageType[]
                     }, 
                     take: 1,
                 }, 
-            }
+            },
         });
 
         const vehiclesAdjusted = vehicles.map(({fuelingRequests, ...v}) => ({...v, 
@@ -108,3 +117,28 @@ export const removeVehicle = async (id: VehicleIdType): Promise<ResponseType<Veh
             return {success:false, error:'Erro ao remover veículo'}
         }
 }
+
+export type SelectedVehicle<T extends Prisma.VehicleSelect> = Prisma.VehicleGetPayload<{ select: T }>;
+
+export const getVehiclesSelect = async <T extends VehicleSelectType>(
+  data: T
+): Promise<ResponseType<SelectedVehicle<T>[]>> => {
+  const v = VehicleSelectSchema.safeParse(data);
+  if (!v.success) return { success: false, error: v.error.message };
+  
+  const select = v.data as T;
+
+  try {
+    const vehicles = await prisma.vehicle.findMany({
+      select: select,
+    });
+
+    return { 
+      success: true, 
+      data: vehicles as unknown as SelectedVehicle<T>[] 
+    };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: 'Erro ao listar veículos' };
+  }
+};

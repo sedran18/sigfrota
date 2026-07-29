@@ -1,18 +1,11 @@
-'use client';
 
-import { useState } from "react"
 import RequestCard from "./RequestCard"
-import {  fuelingRequestType} from "@/lib/types"
+import { FuelingRequestType } from "@/schemas/fuelingRequest.schema";
 
 
-const SolicitacaoList = ({items}:{items:  fuelingRequestType[]}) => {
-  const [solicitacoes, setSolicitacoes] = useState(items)
-
-
+const SolicitacaoList = ({solicitacoes}:{solicitacoes:FuelingRequestType[]}) => {
   return (
-    <div className="w-full min-h-screen p-4 md:p-3 bg-slate-100 flex flex-col gap-4">
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      <div className="grid p-1 md:p-2 lg:p-10 px-auto grid-cols-1 gap-4 w-full overflow-hidden">
         {solicitacoes.map((item) => (
           <RequestCard
             key={item.id} 
@@ -20,7 +13,6 @@ const SolicitacaoList = ({items}:{items:  fuelingRequestType[]}) => {
           />
         ))}
       </div>
-    </div>
   )
 }
 

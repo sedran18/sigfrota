@@ -81,3 +81,22 @@ export const VehicleWithUsageSchema = VehicleSchema.extend({
 })
 
 export type VehicleWithUsageType = z.infer<typeof VehicleWithUsageSchema>
+
+export const VehicleSelectSchema = z.object({
+  id: z.boolean().optional(),
+  plate: z.boolean().optional(),
+  model: z.boolean().optional(),
+  brand: z.boolean().optional(),
+  year: z.boolean().optional(),
+  fuelType: z.boolean().optional(),
+  tankCapacity:z.boolean().optional(),
+  conservationStatus: z.boolean().optional(),
+  observation: z.boolean().optional(),
+  averageConsumption: z.boolean().optional(),
+  active: z.boolean().optional(),
+  currentOdometer: z.boolean().optional(),
+  createdAt: z.boolean().optional(),
+  updatedAt: z.boolean().optional(),
+});
+
+export type VehicleSelectType = z.infer<typeof VehicleSelectSchema>

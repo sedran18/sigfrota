@@ -6,7 +6,7 @@ import { ResponseType } from "../types";
 export const getFuelingRequests = async (): Promise<ResponseType<FuelingRequestType[]>> => {
     try {
         const requests = await prisma.fuelingRequest.findMany();
-        const requestsAdjusted = requests.map(req => ({...req, liters: req.liters.toNumber()}));
+        const requestsAdjusted = requests.map(req => ({...req, liters: Number(req.liters)}));
         return {success: true, data: requestsAdjusted}
     } catch (err) {
         console.error(err);
@@ -35,7 +35,7 @@ export const createFuelingRequest = async (data: CreateFuelingRequestType):Promi
         }
         
         await prisma.fuelingRequest.create({
-            data: {...data, odometer}
+            data: {...v.data, odometer, liters: String(v.data.liters)}
         });
         
         return {success:true, data: 'Solicitação criada com sucesso'};

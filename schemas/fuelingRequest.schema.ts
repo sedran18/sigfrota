@@ -7,7 +7,7 @@ export const FuelingRequestSchema = z.object({
     driverId: z.uuid(),
     // createdBy: z.uuid(),
     contractFuelId: z.uuid(),
-    liters: z.number().positive().or(z.literal("full")),
+    liters: z.number().positive().or(z.literal("FULL")),
     fuelType: FuelTypeSchema,
     odometer: z.number().int().nonnegative().optional(),
     status: RequesStatusSchema,
@@ -22,5 +22,12 @@ export const CreateFuelingRequestSchema = FuelingRequestSchema.omit({
     createdAt: true, 
     updatedAt: true
 });
-
 export type CreateFuelingRequestType = z.infer<typeof CreateFuelingRequestSchema>
+
+export const CreateFuelingRequestFormSchema = CreateFuelingRequestSchema.omit({
+    contractFuelId: true,
+}).extend({
+    gasStationId: z.uuid(),
+});
+
+export type CreateFuelingRequestFormType = z.infer<typeof CreateFuelingRequestFormSchema>;

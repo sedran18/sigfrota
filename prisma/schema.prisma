@@ -140,7 +140,7 @@ model FuelingRequest {
   contractFuelId String @db.Uuid
   contractFuel ContractFuel @relation(fields: [contractFuelId], references: [id]) 
 
-  liters Decimal @db.Decimal(5,2)
+  liters String
   fuelType FuelType
   odometer Int
   status RequesStatusSchema

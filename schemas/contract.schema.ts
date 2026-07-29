@@ -1,5 +1,6 @@
 import z, { boolean } from "zod";
 import { ContractFuelSchema, CreateContractFuelSchema } from "./contractFuel.schema";
+import { FuelTypeSchema } from "./enums.schema";
 
 export const ContractSchema = z.object({
   id: z.uuid({
@@ -67,3 +68,10 @@ export const UpdateContractSchema = CreateContractSchema.extend({
 }).partial();
 
 export type UpdateContractType = z.infer<typeof UpdateContractSchema>;
+
+export const GetContractFuelByGasStationAndFuelTypeSchema = z.object({
+  gasStationId: z.uuid(),
+  fuelType: FuelTypeSchema,
+});
+
+export type GetContractFuelByGasStationAndFuelTypeType = z.infer<typeof GetContractFuelByGasStationAndFuelTypeSchema>;

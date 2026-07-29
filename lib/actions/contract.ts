@@ -1,10 +1,12 @@
 'use server';
 
-import { ContractIdSchema, ContractIdType, ContractType, CreateContractSchema, CreateContractType, } from "@/schemas/contract.schema";
+import { ContractIdSchema, ContractIdType, ContractType, CreateContractSchema, CreateContractType, GetContractFuelByGasStationAndFuelTypeSchema, GetContractFuelByGasStationAndFuelTypeType, } from "@/schemas/contract.schema";
 import { ResponseType } from "../types";
 import { GetContractsResponseType } from "@/schemas/contract.schema";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
+import { getRequestMeta } from "next/dist/server/request-meta";
+import { ContractFuelType } from "@/schemas/contractFuel.schema";
 
 export const getContracts =  async ():Promise<ResponseType<GetContractsResponseType[]>> => {
     try {
@@ -122,3 +124,31 @@ export const updateStatusContract = async (
     return { success: false, error: 'Erro ao atualizar contrato' };
   }
 };
+
+export const getContractFuelByGasStationAndFuelType = async (data:GetContractFuelByGasStationAndFuelTypeType):Promise<ResponseType<Pick<ContractFuelType, 'id'>>> => {
+    const v = GetContractFuelByGasStationAndFuelTypeSchema.safeParse(data);
+    if (!v.success) return {success: false, error: v.error.message};
+
+    try {
+        const contractFuel = await prisma.contractFuel.findFirst({
+            where: {
+                fuelType: v.data.fuelType,
+                contract: {
+                    active: true,
+                    gasStationId: v.data.gasStationId
+                }
+            }, 
+            select: {
+                id: true,
+            }
+        });
+
+        if  (!contractFuel) return {success: false, error: 'Não foi possível encontrar contrato'}
+        return {success: true, data: contractFuel}
+
+    } catch (err) {
+        console.error(err);
+        return {success:false, error: 'Erro em contrato combustível'}
+    }
+}
+
