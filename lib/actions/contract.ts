@@ -5,7 +5,6 @@ import { ResponseType } from "../types";
 import { GetContractsResponseType } from "@/schemas/contract.schema";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
-import { getRequestMeta } from "next/dist/server/request-meta";
 import { ContractFuelType } from "@/schemas/contractFuel.schema";
 
 export const getContracts =  async ():Promise<ResponseType<GetContractsResponseType[]>> => {
@@ -143,7 +142,7 @@ export const getContractFuelByGasStationAndFuelType = async (data:GetContractFue
             }
         });
 
-        if  (!contractFuel) return {success: false, error: 'Não foi possível encontrar contrato'}
+        if  (!contractFuel) return {success: false, error: 'Não há contrato nesse posto com esse combustível disponível'}
         return {success: true, data: contractFuel}
 
     } catch (err) {

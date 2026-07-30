@@ -1,6 +1,6 @@
 "use client"
 
-import { Plus, Fuel } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,28 +11,43 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { camposFiltro } from "@/lib/data/camposFiltro";
-import { useForm} from "react-hook-form";
+import { useForm, useWatch} from "react-hook-form";
 import { CreateFuelingRequestFormSchema, CreateFuelingRequestFormType} from "@/schemas/fuelingRequest.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFuelingRequest } from "@/lib/actions/fuelingRequest";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getContractFuelByGasStationAndFuelType } from "@/lib/actions/contract";
+import { SelectedGasStation } from "@/lib/actions/gasStation";
+import { SelectedDriver } from "@/lib/actions/driver";
+import { getVehiclesSelectByFuelType, SelectedVehicle } from "@/lib/actions/vehicle";
+import { FuelTypeSchema } from "@/schemas/enums.schema";
 
-const veiculos = camposFiltro[1].campos;
-const postos = camposFiltro[0].campos;
-const motoristas = camposFiltro[2].campos;
 
-const AddRequest = () => {
+const AddRequest = ({ postos, motoristas}: {
+  postos: SelectedGasStation<{id:true, name: true}>[], 
+  motoristas: SelectedDriver<{id:true, name: true}>[]
+}) => {
   const [open, setOpen] = useState(false);
   const [fullTank, setFullTank] = useState(true)
   const [liters, setLiters] = useState<'FULL' | number>('FULL');
-
+  const [veiculos, setVeiculos] = useState<SelectedVehicle<{id:true, plate: true, model: true, brand:true, year: true}>[]>([]);
+  
+  
+  
   const form = useForm<CreateFuelingRequestFormType>({
     resolver: zodResolver(CreateFuelingRequestFormSchema),
+    defaultValues: {
+      fuelType: 'GASOLINA_COMUM',
+      vehicleId: '',
+      driverId: '',
+      gasStationId: '',
+      liters: 'FULL',
+    }
   });
 
-  const {register, handleSubmit} =  form;
+  const {register, handleSubmit, formState} =  form;
+  const fuelType = useWatch({control: form.control, name: 'fuelType' });
+  console.log('fuelType: ', fuelType)
 
   const onSubmit = async ({gasStationId, ...data}: CreateFuelingRequestFormType) => {
     const contractFuelId = await getContractFuelByGasStationAndFuelType({gasStationId: gasStationId, fuelType: data.fuelType});
@@ -47,12 +62,45 @@ const AddRequest = () => {
     setOpen(false);
   }
 
+  useEffect(() => {
+    const fetchVeiculos = async () => {
+      if (!fuelType) {
+        setVeiculos([]);
+        return;
+      }
+
+      const response = await getVehiclesSelectByFuelType(
+        { id: true, plate: true, model: true, brand: true, year: true },
+        fuelType
+      );
+      console.log('response do useEffect: ', response);
+
+      if (!response.success) {
+        setVeiculos([]);
+        return;
+      }
+
+      setVeiculos(response.data);
+    };
+
+    fetchVeiculos();
+  }, [fuelType]);
+
+  const fuelTypes = FuelTypeSchema.options;
+
   const selectStyles = `
     w-full h-11 px-3 text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-200 
     rounded-none cursor-pointer uppercase tracking-wider outline-none transition-all
     focus:border-[#093a1c] focus:ring-1 focus:ring-[#093a1c]
   `;
 
+  const onError = (err: unknown) => {
+      console.log("Erros de validação encontrados:", err);
+      
+      // Exemplo: Mostrar um toast de aviso ou focar no primeiro erro
+      alert("Por favor, preencha todos os campos obrigatórios!");
+    };
+    
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger 
@@ -70,85 +118,108 @@ const AddRequest = () => {
       <DialogContent className="sm:max-w-md bg-slate-950 border border-slate-800 text-slate-200 rounded-none p-6 shadow-2xl">
         <DialogHeader className="border-b border-slate-900 pb-4 mb-2">
           <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
-            <Fuel size={18} className="text-emerald-400" />
             Adicionar Nova Solicitação
           </DialogTitle>
         </DialogHeader>
-
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+        {
+          formState.errors.root && (
+            <span>{formState.errors.root.message}</span>
+          )
+        }
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="carro" className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Veículo</Label>
             <select  
               {...register('vehicleId')}
-              name="carro" 
               id="carro" 
               className={selectStyles} 
-              defaultValue="">
-              <option value="" disabled hidden>Selecione o veículo</option>
-              {veiculos.map(v => (
-                <option value={v.toLowerCase()} key={v.toLowerCase()} className="bg-slate-950">{v}</option>
-              ))}
+              >
+              <option value="" disabled>{veiculos.length > 0 ? 'Selecione o veículo' : 'Não há veículos disponíveis para esse combustível'}</option>
+
+              {veiculos.length > 0 &&
+                veiculos.map(v => (
+                  <option value={v?.id} key={v?.id} className="bg-slate-950">{v?.brand}, {v?.model}, {v?.plate}, {v?.year}</option>
+                ))
+              }
             </select>
+            {
+              formState.errors.vehicleId && 
+              (
+                <span>{formState.errors.vehicleId.message}</span>
+              )
+            }
           </div>
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="motorista" className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Motorista</Label>
             <select 
               {...register('driverId')}
-              name="motorista" 
               id="motorista" 
               className={selectStyles} 
               >
-              <option value="" disabled hidden>Selecione o motorista</option>
-              {motoristas.map(m => (
-                <option value={m.toLowerCase()} key={m.toLowerCase()} className="bg-slate-950">{m}</option>
+              <option value="" disabled>{motoristas.length > 0 ? 'Selecione o motorista' : 'Não há motoristas disponíveis'}</option>
+
+              {motoristas.length > 0 && motoristas.map(m => (
+                <option value={m.id} key={m.id} className="bg-slate-950">{m.name}</option>
               ))}
             </select>
+            {
+              formState.errors.driverId && 
+              (
+                <span>{formState.errors.driverId.message}</span>
+              )
+            }
           </div>
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="posto" className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Posto de Combustível</Label>
             <select
               {...register('gasStationId')}
-              name="posto" 
               id="posto" 
               className={selectStyles} 
               >
-              <option value="" disabled hidden>Selecione o posto</option>
-              {postos.map(p => (
-                <option value={p.toLowerCase()} key={p.toLowerCase()} className="bg-slate-950">{p}</option>
+              <option value="" disabled>{postos.length > 0 ? 'Selecione o posto' : 'Não há postos disponíveis'}</option>
+              {postos.length > 0 && postos.map(p => (
+                <option value={p.id} key={p.id} className="bg-slate-950">{p.name}</option>
               ))}
             </select>
+            {
+              formState.errors.gasStationId && 
+              (
+                <span>{formState.errors.gasStationId.message}</span>
+              )
+            }
           </div>
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="combustivel" className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Tipo de Combustível</Label>
             <select 
               {...register('fuelType')}
-              name="combustivel" 
               id="combustivel" 
               className={selectStyles} 
               >
               <option value="" disabled hidden>Selecione o combustível</option>
-              <option value='gas' className="bg-slate-950">Gasolina comum</option>
-              <option value='etanol' className="bg-slate-950">Etanol</option>
-              <option value='gasad' className="bg-slate-950">Gasolina aditivada</option>
-              <option value='diesels500' className="bg-slate-950">Diesel S500</option>
-              <option value='diesels10' className="bg-slate-950">Diesel S10</option>
+              {
+                fuelTypes.map(f => <option value={f} key={f}>{f.includes('_') ? f.replace('_', ' ') : f }</option>)
+              }
             </select>
+            {
+              formState.errors.fuelType && 
+              (
+                <span>{formState.errors.fuelType.message}</span>
+              )
+            }
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5 justify-end">
               <Label htmlFor="km" className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Quilometragem Inicial (KM)</Label>
               <Input 
-                {...register('odometer')}
+                {...register('odometer', {valueAsNumber: true})}
                 id="km"
-                name="km"
                 type="number" 
                 placeholder="Ex: 145200" 
                 className="h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-600 font-mono focus-visible:ring-[#093a1c]"
-                required
               />
             </div>
 
@@ -159,7 +230,6 @@ const AddRequest = () => {
                   onChange={() => setFullTank(!fullTank)}
                   type="checkbox" 
                   id="encher"
-                  name="encher"
                   className="h-5 w-5 accent-[#093a1c] cursor-pointer" 
                 />
                 Completar tanque
@@ -168,11 +238,10 @@ const AddRequest = () => {
               <Label htmlFor="litros" className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Litros à abastecer</Label>
               <Input 
                   id="litros"
-                  name="litros"
                   type="number" 
                   step="0.01"
                   disabled={fullTank} 
-                  value={liters} // Se tanque cheio estiver ativo, mostra "FULL"
+                  value={liters} 
                   onChange={e => {
                     const valor = fullTank ? 'FULL' : Number(e.target.value);
                     setLiters(valor);

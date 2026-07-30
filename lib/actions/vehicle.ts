@@ -16,7 +16,7 @@ import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
 import { Prisma } from "../generated/prisma/browser";
-import { FuelType, FuelTypeSchema, VehicleFuelTypeSchema, VehicleFuelTypeType } from "@/schemas/enums.schema";
+import { FuelType, FuelTypeSchema,  VehicleFuelTypeType } from "@/schemas/enums.schema";
 
 export const createVehicle = async (item:CreateVehicleType): Promise<ResponseType<string>> => {
     const v = CreateVehicleSchema.safeParse(item);
@@ -154,6 +154,8 @@ export const getVehiclesSelectByFuelType = async <T extends VehicleSelectType>(
         },
         select: select,
         });
+
+        if (!vehicles) return {success: false, error: 'Não foram encontrados veículos que consomem esse combustível'}
 
         return { 
         success: true, 

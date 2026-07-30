@@ -2,6 +2,7 @@
 import { CreateFuelingRequestSchema, CreateFuelingRequestType, FuelingRequestType } from "@/schemas/fuelingRequest.schema";
 import prisma from "../prisma";
 import { ResponseType } from "../types";
+import { revalidatePath } from "next/cache";
 
 export const getFuelingRequests = async (): Promise<ResponseType<FuelingRequestType[]>> => {
     try {
@@ -35,9 +36,9 @@ export const createFuelingRequest = async (data: CreateFuelingRequestType):Promi
         }
         
         await prisma.fuelingRequest.create({
-            data: {...v.data, odometer, liters: String(v.data.liters)}
+            data: {...v.data, odometer, liters: String(v.data.liters), status: 'PENDING'}
         });
-        
+        revalidatePath('/admin/solicitacoes');
         return {success:true, data: 'Solicitação criada com sucesso'};
 
     } catch (err) {

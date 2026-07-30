@@ -19,6 +19,7 @@ export type FuelingRequestType = z.infer<typeof FuelingRequestSchema>;
 
 export const CreateFuelingRequestSchema = FuelingRequestSchema.omit({
     id: true,
+    status: true,
     createdAt: true, 
     updatedAt: true
 });

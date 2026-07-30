@@ -5,24 +5,24 @@ import AddRequest from "@/components/admin/solicitacoes/AddRequest";
 import SolicitacaoList from "@/components/admin/solicitacoes/SolicitacaoList";
 import { getFuelingRequests } from "@/lib/actions/fuelingRequest";
 import { FuelIcon } from "lucide-react";
-import { getVehiclesSelectByFuelType } from "@/lib/actions/vehicle";
 import { getGasStationsSelect } from "@/lib/actions/gasStation";
 import { getDriversSelect } from "@/lib/actions/driver";
 
 const Solicitacoes = async () => {
   const solicitacoes = await getFuelingRequests();
-  const veiculos = await getVehiclesSelectByFuelType({id:true, plate: true, model: true, brand:true, year: true}, 'GASOLINA_COMUM');
-  console.log(veiculos);
   const postos = await getGasStationsSelect({id:true, name: true});
-  console.log(postos);
+  // console.log('postos', postos);
   const motoristas = await getDriversSelect({id:true, name: true});
-  console.log(motoristas);
+  // console.log('motoristas', motoristas)
   
   return (
     <div>
       <HeaderTemplate title='Solicitações' description="Lista de todas as solicitações">
         <DateCalendarPicker />
-        <AddRequest />
+        <AddRequest 
+          postos={postos.success ? postos.data : []} 
+          motoristas={motoristas.success ? motoristas.data : []}
+        />
       </HeaderTemplate>
       <BasicFilters />
       {

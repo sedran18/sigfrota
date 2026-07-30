@@ -96,7 +96,6 @@ const AddPosto = ({gasStation} : {gasStation?: GasStationType}) => {
             </Label>
             <Input
               {...register('name')}
-              id="name"
               placeholder="EX: POSTO SANTA MARTA LTDA"
               className={inputStyles}
             />
