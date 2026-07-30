@@ -53,3 +53,15 @@ export const GasStationWithUsageSchema = GasStationSchema.extend({
 })
 
 export type GasStationWithUsageType = z.infer<typeof GasStationWithUsageSchema>
+
+export const GasStationSelectSchema = z.object({
+  id: z.boolean().optional(),
+  name:z.boolean().optional(),
+  cnpj: z.boolean().optional(),
+  active: z.boolean().optional(),
+  address: z.boolean().optional(),
+  createdAt: z.boolean().optional(),
+  updatedAt: z.boolean().optional(),
+});
+
+export type GasStationSelectType = z.infer<typeof GasStationSelectSchema>

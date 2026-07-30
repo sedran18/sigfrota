@@ -16,6 +16,7 @@ import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
 import { Prisma } from "../generated/prisma/browser";
+import { FuelType, FuelTypeSchema, VehicleFuelTypeSchema, VehicleFuelTypeType } from "@/schemas/enums.schema";
 
 export const createVehicle = async (item:CreateVehicleType): Promise<ResponseType<string>> => {
     const v = CreateVehicleSchema.safeParse(item);
@@ -120,25 +121,46 @@ export const removeVehicle = async (id: VehicleIdType): Promise<ResponseType<Veh
 
 export type SelectedVehicle<T extends Prisma.VehicleSelect> = Prisma.VehicleGetPayload<{ select: T }>;
 
-export const getVehiclesSelect = async <T extends VehicleSelectType>(
-  data: T
+export const getVehiclesSelectByFuelType = async <T extends VehicleSelectType>(
+  data: T,
+  fuelType: FuelType,
 ): Promise<ResponseType<SelectedVehicle<T>[]>> => {
-  const v = VehicleSelectSchema.safeParse(data);
-  if (!v.success) return { success: false, error: v.error.message };
+    const v = VehicleSelectSchema.safeParse(data);
+    if (!v.success) return { success: false, error: 'Select inválido' };
   
-  const select = v.data as T;
+    const select = v.data as T;
 
-  try {
-    const vehicles = await prisma.vehicle.findMany({
-      select: select,
-    });
+    const vFuel= FuelTypeSchema.safeParse(fuelType);
 
-    return { 
-      success: true, 
-      data: vehicles as unknown as SelectedVehicle<T>[] 
-    };
-  } catch (err) {
-    console.error(err);
-    return { success: false, error: 'Erro ao listar veículos' };
-  }
+    if(!vFuel.success) return {success:false, error: 'fuelType inválido'};
+
+    const combustivel = vFuel.data.startsWith('GASOLINA') ? 'GASOLINA' :   vFuel.data;
+    let fuelTarget:VehicleFuelTypeType[];
+
+    if (combustivel === 'GASOLINA') {
+        fuelTarget = ['GASOLINA', 'FLEX'];
+    } else if (combustivel === 'ETANOL') {
+        fuelTarget = ['ETANOL', 'FLEX'];
+    } else {
+        fuelTarget = [combustivel as VehicleFuelTypeType]
+    }
+    
+    try {
+        const vehicles = await prisma.vehicle.findMany({
+        where: {
+            fuelType: {
+                in: fuelTarget,
+            }
+        },
+        select: select,
+        });
+
+        return { 
+        success: true, 
+        data: vehicles as unknown as SelectedVehicle<T>[] 
+        };
+    } catch (err) {
+        console.error(err);
+        return { success: false, error: 'Erro ao listar veículos' };
+    }
 };

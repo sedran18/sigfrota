@@ -1,10 +1,10 @@
 'use server';
 
-import { CreateDriverSchema, CreateDriverType, DriverIdSchema, DriverIdType, DriverType, UpdateDriverSchema, UpdateDriverType, DriverWithUsageType} from "@/schemas/driver.schema";
+import { CreateDriverSchema, CreateDriverType, DriverIdSchema, DriverIdType, DriverType, UpdateDriverSchema, UpdateDriverType, DriverWithUsageType, DriverSelectSchema, DriverSelectType} from "@/schemas/driver.schema";
 import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
-import { Driver} from "../generated/prisma/client";
+import { Driver, Prisma} from "../generated/prisma/client";
 
 export const createDriver = async (item: CreateDriverType):Promise<ResponseType<string>> => {
         const v = CreateDriverSchema.safeParse(item);
@@ -96,3 +96,28 @@ export const removeDriver = async (id: DriverIdType): Promise<ResponseType<Drive
             return {success:false, error:'Erro ao remover motorista'}
         }
 }
+
+export type SelectedDriver<T extends Prisma.DriverSelect> = Prisma.DriverGetPayload<{ select: T }>;
+
+export const getDriversSelect = async <T extends DriverSelectType>(
+  data: T
+): Promise<ResponseType<SelectedDriver<T>[]>> => {
+  const v = DriverSelectSchema.safeParse(data);
+  if (!v.success) return { success: false, error: v.error.message };
+  
+  const select = v.data as T;
+
+  try {
+    const drivers = await prisma.driver.findMany({
+      select: select,
+    });
+
+    return { 
+      success: true, 
+      data: drivers as unknown as SelectedDriver<T>[] 
+    };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: 'Erro ao listar veículos' };
+  }
+};

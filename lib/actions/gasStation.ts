@@ -1,10 +1,11 @@
 'use server';
 
-import { CreateGasStationSchema, CreateGasStationType, GasStationIdSchema, GasStationIdType, GasStationType, GasStationWithUsageType, UpdateGasStationSchema, UpdateGasStationType} from "@/schemas/gasStation.schema";
+import { CreateGasStationSchema, CreateGasStationType, GasStationIdSchema, GasStationIdType, GasStationSelectSchema, GasStationSelectType, GasStationType, GasStationWithUsageType, UpdateGasStationSchema, UpdateGasStationType} from "@/schemas/gasStation.schema";
 import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
 import { GasStation} from "../generated/prisma/client";
+import { Prisma } from "../generated/prisma/browser";
 
 export const createGasStation = async (item: CreateGasStationType):Promise<ResponseType<string>> => {
         const v = CreateGasStationSchema.safeParse(item);
@@ -107,3 +108,29 @@ export const removeGasStation = async (id: GasStationIdType): Promise<ResponseTy
             return {success:false, error:'Erro ao remover posto'}
         }
 }
+
+
+export type SelectedGasStation<T extends Prisma.GasStationSelect> = Prisma.GasStationGetPayload<{ select: T }>;
+
+export const getGasStationsSelect = async <T extends GasStationSelectType>(
+  data: T
+): Promise<ResponseType<SelectedGasStation<T>[]>> => {
+  const v = GasStationSelectSchema.safeParse(data);
+  if (!v.success) return { success: false, error: v.error.message };
+  
+  const select = v.data as T;
+
+  try {
+    const GasStations = await prisma.gasStation.findMany({
+      select: select,
+    });
+
+    return { 
+      success: true, 
+      data: GasStations as unknown as SelectedGasStation<T>[] 
+    };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: 'Erro ao listar veículos' };
+  }
+};

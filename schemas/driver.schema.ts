@@ -36,3 +36,14 @@ export const DriverWithUsageSchema = DriverSchema.extend({
 })
 
 export type DriverWithUsageType = z.infer<typeof DriverWithUsageSchema>
+
+export const DriverSelectSchema = z.object({
+    id: z.boolean().optional(),
+    name: z.boolean().optional(),
+    phone: z.boolean().optional(),
+    active: z.boolean().optional(),
+    createdAt:z.boolean().optional(),
+    updatedAt: z.boolean().optional(),
+})
+
+export type DriverSelectType = z.infer<typeof DriverSelectSchema>
