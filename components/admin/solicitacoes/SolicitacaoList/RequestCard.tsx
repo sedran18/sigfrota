@@ -25,6 +25,7 @@ const statusConfig = {
 const RequestCard = ({ data }: {data:FuelingRequestType}) => {
   const currentStatus = statusConfig[data.status]
   const isPending = data.status === "PENDING"
+  console.log('litros', data.liters)
 
   return (
     <div className={`
@@ -65,7 +66,7 @@ const RequestCard = ({ data }: {data:FuelingRequestType}) => {
 
         <div className="flex items-center gap-2.5">
           <Fuel size={14} className="shrink-0 text-slate-400" />
-          <span>Volume Solicitado: <strong className="text-emerald-800 font-black uppercase">{data.liters === "full" ? "Tanque Cheio" : `${data.liters} L`}</strong></span>
+          <span>Volume Solicitado: <strong className="text-emerald-800 font-black uppercase">{data.liters === "FULL" ? "Tanque Cheio" : `${data.liters} L`}</strong></span>
         </div>
       </div>
         

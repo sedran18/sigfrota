@@ -1,5 +1,5 @@
 
-import RequestCard from "./RequestCard"
+import RequestCard from "./RequestCard";
 import { FuelingRequestType } from "@/schemas/fuelingRequest.schema";
 
 

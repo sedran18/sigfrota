@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 export const getFuelingRequests = async (): Promise<ResponseType<FuelingRequestType[]>> => {
     try {
         const requests = await prisma.fuelingRequest.findMany();
-        const requestsAdjusted = requests.map(req => ({...req, liters: Number(req.liters)}));
+        const requestsAdjusted = requests.map(req => ({...req, liters: req.liters === 'FULL' ? 'FULL' as const : Number(req.liters)}));
         return {success: true, data: requestsAdjusted}
     } catch (err) {
         console.error(err);

@@ -32,8 +32,6 @@ const AddRequest = ({ postos, motoristas}: {
   const [liters, setLiters] = useState<'FULL' | number>('FULL');
   const [veiculos, setVeiculos] = useState<SelectedVehicle<{id:true, plate: true, model: true, brand:true, year: true}>[]>([]);
   
-  
-  
   const form = useForm<CreateFuelingRequestFormType>({
     resolver: zodResolver(CreateFuelingRequestFormSchema),
     defaultValues: {
@@ -47,7 +45,6 @@ const AddRequest = ({ postos, motoristas}: {
 
   const {register, handleSubmit, formState} =  form;
   const fuelType = useWatch({control: form.control, name: 'fuelType' });
-  console.log('fuelType: ', fuelType)
 
   const onSubmit = async ({gasStationId, ...data}: CreateFuelingRequestFormType) => {
     const contractFuelId = await getContractFuelByGasStationAndFuelType({gasStationId: gasStationId, fuelType: data.fuelType});
@@ -73,7 +70,6 @@ const AddRequest = ({ postos, motoristas}: {
         { id: true, plate: true, model: true, brand: true, year: true },
         fuelType
       );
-      console.log('response do useEffect: ', response);
 
       if (!response.success) {
         setVeiculos([]);

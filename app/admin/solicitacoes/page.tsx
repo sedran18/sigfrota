@@ -11,10 +11,8 @@ import { getDriversSelect } from "@/lib/actions/driver";
 const Solicitacoes = async () => {
   const solicitacoes = await getFuelingRequests();
   const postos = await getGasStationsSelect({id:true, name: true});
-  // console.log('postos', postos);
   const motoristas = await getDriversSelect({id:true, name: true});
-  // console.log('motoristas', motoristas)
-  
+  console.log(solicitacoes)
   return (
     <div>
       <HeaderTemplate title='Solicitações' description="Lista de todas as solicitações">
