@@ -1,12 +1,17 @@
 'use server';
-import { CreateFuelingRequestSchema, CreateFuelingRequestType, FuelingRequestType } from "@/schemas/fuelingRequest.schema";
+import { CreateFuelingRequestSchema, CreateFuelingRequestType, FuelingRequestIdSchema, FuelingRequestIdType, FuelingRequestType } from "@/schemas/fuelingRequest.schema";
 import prisma from "../prisma";
 import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
+import { RequesStatusType } from "@/schemas/enums.schema";
 
-export const getFuelingRequests = async (): Promise<ResponseType<FuelingRequestType[]>> => {
+export const getFuelingRequests = async (status: RequesStatusType): Promise<ResponseType<FuelingRequestType[]>> => {
     try {
-        const requests = await prisma.fuelingRequest.findMany();
+        const requests = await prisma.fuelingRequest.findMany({
+            where: {
+                status,
+            }
+        });
         const requestsAdjusted = requests.map(req => ({...req, liters: req.liters === 'FULL' ? 'FULL' as const : Number(req.liters)}));
         return {success: true, data: requestsAdjusted}
     } catch (err) {
@@ -46,3 +51,23 @@ export const createFuelingRequest = async (data: CreateFuelingRequestType):Promi
         return {success: false, error: 'Erro ao criar solicitação'}
     }
 }
+
+export const deleteFuelingRequest = async (id: FuelingRequestIdType): Promise<ResponseType<FuelingRequestType>> => {
+    const v = FuelingRequestIdSchema.safeParse(id);
+    if (!v.success) return {success: false, error: v.error.message}
+    try {
+        const deleted = await prisma.fuelingRequest.delete({
+            where: {
+                id: v.data,
+            }
+        });
+        revalidatePath('/admin/solicitacoes');
+        return {success: true, data: {...deleted, liters: deleted.liters === 'FULL' ? 'FULL' as const : Number(deleted.liters)}};
+
+    } catch (err) {
+        console.log(err);
+        return {success: false, error: 'Erro ao deletar solicitação de abastecimento!'}
+    }
+}
+
+// criar fueling sem cascade onDelete

@@ -2,6 +2,8 @@ import { CheckCircle2, X, AlertCircle, XCircle, Fuel, User, Gauge, Calendar, Pri
 import { Button } from "@/components/ui/button"
 import { dateToStringDate } from "@/lib/utils"
 import { FuelingRequestType } from "@/schemas/fuelingRequest.schema"
+import { RequesStatusType } from "@/schemas/enums.schema"
+import DeleteBtn from "./DeleteBtn"
 
 
 const statusConfig = {
@@ -22,7 +24,7 @@ const statusConfig = {
   }
 }
 
-const RequestCard = ({ data }: {data:FuelingRequestType}) => {
+const RequestCard = ({ data, status }: {data:FuelingRequestType, status: RequesStatusType}) => {
   const currentStatus = statusConfig[data.status]
   const isPending = data.status === "PENDING"
   console.log('litros', data.liters)
@@ -45,9 +47,7 @@ const RequestCard = ({ data }: {data:FuelingRequestType}) => {
           {currentStatus.label}
         </span>
       </div>
-      <Button>
-        <X />
-      </Button>
+      <DeleteBtn status={status} fuelingRequestId={data.id}/>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4 border-t border-b border-slate-100 py-4 my-1 text-sm text-slate-600">
         <div className="flex items-center gap-2.5">
           <User size={14} className="shrink-0 text-slate-400" />

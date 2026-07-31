@@ -32,3 +32,7 @@ export const CreateFuelingRequestFormSchema = CreateFuelingRequestSchema.omit({
 });
 
 export type CreateFuelingRequestFormType = z.infer<typeof CreateFuelingRequestFormSchema>;
+
+
+export const FuelingRequestIdSchema = z.uuid({error: 'Id com formato inválido'});
+export type FuelingRequestIdType = z.infer<typeof FuelingRequestIdSchema>;

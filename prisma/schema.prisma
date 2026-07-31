@@ -133,7 +133,6 @@ model FuelingRequest {
   vehicleId String @db.Uuid
   vehicle Vehicle @relation(fields: [vehicleId], references: [id])
 
-
   driverId String @db.Uuid
   driver Driver @relation(fields: [driverId], references: [id])
   

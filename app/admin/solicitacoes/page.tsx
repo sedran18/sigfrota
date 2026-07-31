@@ -7,12 +7,13 @@ import { getFuelingRequests } from "@/lib/actions/fuelingRequest";
 import { FuelIcon } from "lucide-react";
 import { getGasStationsSelect } from "@/lib/actions/gasStation";
 import { getDriversSelect } from "@/lib/actions/driver";
+import { RequesStatusType } from "@/schemas/enums.schema";
 
 const Solicitacoes = async () => {
-  const solicitacoes = await getFuelingRequests();
+  const status: RequesStatusType = 'PENDING'
+  const solicitacoes = await getFuelingRequests(status);
   const postos = await getGasStationsSelect({id:true, name: true});
   const motoristas = await getDriversSelect({id:true, name: true});
-  console.log(solicitacoes)
   return (
     <div>
       <HeaderTemplate title='Solicitações' description="Lista de todas as solicitações">
@@ -25,7 +26,7 @@ const Solicitacoes = async () => {
       <BasicFilters />
       {
         solicitacoes.success && solicitacoes.data.length > 0? 
-        <SolicitacaoList solicitacoes={solicitacoes.data}/>
+        <SolicitacaoList solicitacoes={solicitacoes.data} status={status}/>
         :
         <div className="flex m-2 lg:m-10 flex-col gasStations-center justify-center text-center p-12 bg-slate-50 border border-slate-200 rounded-none">
           <FuelIcon size={32} className="text-slate-400 mb-2.5" />
