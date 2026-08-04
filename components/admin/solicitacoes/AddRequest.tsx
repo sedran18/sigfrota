@@ -1,6 +1,6 @@
 "use client"
 
-import { Plus } from "lucide-react";
+import { Edit2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,46 +12,55 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm, useWatch} from "react-hook-form";
-import { CreateFuelingRequestFormSchema, CreateFuelingRequestFormType} from "@/schemas/fuelingRequest.schema";
+import { CreateFuelingRequestSchema, CreateFuelingRequestType, FuelingRequestType} from "@/schemas/fuelingRequest.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFuelingRequest } from "@/lib/actions/fuelingRequest";
-import { useEffect, useState } from "react";
-import { getContractFuelByGasStationAndFuelType } from "@/lib/actions/contract";
-import { SelectedGasStation } from "@/lib/actions/gasStation";
-import { SelectedDriver } from "@/lib/actions/driver";
+import { createFuelingRequest, updateFuelingRequest } from "@/lib/actions/fuelingRequest";
+import { useEffect, useRef, useState } from "react";
 import { getVehiclesSelectByFuelType, SelectedVehicle } from "@/lib/actions/vehicle";
 import { FuelTypeSchema } from "@/schemas/enums.schema";
+import { useFuelingData } from "@/providers/FuelingDataProvider";
 
 
-const AddRequest = ({ postos, motoristas}: {
-  postos: SelectedGasStation<{id:true, name: true}>[], 
-  motoristas: SelectedDriver<{id:true, name: true}>[]
+const AddRequest = ({request}: {
+  request?: FuelingRequestType,
 }) => {
   const [open, setOpen] = useState(false);
-  const [fullTank, setFullTank] = useState(true)
-  const [liters, setLiters] = useState<'FULL' | number>('FULL');
+  const [fullTank, setFullTank] = useState(request ? request.liters === 'FULL' : true)
   const [veiculos, setVeiculos] = useState<SelectedVehicle<{id:true, plate: true, model: true, brand:true, year: true}>[]>([]);
   
-  const form = useForm<CreateFuelingRequestFormType>({
-    resolver: zodResolver(CreateFuelingRequestFormSchema),
+  const { postos, motoristas } = useFuelingData();
+  
+  const form = useForm<CreateFuelingRequestType>({
+    resolver: zodResolver(CreateFuelingRequestSchema),
     defaultValues: {
-      fuelType: 'GASOLINA_COMUM',
-      vehicleId: '',
+      fuelType: request ? request.fuelType : 'GASOLINA_COMUM',
+      vehicleId: request ? request.vehicleId : '',
       driverId: '',
       gasStationId: '',
       liters: 'FULL',
     }
   });
 
-  const {register, handleSubmit, formState} =  form;
+  const {register, handleSubmit, formState, setValue} =  form;
   const fuelType = useWatch({control: form.control, name: 'fuelType' });
+  const litersValue = useWatch({control: form.control, name: 'liters' });
 
-  const onSubmit = async ({gasStationId, ...data}: CreateFuelingRequestFormType) => {
-    const contractFuelId = await getContractFuelByGasStationAndFuelType({gasStationId: gasStationId, fuelType: data.fuelType});
+  // só pode atualizar se o fueling não for completo
+  const onSubmit = async (data: CreateFuelingRequestType) => {
 
-    if (!contractFuelId.success) return form.setError('root', {type: 'manual', message: contractFuelId.error});
 
-    const res =  await createFuelingRequest({...data, contractFuelId: contractFuelId.data.id, liters: liters});
+    const res =  
+    request 
+      ? 
+        await updateFuelingRequest(
+          request.id, 
+          { 
+            ...request, 
+            ...data, 
+          }
+        )
+      : 
+        await createFuelingRequest({...data});
     
     if (!res.success) return form.setError('root', {type: 'manual', message: res.error});
 
@@ -60,12 +69,25 @@ const AddRequest = ({ postos, motoristas}: {
   }
 
   useEffect(() => {
+    if (request) {
+      form.reset(request)
+    }
+  }, [request, form]);
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
     const fetchVeiculos = async () => {
       if (!fuelType) {
         setVeiculos([]);
         return;
       }
-
+      
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+      } else {
+        setValue('vehicleId', '');
+      }
+      
       const response = await getVehiclesSelectByFuelType(
         { id: true, plate: true, model: true, brand: true, year: true },
         fuelType
@@ -80,7 +102,7 @@ const AddRequest = ({ postos, motoristas}: {
     };
 
     fetchVeiculos();
-  }, [fuelType]);
+  }, [fuelType, setValue]);
 
   const fuelTypes = FuelTypeSchema.options;
 
@@ -96,9 +118,26 @@ const AddRequest = ({ postos, motoristas}: {
       // Exemplo: Mostrar um toast de aviso ou focar no primeiro erro
       alert("Por favor, preencha todos os campos obrigatórios!");
     };
-    
+  
+const handleOpenChange = (isOpen: boolean) => {
+
+  setOpen(isOpen);
+
+  if (!isOpen) {
+    form.reset(request ?? {
+      fuelType: 'GASOLINA_COMUM',
+      vehicleId: '',
+      driverId: '',
+      odometer: "" as unknown as number,
+      gasStationId: '',
+      liters: 'FULL',
+    });
+    setFullTank(request ? request.liters === 'FULL' : true);
+  }
+};
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger 
         className="
           flex items-center w-full min-w-55 justify-center gap-2 h-11 
@@ -107,11 +146,22 @@ const AddRequest = ({ postos, motoristas}: {
           hover:bg-[#093a1c]/90
         "
       >
-        <Plus size={16} className="shrink-0" />
-        <span className="">Adicionar Solicitação</span>
+        {
+          request ? 
+            <>
+              <Edit2 size={16} />
+              Editar
+            </>
+          :
+            <>
+              <Plus size={16} />
+              Adicionar Solicitação
+            </>
+        }
       </DialogTrigger>
       
-      <DialogContent className="sm:max-w-md bg-slate-950 border border-slate-800 text-slate-200 rounded-none p-6 shadow-2xl">
+      <DialogContent 
+        className="sm:max-w-md bg-slate-950 border border-slate-800 text-slate-200 rounded-none p-6 shadow-2xl">
         <DialogHeader className="border-b border-slate-900 pb-4 mb-2">
           <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
             Adicionar Nova Solicitação
@@ -217,14 +267,23 @@ const AddRequest = ({ postos, motoristas}: {
                 placeholder="Ex: 145200" 
                 className="h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-600 font-mono focus-visible:ring-[#093a1c]"
               />
+              {
+                formState.errors.odometer && (
+                  <span>{formState.errors.odometer.message}</span>
+                )
+              }
             </div>
 
             <div className="flex flex-col gap-1.5 justify-end">
               <label className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-wide text-emerald-400 cursor-pointer pb-1 mb-0.5 select-none">
                 <input 
                   checked={fullTank}
-                  onChange={() => setFullTank(!fullTank)}
-                  type="checkbox" 
+                  onChange={() => {
+                    const next = !fullTank;
+                    setFullTank(next);
+                    setValue('liters', next ? 'FULL' : 0, { shouldValidate: true });
+                  }}
+                  type="checkbox"
                   id="encher"
                   className="h-5 w-5 accent-[#093a1c] cursor-pointer" 
                 />
@@ -237,21 +296,27 @@ const AddRequest = ({ postos, motoristas}: {
                   type="number" 
                   step="0.01"
                   disabled={fullTank} 
-                  value={liters} 
+                  value={fullTank || !litersValue || litersValue === 'FULL' ? '' : litersValue} 
                   onChange={e => {
-                    const valor = fullTank ? 'FULL' : Number(e.target.value);
-                    setLiters(valor);
+                    setValue('liters', Number(e.target.value), { shouldValidate: true });
                   }}
                   placeholder={fullTank ? "Tanque Cheio" : "Ex: 45.50"}
                   className="h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-600 font-mono focus-visible:ring-[#093a1c] disabled:opacity-40 disabled:cursor-not-allowed"
                 />
+              {
+                formState.errors.liters && 
+                  (
+                    <span>{formState.errors.liters.message}</span>
+                  )
+              }
             </div>
           </div>
 
           <div className="flex justify-end gap-3 border-t border-slate-900 pt-4 mt-2">
             <Button 
               type="button" 
-              variant="ghost" 
+              variant="ghost"
+              onClick={() => handleOpenChange(false)}
               className="rounded-none cursor-pointer font-bold text-xs tracking-wider uppercase text-slate-400 hover:text-white hover:bg-slate-900"
             >
               Cancelar

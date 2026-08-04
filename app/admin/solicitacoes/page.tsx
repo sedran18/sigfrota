@@ -8,19 +8,23 @@ import { FuelIcon } from "lucide-react";
 import { getGasStationsSelect } from "@/lib/actions/gasStation";
 import { getDriversSelect } from "@/lib/actions/driver";
 import { RequesStatusType } from "@/schemas/enums.schema";
+import { FuelingDataProvider } from "@/providers/FuelingDataProvider";
 
 const Solicitacoes = async () => {
   const status: RequesStatusType = 'PENDING'
+  // fazer context para o status
   const solicitacoes = await getFuelingRequests(status);
   const postos = await getGasStationsSelect({id:true, name: true});
   const motoristas = await getDriversSelect({id:true, name: true});
   return (
-    <div>
+    <FuelingDataProvider 
+      postos={postos.success ? postos.data : [] } 
+      motoristas={motoristas.success ? motoristas.data : []}
+      >
       <HeaderTemplate title='Solicitações' description="Lista de todas as solicitações">
         <DateCalendarPicker />
-        <AddRequest 
-          postos={postos.success ? postos.data : []} 
-          motoristas={motoristas.success ? motoristas.data : []}
+        <AddRequest
+          key='novo'
         />
       </HeaderTemplate>
       <BasicFilters />
@@ -33,7 +37,7 @@ const Solicitacoes = async () => {
           <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Nenhuma solicitação de abastecimento</h3>
         </div>     
       }
-    </div>
+    </FuelingDataProvider>
   )
 }
 

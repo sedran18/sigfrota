@@ -1,9 +1,10 @@
-import { CheckCircle2, X, AlertCircle, XCircle, Fuel, User, Gauge, Calendar, Printer } from "lucide-react"
+import { CheckCircle2, AlertCircle, XCircle, Fuel, User, Gauge, Calendar, Printer } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { dateToStringDate } from "@/lib/utils"
 import { FuelingRequestType } from "@/schemas/fuelingRequest.schema"
 import { RequesStatusType } from "@/schemas/enums.schema"
 import DeleteBtn from "./DeleteBtn"
+import AddRequest from "../AddRequest"
 
 
 const statusConfig = {
@@ -27,8 +28,7 @@ const statusConfig = {
 const RequestCard = ({ data, status }: {data:FuelingRequestType, status: RequesStatusType}) => {
   const currentStatus = statusConfig[data.status]
   const isPending = data.status === "PENDING"
-  console.log('litros', data.liters)
-
+  
   return (
     <div className={`
       relative flex flex-col justify-between gap-5 p-5 pt-3 bg-white border border-slate-200 transition-all rounded-none w-full
@@ -77,6 +77,7 @@ const RequestCard = ({ data, status }: {data:FuelingRequestType, status: RequesS
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
+          <AddRequest request={data} key={'update'}/>
           <Button 
             variant="outline"
             className="w-full sm:w-auto border-slate-300 text-slate-900 bg-white font-bold text-xs tracking-wider uppercase rounded-none h-9 px-3 gap-1.5 cursor-pointer hover:bg-slate-50 hover:text-slate-950 transition-all"
