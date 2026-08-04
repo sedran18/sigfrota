@@ -1,6 +1,8 @@
 import z from "zod";
 import { FuelTypeSchema, RequesStatusSchema } from "./enums.schema";
 import { GasStationIdSchema } from "./gasStation.schema";
+import { SelectedDriver } from "@/lib/actions/driver";
+import { SelectedGasStation } from "@/lib/actions/gasStation";
 
 export const FuelingRequestSchema = z.object({
     id: z.uuid(),
@@ -17,6 +19,29 @@ export const FuelingRequestSchema = z.object({
 })
 
 export type FuelingRequestType = z.infer<typeof FuelingRequestSchema>;
+
+export const GetFuelingRequestSchema = FuelingRequestSchema.extend({
+  driver: z.object({
+    id: z.uuid(),
+    name: z.string(),
+  }),
+  vehicle: z.object({
+    brand: z.string(),
+    model: z.string(),
+    year: z.number().int(),
+    plate: z.string(),
+  }),
+  contractFuel: z.object({
+    contract: z.object({
+      gasStation: z.object({
+        id: z.uuid(),
+        name: z.string(),
+      }),
+    }),
+  }),
+});
+
+export type GetFuelingRequestType = z.infer<typeof GetFuelingRequestSchema>;
 
 export const CreateFuelingRequestSchema = FuelingRequestSchema.omit({
     id: true,

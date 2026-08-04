@@ -1,53 +1,53 @@
 'use server';
-import { CreateFuelingRequestSchema, CreateFuelingRequestType, FuelingRequestIdSchema, FuelingRequestIdType, FuelingRequestType } from "@/schemas/fuelingRequest.schema";
+import { CreateFuelingRequestSchema, CreateFuelingRequestType, FuelingRequestIdSchema, FuelingRequestIdType, FuelingRequestType, GetFuelingRequestType } from "@/schemas/fuelingRequest.schema";
 import prisma from "../prisma";
 import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import { RequesStatusType } from "@/schemas/enums.schema";
 import { getContractFuelByGasStationAndFuelType } from "./contract";
 
-export const getFuelingRequests = async (status: RequesStatusType): Promise<ResponseType<FuelingRequestType[]>> => {
+export const getFuelingRequests = async (status: RequesStatusType): Promise<ResponseType<GetFuelingRequestType[]>> => {
     try {
-        const requests = await prisma.fuelingRequest.findMany({
-            where: {
-                status,
-            }
-        });
         // const requests = await prisma.fuelingRequest.findMany({
         //     where: {
         //         status,
-        //     }, 
-        //     include: {
-        //         driver: {
-        //             select: {
-        //                 name: true, 
-        //                 id: true,
-        //             }
-        //         },
-        //         vehicle: {
-        //             select: {
-        //                 brand: true, 
-        //                 model: true,
-        //                 year: true, 
-        //                 plate: true,
-        //             }
-        //         },
-        //         contractFuel: {
-        //             select: {
-        //                 contract: {
-        //                     select: {
-        //                         gasStation: {
-        //                             select: {
-        //                                 name: true,
-        //                                 id: true,
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
         //     }
         // });
+        const requests = await prisma.fuelingRequest.findMany({
+            where: {
+                status,
+            }, 
+            include: {
+                driver: {
+                    select: {
+                        name: true, 
+                        id: true,
+                    }
+                },
+                vehicle: {
+                    select: {
+                        brand: true, 
+                        model: true,
+                        year: true, 
+                        plate: true,
+                    }
+                },
+                contractFuel: {
+                    select: {
+                        contract: {
+                            select: {
+                                gasStation: {
+                                    select: {
+                                        name: true,
+                                        id: true,
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
         const requestsAdjusted = requests.map(req => ({...req, liters: req.liters === 'FULL' ? 'FULL' as const : Number(req.liters)}));
         return {success: true, data: requestsAdjusted}
     } catch (err) {

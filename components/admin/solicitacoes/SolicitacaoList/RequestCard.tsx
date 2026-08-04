@@ -1,7 +1,7 @@
 import { CheckCircle2, AlertCircle, XCircle, Fuel, User, Gauge, Calendar, Printer } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { dateToStringDate } from "@/lib/utils"
-import { FuelingRequestType } from "@/schemas/fuelingRequest.schema"
+import { GetFuelingRequestType } from "@/schemas/fuelingRequest.schema"
 import { RequesStatusType } from "@/schemas/enums.schema"
 import DeleteBtn from "./DeleteBtn"
 import AddRequest from "../AddRequest"
@@ -25,7 +25,7 @@ const statusConfig = {
   }
 }
 
-const RequestCard = ({ data, status }: {data:FuelingRequestType, status: RequesStatusType}) => {
+const RequestCard = ({ data, status }: {data:GetFuelingRequestType, status: RequesStatusType}) => {
   const currentStatus = statusConfig[data.status]
   const isPending = data.status === "PENDING"
   

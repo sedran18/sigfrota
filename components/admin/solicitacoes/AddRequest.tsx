@@ -12,17 +12,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm, useWatch} from "react-hook-form";
-import { CreateFuelingRequestSchema, CreateFuelingRequestType, FuelingRequestType} from "@/schemas/fuelingRequest.schema";
+import { CreateFuelingRequestSchema, CreateFuelingRequestType, GetFuelingRequestType} from "@/schemas/fuelingRequest.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFuelingRequest, updateFuelingRequest } from "@/lib/actions/fuelingRequest";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getVehiclesSelectByFuelType, SelectedVehicle } from "@/lib/actions/vehicle";
 import { FuelTypeSchema } from "@/schemas/enums.schema";
 import { useFuelingData } from "@/providers/FuelingDataProvider";
 
 
 const AddRequest = ({request}: {
-  request?: FuelingRequestType,
+  request?: GetFuelingRequestType,
 }) => {
   const [open, setOpen] = useState(false);
   const [fullTank, setFullTank] = useState(request ? request.liters === 'FULL' : true)
@@ -40,6 +40,12 @@ const AddRequest = ({request}: {
       liters: 'FULL',
     }
   });
+  const formDefaults = useMemo(() => {
+    if (!request) return undefined;
+    const { contractFuel, driver, vehicle, status, createdAt, updatedAt, id, ...requestData } = request;
+    return { ...requestData, gasStationId: contractFuel.contract.gasStation.id };
+  }, [request]);
+
 
   const {register, handleSubmit, formState, setValue} =  form;
   const fuelType = useWatch({control: form.control, name: 'fuelType' });
@@ -52,13 +58,7 @@ const AddRequest = ({request}: {
     const res =  
     request 
       ? 
-        await updateFuelingRequest(
-          request.id, 
-          { 
-            ...request, 
-            ...data, 
-          }
-        )
+        await updateFuelingRequest(request.id, {...formDefaults, ...data})
       : 
         await createFuelingRequest({...data});
     
@@ -69,10 +69,11 @@ const AddRequest = ({request}: {
   }
 
   useEffect(() => {
-    if (request) {
-      form.reset(request)
+    if (formDefaults) {
+      form.reset(formDefaults)
     }
-  }, [request, form]);
+  }, [formDefaults, form]);
+  
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -124,7 +125,7 @@ const handleOpenChange = (isOpen: boolean) => {
   setOpen(isOpen);
 
   if (!isOpen) {
-    form.reset(request ?? {
+    form.reset(formDefaults ?? {
       fuelType: 'GASOLINA_COMUM',
       vehicleId: '',
       driverId: '',
