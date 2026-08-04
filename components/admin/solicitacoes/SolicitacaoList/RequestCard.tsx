@@ -38,7 +38,7 @@ const RequestCard = ({ data, status }: {data:GetFuelingRequestType, status: Requ
       <div className="flex justify-between items-start gap-4">
         <div className="flex flex-col gap-3 min-w-0">
           <h3 className="text-sm font-black text-slate-800 uppercase tracking-wide truncate max-w-[160px] sm:max-w-xs">
-            {data.vehicleId}
+            {data.vehicle.brand}, {data.vehicle.model}, {data.vehicle.plate}, {data.vehicle.year}
           </h3>
         </div>
         
@@ -51,12 +51,12 @@ const RequestCard = ({ data, status }: {data:GetFuelingRequestType, status: Requ
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4 border-t border-b border-slate-100 py-4 my-1 text-sm text-slate-600">
         <div className="flex items-center gap-2.5">
           <User size={14} className="shrink-0 text-slate-400" />
-          <span>Condutor: <strong className="text-slate-800 font-bold uppercase">{data.driverId}</strong></span>
+          <span>Condutor: <strong className="text-slate-800 font-bold uppercase">{data.driver.name}</strong></span>
         </div>
 
         <div className="flex items-center gap-2.5">
           <Fuel size={14} className="shrink-0 text-slate-400" />
-          <span>Combustível: <strong className="text-slate-800 font-bold">{data.fuelType}</strong></span>
+          <span>Combustível: <strong className="text-slate-800 font-bold">{data.fuelType.includes('_') ? data.fuelType.replace('_', ' ') : data.fuelType}</strong></span>
         </div>
 
         <div className="flex items-center gap-2.5">
