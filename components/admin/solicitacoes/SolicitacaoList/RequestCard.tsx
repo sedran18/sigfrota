@@ -1,10 +1,11 @@
-import { CheckCircle2, AlertCircle, XCircle, Fuel, User, Gauge, Calendar, Printer } from "lucide-react"
+import { CheckCircle2, AlertCircle, XCircle, Fuel, User, Gauge, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { dateToStringDate } from "@/lib/utils"
 import { GetFuelingRequestType } from "@/schemas/fuelingRequest.schema"
 import { RequesStatusType } from "@/schemas/enums.schema"
 import DeleteBtn from "./DeleteBtn"
 import AddRequest from "../AddRequest"
+import PrintOrderButton from "../PrintOrderButton"
 
 
 const statusConfig = {
@@ -78,13 +79,7 @@ const RequestCard = ({ data, status }: {data:GetFuelingRequestType, status: Requ
 
         <div className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
           <AddRequest request={data} key={'update'}/>
-          <Button 
-            variant="outline"
-            className="w-full sm:w-auto border-slate-300 text-slate-900 bg-white font-bold text-xs tracking-wider uppercase rounded-none h-9 px-3 gap-1.5 cursor-pointer hover:bg-slate-50 hover:text-slate-950 transition-all"
-          >
-            <Printer size={13} />
-            Imprimir
-          </Button>
+          <PrintOrderButton data={data}/>
           
           {isPending ? (
             <Button
