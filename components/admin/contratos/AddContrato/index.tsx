@@ -104,7 +104,7 @@ const AddContrato = ({ postos = [] }: {postos: GasStationWithUsageType[]}) => {
               Número do Contrato *
             </Label>
             <Input
-              {...register("contractNumber", { valueAsNumber: true })}
+              {...register("contractNumber")}
               id="contract_number"
               type="number"
               placeholder="EX: 1024"

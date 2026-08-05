@@ -90,7 +90,7 @@ model GasStation {
 model Contract {
   id String @id @default(uuid()) @db.Uuid
 
-  contractNumber Int 
+  contractNumber String
 
   startDate DateTime @db.Date
   endDate DateTime @db.Date
@@ -146,4 +146,6 @@ model FuelingRequest {
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  
+  @@map("fueling_requests")
 }

@@ -1,4 +1,4 @@
-import z, { boolean } from "zod";
+import z from "zod";
 import { ContractFuelSchema, CreateContractFuelSchema } from "./contractFuel.schema";
 import { FuelTypeSchema } from "./enums.schema";
 
@@ -11,13 +11,7 @@ export const ContractSchema = z.object({
     error: "ID do posto inválido",
   }),
 
-  contractNumber: z
-    .number({
-      error: "O número do contrato deve ser um número",
-    })
-    .int({
-      error: "O número do contrato deve ser um número inteiro",
-    }),
+  contractNumber: z.string({error: 'Número de contrato precisa ser string'}).min(2),
 
   startDate: z.date({
     error: "A data de início é obrigatória",

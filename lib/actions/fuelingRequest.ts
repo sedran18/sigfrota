@@ -32,12 +32,10 @@ export const getFuelingRequests = async ({
     const normalizedStatus = toArray(status);
     const normalizedFuelTypes = toArray(fuelType);
 
-    // 2. Monta o 'where' base do Prisma
     const where: Prisma.FuelingRequestWhereInput = {
       status: normalizedStatus?.length ? { in: normalizedStatus } : 'PENDING',
     };
 
-    // 3. Aplica os filtros de forma segura com .length
     if (normalizedDrivers?.length) {
       where.driverId = { in: normalizedDrivers };
     }
@@ -146,6 +144,16 @@ export const createFuelingRequest = async (
 
     } catch (err) {
         console.error(err);
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          // P2002 = Violou a restrição de unicidade (Unique Constraint)
+          if (err.code === "P2002") {
+            return {
+              success: false,
+              error: "Este veículo já possui uma solicitação de abastecimento pendente.",
+            }
+          }
+        }
+
         return {success: false, error: 'Erro ao criar solicitação'}
     }
 }
