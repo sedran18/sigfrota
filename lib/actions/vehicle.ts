@@ -123,43 +123,39 @@ export type SelectedVehicle<T extends Prisma.VehicleSelect> = Prisma.VehicleGetP
 
 export const getVehiclesSelectByFuelType = async <T extends VehicleSelectType>(
   data: T,
-  fuelType: FuelType,
+  fuelType?: FuelType,
 ): Promise<ResponseType<SelectedVehicle<T>[]>> => {
     const v = VehicleSelectSchema.safeParse(data);
     if (!v.success) return { success: false, error: 'Select inválido' };
   
     const select = v.data as T;
 
-    const vFuel= FuelTypeSchema.safeParse(fuelType);
+    let fuelTarget: VehicleFuelTypeType[] | undefined;
 
-    if(!vFuel.success) return {success:false, error: 'fuelType inválido'};
+    if (fuelType) {
+        const vFuel = FuelTypeSchema.safeParse(fuelType);
+        if (!vFuel.success) return { success: false, error: 'fuelType inválido' };
 
-    const combustivel = vFuel.data.startsWith('GASOLINA') ? 'GASOLINA' :   vFuel.data;
-    let fuelTarget:VehicleFuelTypeType[];
+        const combustivel = vFuel.data.startsWith('GASOLINA') ? 'GASOLINA' : vFuel.data;
 
-    if (combustivel === 'GASOLINA') {
-        fuelTarget = ['GASOLINA', 'FLEX'];
-    } else if (combustivel === 'ETANOL') {
-        fuelTarget = ['ETANOL', 'FLEX'];
-    } else {
-        fuelTarget = [combustivel as VehicleFuelTypeType]
+        if (combustivel === 'GASOLINA') {
+            fuelTarget = ['GASOLINA', 'FLEX'];
+        } else if (combustivel === 'ETANOL') {
+            fuelTarget = ['ETANOL', 'FLEX'];
+        } else {
+            fuelTarget = [combustivel as VehicleFuelTypeType];
+        }
     }
     
     try {
         const vehicles = await prisma.vehicle.findMany({
-        where: {
-            fuelType: {
-                in: fuelTarget,
-            }
-        },
-        select: select,
+            where: fuelTarget ? { fuelType: { in: fuelTarget } } : {},
+            select: select,
         });
 
-        if (!vehicles) return {success: false, error: 'Não foram encontrados veículos que consomem esse combustível'}
-
         return { 
-        success: true, 
-        data: vehicles as unknown as SelectedVehicle<T>[] 
+            success: true, 
+            data: vehicles
         };
     } catch (err) {
         console.error(err);

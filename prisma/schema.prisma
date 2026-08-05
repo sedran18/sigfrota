@@ -30,7 +30,7 @@ enum ConservationStatus {
   DEFFECTED
 }
 
-enum RequesStatusSchema {
+enum RequestStatusSchema {
   PENDING 
   COMPLETED
   CANCELED
@@ -142,7 +142,7 @@ model FuelingRequest {
   liters String
   fuelType FuelType
   odometer Int
-  status RequesStatusSchema
+  status RequestStatusSchema
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)

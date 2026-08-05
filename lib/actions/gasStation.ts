@@ -113,7 +113,7 @@ export const removeGasStation = async (id: GasStationIdType): Promise<ResponseTy
 export type SelectedGasStation<T extends Prisma.GasStationSelect> = Prisma.GasStationGetPayload<{ select: T }>;
 
 export const getGasStationsSelect = async <T extends GasStationSelectType>(
-  data: T
+  data: T,
 ): Promise<ResponseType<SelectedGasStation<T>[]>> => {
   const v = GasStationSelectSchema.safeParse(data);
   if (!v.success) return { success: false, error: v.error.message };

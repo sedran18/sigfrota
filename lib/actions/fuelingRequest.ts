@@ -3,58 +3,106 @@ import { CreateFuelingRequestSchema, CreateFuelingRequestType, FuelingRequestIdS
 import prisma from "../prisma";
 import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
-import { RequesStatusType } from "@/schemas/enums.schema";
+import { FuelType, RequestStatusType } from "@/schemas/enums.schema";
 import { getContractFuelByGasStationAndFuelType } from "./contract";
+import { GasStationIdType } from "@/schemas/gasStation.schema";
+import { DriverIdType } from "@/schemas/driver.schema";
+import { VehicleIdType } from "@/schemas/vehicle.schema";
+import { Prisma } from "../generated/prisma/client";
+import { toArray } from "../utils";
 
-export const getFuelingRequests = async (status: RequesStatusType): Promise<ResponseType<GetFuelingRequestType[]>> => {
-    try {
-        // const requests = await prisma.fuelingRequest.findMany({
-        //     where: {
-        //         status,
-        //     }
-        // });
-        const requests = await prisma.fuelingRequest.findMany({
-            where: {
-                status,
-            }, 
-            include: {
-                driver: {
-                    select: {
-                        name: true, 
-                        id: true,
-                    }
-                },
-                vehicle: {
-                    select: {
-                        brand: true, 
-                        model: true,
-                        year: true, 
-                        plate: true,
-                    }
-                },
-                contractFuel: {
-                    select: {
-                        contract: {
-                            select: {
-                                gasStation: {
-                                    select: {
-                                        name: true,
-                                        id: true,
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        const requestsAdjusted = requests.map(req => ({...req, liters: req.liters === 'FULL' ? 'FULL' as const : Number(req.liters)}));
-        return {success: true, data: requestsAdjusted}
-    } catch (err) {
-        console.error(err);
-        return {success: false, error: 'Erro ao listar solicitações'}
+export const getFuelingRequests = async ({
+  gasStationsIds,
+  driversIds,
+  vehiclesIds,
+  status,
+  fuelType
+}: {
+  gasStationsIds?: GasStationIdType[] | GasStationIdType
+  driversIds?: DriverIdType[] | DriverIdType
+  vehiclesIds?: VehicleIdType[] | VehicleIdType
+  status?: RequestStatusType[] | RequestStatusType
+  fuelType?: FuelType[] | FuelType
+}): Promise<ResponseType<GetFuelingRequestType[]>> => {
+
+  try {
+    const normalizedGasStations = toArray(gasStationsIds);
+    const normalizedDrivers = toArray(driversIds);
+    const normalizedVehicles = toArray(vehiclesIds);
+    const normalizedStatus = toArray(status);
+    const normalizedFuelTypes = toArray(fuelType);
+
+    // 2. Monta o 'where' base do Prisma
+    const where: Prisma.FuelingRequestWhereInput = {
+      status: normalizedStatus?.length ? { in: normalizedStatus } : 'PENDING',
+    };
+
+    // 3. Aplica os filtros de forma segura com .length
+    if (normalizedDrivers?.length) {
+      where.driverId = { in: normalizedDrivers };
     }
-}
+
+    if (normalizedVehicles?.length) {
+      where.vehicleId = { in: normalizedVehicles };
+    }
+
+    if (normalizedGasStations?.length) {
+      where.contractFuel = {
+        contract: {
+          gasStationId: { in: normalizedGasStations },
+        },
+      };
+    }
+
+    if (normalizedFuelTypes?.length) {
+      where.fuelType = { in: normalizedFuelTypes };
+    }
+
+    const requests = await prisma.fuelingRequest.findMany({
+      where,
+      include: {
+        driver: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+        vehicle: {
+          select: {
+            brand: true,
+            model: true,
+            year: true,
+            plate: true,
+          },
+        },
+        contractFuel: {
+          select: {
+            contract: {
+              select: {
+                gasStation: {
+                  select: {
+                    name: true,
+                    id: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const requestsAdjusted = requests.map((req) => ({
+      ...req,
+      liters: req.liters === 'FULL' ? ('FULL' as const) : Number(req.liters),
+    }));
+
+    return { success: true, data:  requestsAdjusted};
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: 'Erro ao listar solicitações' };
+  }
+};
 
 export const createFuelingRequest = async (
     data: CreateFuelingRequestType,

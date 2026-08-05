@@ -20,3 +20,7 @@ export const formatCNPJ = (value: string) => {
 };
 
 
+export const toArray = <T>(val?: T[] | T): T[] => {
+  if (!val) return [];
+  return Array.isArray(val) ? val : [val];
+};

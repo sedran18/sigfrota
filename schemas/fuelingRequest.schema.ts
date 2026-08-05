@@ -1,8 +1,6 @@
 import z from "zod";
-import { FuelTypeSchema, RequesStatusSchema } from "./enums.schema";
+import { FuelTypeSchema, RequestStatusSchema } from "./enums.schema";
 import { GasStationIdSchema } from "./gasStation.schema";
-import { SelectedDriver } from "@/lib/actions/driver";
-import { SelectedGasStation } from "@/lib/actions/gasStation";
 
 export const FuelingRequestSchema = z.object({
     id: z.uuid(),
@@ -13,7 +11,7 @@ export const FuelingRequestSchema = z.object({
     liters: z.number().positive().or(z.literal("FULL")),
     fuelType: FuelTypeSchema,
     odometer: z.number().int().nonnegative().optional(),
-    status: RequesStatusSchema,
+    status: RequestStatusSchema,
     createdAt: z.date(),
     updatedAt: z.date(),    
 })

@@ -23,13 +23,13 @@ export type ConservationStatusType= z.infer<typeof ConservationStatusSchema>;
 
 
 // Request Status
-export const RequesStatusSchema = z.enum([
+export const RequestStatusSchema = z.enum([
   'PENDING', 
   'COMPLETED', 
   'CANCELED'
 ]);
 
-export type RequesStatusType = z.infer<typeof RequesStatusSchema>;
+export type RequestStatusType = z.infer<typeof RequestStatusSchema>;
 
 
 // User Role

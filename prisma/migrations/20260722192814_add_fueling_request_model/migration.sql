@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "RequesStatusSchema" AS ENUM ('PENDING', 'COMPLETED', 'CANCELED');
+CREATE TYPE "RequestStatusSchema" AS ENUM ('PENDING', 'COMPLETED', 'CANCELED');
 
 -- AlterTable
 ALTER TABLE "vehicles" ALTER COLUMN "averageConsumption" SET DATA TYPE DECIMAL(5,2);
@@ -13,7 +13,7 @@ CREATE TABLE "FuelingRequest" (
     "liters" DECIMAL(5,2) NOT NULL,
     "fuelType" "FuelType" NOT NULL,
     "odometer" INTEGER NOT NULL,
-    "status" "RequesStatusSchema" NOT NULL,
+    "status" "RequestStatusSchema" NOT NULL,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL,
 

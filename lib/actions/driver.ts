@@ -100,7 +100,7 @@ export const removeDriver = async (id: DriverIdType): Promise<ResponseType<Drive
 export type SelectedDriver<T extends Prisma.DriverSelect> = Prisma.DriverGetPayload<{ select: T }>;
 
 export const getDriversSelect = async <T extends DriverSelectType>(
-  data: T
+  data: T,
 ): Promise<ResponseType<SelectedDriver<T>[]>> => {
   const v = DriverSelectSchema.safeParse(data);
   if (!v.success) return { success: false, error: v.error.message };
@@ -118,6 +118,6 @@ export const getDriversSelect = async <T extends DriverSelectType>(
     };
   } catch (err) {
     console.error(err);
-    return { success: false, error: 'Erro ao listar veículos' };
+    return { success: false, error: 'Erro ao listar motoristas' };
   }
 };

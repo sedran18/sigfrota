@@ -91,3 +91,12 @@ export type ResponseType<T> =
       success: false;
       error: string;
     };
+    
+export type OptionType = string | { id: string; name: string } | {id: string, brand: string, model: string, plate: string, year: number}
+
+
+export interface FilterConfig {
+  title: string
+  paramName: string
+  campos: OptionType[]
+}

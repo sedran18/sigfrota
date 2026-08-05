@@ -1,34 +1,104 @@
 "use client"
 
-import * as React from "react"
 import { ChevronDown, Filter, RotateCcw } from "lucide-react"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useState } from "react"
+import { useRouter, useSearchParams, usePathname } from "next/navigation"
+import { OptionType } from "@/lib/types"
 
-interface FiltroProps {
+interface FiltroProps<T extends OptionType> {
   title: string
-  campos: string[]
+  paramName: string
+  campos: T[]
 }
 
-const Filtro = ({ title, campos }: FiltroProps) => {
-  const [open, setOpen] = React.useState(false)
-  const [selecionados, setSelecionados] = React.useState<string[]>(campos.map(c => c.toLowerCase()))
+const Filtro = <T extends OptionType>({ title, paramName, campos }: FiltroProps<T>) => {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
-  const handleToggle = (valor: string) => {
-    setSelecionados((prev) =>
-      prev.includes(valor) 
-        ? prev.filter((item) => item !== valor) 
-        : [...prev, valor]
-    )
+  const [open, setOpen] = useState(false)
+
+  const allIds = campos.map((c) => (typeof c === "string" ? c : c.id))
+
+  const urlParams = searchParams.getAll(paramName)
+
+  const isDefaultAll = !searchParams.has(paramName)
+  const selecionados = isDefaultAll ? allIds : urlParams
+
+  const getItemData = (item: T) => {
+    if (typeof item === "string") {
+      return { id: item, label: item.includes("_") ? item.replace(/_/g, " ") : item }
+    }
+
+    const veiculo = item as unknown as {
+      id: string
+      name?: string
+      brand?: string
+      model?: string
+      plate?: string
+      year?: number
+    }
+
+    if (veiculo.brand && veiculo.model) {
+      const infos = [
+        `${veiculo.brand} ${veiculo.model}`,
+        veiculo.plate,
+        veiculo.year,
+      ]
+        .filter(Boolean)
+        .join(" - ")
+
+      return {
+        id: veiculo.id,
+        label: infos,
+      }
+    }
+
+    return {
+      id: veiculo.id,
+      label: veiculo.name ?? "Sem identificação",
+    }
   }
+
+  const handleToggle = (id: string) => {
+    let nextSelecionados: string[]
+
+    if (selecionados.includes(id)) {
+      nextSelecionados = selecionados.filter((item) => item !== id)
+    } else {
+      nextSelecionados = [...selecionados, id]
+    }
+
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete(paramName)
+
+    if (nextSelecionados.length === allIds.length || nextSelecionados.length === 0) {
+      router.push(`${pathname}?${params.toString()}`)
+      return
+    }
+
+    // Caso contrário, injeta os selecionados na URL
+    nextSelecionados.forEach((val) => params.append(paramName, val))
+    router.push(`${pathname}?${params.toString()}`)
+  }
+
+  const handleClear = () => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete(paramName)
+    router.push(`${pathname}?${params.toString()}`)
+  }
+
+  const countExibido = isDefaultAll ? allIds.length : selecionados.length
 
   return (
     <div className="w-full md:w-auto md:min-w-[160px] max-w-[240px]">
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger 
+        <PopoverTrigger
           className={`
             flex w-full items-center justify-between px-3.5 h-11 
             text-xs font-bold uppercase tracking-wide text-left 
@@ -37,26 +107,28 @@ const Filtro = ({ title, campos }: FiltroProps) => {
             hover:bg-slate-800 hover:text-white hover:border-slate-700
             focus:ring-1 focus:ring-emerald-800 focus:border-emerald-800
             ${open ? "border-emerald-800 ring-1 ring-emerald-800" : ""}
-            ${selecionados.length > 0 ? "border-emerald-800/60 text-white" : ""}
+            ${countExibido > 0 ? "border-emerald-800/60 text-white" : ""}
           `}
         >
-          <div className="flex items-center gap-2.5   pr-2">
-            <Filter 
-              size={14} 
-              className={`transition-colors shrink-0 ${selecionados.length > 0 ? "text-emerald-400" : "text-slate-400"}`} 
+          <div className="flex items-center gap-2.5 pr-2">
+            <Filter
+              size={14}
+              className={`transition-colors shrink-0 ${
+                countExibido > 0 ? "text-emerald-400" : "text-slate-400"
+              }`}
             />
-            <span className=" ">{title}</span>
+            <span>{title}</span>
           </div>
-          
+
           <div className="flex items-center gap-1.5 shrink-0">
-            {selecionados.length > 0 && (
-              <span className="flex items-center justify-center bg-emerald-800 text-emerald-300  text-[12px] px-1.5 py-0.5 font-bold">
-                {selecionados.length}
-              </span>
-            )}
-            <ChevronDown 
-              size={14} 
-              className={`text-slate-400 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`} 
+            <span className="flex items-center justify-center bg-emerald-800 text-emerald-300 text-[12px] px-1.5 py-0.5 font-bold">
+              {countExibido}
+            </span>
+            <ChevronDown
+              size={14}
+              className={`text-slate-400 shrink-0 transition-transform duration-200 ${
+                open ? "rotate-180" : ""
+              }`}
             />
           </div>
         </PopoverTrigger>
@@ -74,41 +146,42 @@ const Filtro = ({ title, campos }: FiltroProps) => {
 
           <div className="max-h-60 overflow-y-auto p-1 flex flex-col gap-0.5 bg-slate-950">
             {campos.map((c) => {
-              const valor = c.toLowerCase()
-              const isChecked = selecionados.includes(valor)
+              const { id, label } = getItemData(c)
+              const isChecked = selecionados.includes(id)
 
               return (
                 <label
-                  key={valor}
+                  key={id}
                   className={`
                     flex items-center gap-3 px-3 py-2.5 text-xs font-semibold cursor-pointer transition-all border border-transparent
-                    ${isChecked 
-                      ? "bg-[#093a1c]/20 text-emerald-400 border-[#093a1c]/30 font-bold" 
-                      : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+                    ${
+                      isChecked
+                        ? "bg-[#093a1c]/20 text-emerald-400 border-[#093a1c]/30 font-bold"
+                        : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
                     }
                   `}
                 >
                   <input
                     type="checkbox"
-                    id={valor}
+                    id={id}
                     checked={isChecked}
-                    onChange={() => handleToggle(valor)}
+                    onChange={() => handleToggle(id)}
                     className="h-4 w-4 accent-[#093a1c] cursor-pointer bg-slate-800 border-slate-700"
                   />
-                  <span className="  select-none tracking-wide">{c}</span>
+                  <span className="select-none tracking-wide">{label}</span>
                 </label>
               )
             })}
           </div>
 
-          {selecionados.length > 0 && (
+          {!isDefaultAll && (
             <div className="p-1.5 border-t border-slate-900 flex justify-end bg-slate-900/30">
               <button
-                onClick={() => setSelecionados([])}
+                onClick={handleClear}
                 className="text-[10px] font-bold uppercase text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 px-2 py-1.5 transition-all cursor-pointer flex items-center gap-1"
               >
                 <RotateCcw size={10} />
-                Limpar Filtro
+                Restaurar Padrão
               </button>
             </div>
           )}
