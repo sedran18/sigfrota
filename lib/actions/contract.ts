@@ -101,49 +101,69 @@ export const removeContract = async (id: ContractIdType): Promise<ResponseType<C
 
 export const updateStatusContract = async (
   id: ContractIdType,
-  isActive: boolean
+  currentIsActive: boolean
 ): Promise<ResponseType<ContractType>> => {
   const vId = ContractIdSchema.safeParse(id);
   if (!vId.success) return { success: false, error: vId.error.message };
 
+  const newActiveState = !currentIsActive; 
+
   try {
+    const existingContract = await prisma.contract.findUnique({
+      where: { id: vId.data },
+      select: { endDate: true },
+    });
+
+    if (!existingContract) {
+      return { success: false, error: 'Contrato não encontrado.' };
+    }
+
+    if (newActiveState && existingContract.endDate < new Date()) {
+      return { 
+        success: false, 
+        error: 'Impossível ativar: este contrato já está com a data de encerramento vencida.' 
+      };
+    }
+
     const contract = await prisma.contract.update({
-        where: {
-            id: vId.data,
-        },
-        data: {
-            active: !isActive
-        },
+      where: { id: vId.data },
+      data: { active: newActiveState },
     });
 
     revalidatePath('/admin/contratos');
     return { success: true, data: contract };
+
   } catch (err) {
-    console.log(err);
-    return { success: false, error: 'Erro ao atualizar contrato' };
+    console.error(err);
+    return { success: false, error: 'Erro ao atualizar o status do contrato.' };
   }
 };
 
-export const getContractFuelByGasStationAndFuelType = async (data:GetContractFuelByGasStationAndFuelTypeType):Promise<ResponseType<Pick<ContractFuelType, 'id'>>> => {
+export const getContractFuelByGasStationAndFuelType = async (data:GetContractFuelByGasStationAndFuelTypeType):Promise<ResponseType<Pick<ContractFuelType, 'id' | 'litersAvailable'>>> => {
     const v = GetContractFuelByGasStationAndFuelTypeSchema.safeParse(data);
     if (!v.success) return {success: false, error: v.error.message};
 
     try {
         const contractFuel = await prisma.contractFuel.findFirst({
             where: {
+                litersAvailable: { gt: 0 },
                 fuelType: v.data.fuelType,
                 contract: {
                     active: true,
+                    endDate: { gte: new Date() },
                     gasStationId: v.data.gasStationId
                 }
             }, 
             select: {
                 id: true,
+                litersAvailable: true,
             }
         });
 
-        if  (!contractFuel) return {success: false, error: 'Não há contrato nesse posto com esse combustível disponível'}
-        return {success: true, data: contractFuel}
+
+        if  (!contractFuel) return {success: false, error: 'Não há saldo de combustível disponível para este posto no momento.'}
+        
+        return {success: true, data: {...contractFuel, litersAvailable: contractFuel.litersAvailable.toNumber()}}
 
     } catch (err) {
         console.error(err);

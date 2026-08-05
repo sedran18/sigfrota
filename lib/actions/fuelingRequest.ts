@@ -114,19 +114,29 @@ export const createFuelingRequest = async (
         const contractFuelId = await getContractFuelByGasStationAndFuelType({gasStationId: gasStationId, fuelType: dados.fuelType});
         if (!contractFuelId.success) return {success:false, error: contractFuelId.error}
 
-        let odometer:number;
+        const vehicle = await prisma.vehicle.findUnique({
+          select: {currentOdometer: true, tankCapacity: true},
+          where: {id:dados.vehicleId}
+        });        
+        
+        if (!vehicle?.currentOdometer) return {success:false, error: 'Não foi possível encontrar veículo'};
 
-        if (v.data.odometer){
-            odometer = v.data.odometer
-        } else {
-            const vehicle = await prisma.vehicle.findUnique({
-                select: {currentOdometer: true},
-                where: {id: dados.vehicleId}
-            });
+        if (dados.liters === 'FULL' && !vehicle.tankCapacity) {
+          return { success: false, error: 'O veículo não possui a capacidade do tanque cadastrada.' };
+        }
 
-            if (!vehicle?.currentOdometer) return {success:false, error: 'Não foi possível encontrar veículo'};
+        const litersNum = dados.liters === 'FULL' ? vehicle.tankCapacity.toNumber() : Number(dados.liters);
 
-            odometer = vehicle.currentOdometer;
+        const litersAvailable = contractFuelId.data.litersAvailable;
+        if (litersNum > litersAvailable) return {success:false, error: `Não há combustível disponível para esse abastecimento. Combustível restante ${litersAvailable}`}
+
+        const odometer = v.data.odometer ?? vehicle.currentOdometer;
+
+        if (odometer < vehicle.currentOdometer) {
+          return {
+            success: false,
+            error: `O odômetro não pode ser menor que o atual (${vehicle.currentOdometer} km).`,
+          };
         }
         
         await prisma.fuelingRequest.create({
