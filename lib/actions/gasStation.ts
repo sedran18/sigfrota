@@ -4,8 +4,7 @@ import { CreateGasStationSchema, CreateGasStationType, GasStationIdSchema, GasSt
 import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
-import { GasStation} from "../generated/prisma/client";
-import { Prisma } from "../generated/prisma/browser";
+import { GasStation, Prisma} from "../generated/prisma/client";
 
 export const createGasStation = async (item: CreateGasStationType):Promise<ResponseType<string>> => {
         const v = CreateGasStationSchema.safeParse(item);
@@ -16,9 +15,22 @@ export const createGasStation = async (item: CreateGasStationType):Promise<Respo
             return {success: true, data: 'Posto criado com sucesso'};
 
         } catch (err) {
-            console.log(err)
-            return {success: false, error: 'Erro ao salvar posto'}
+    console.log(err);
+
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === 'P2002') {
+        const target = err.meta?.target as string[] | undefined;
+        
+        if (target?.includes('cnpj')) {
+          return { success: false, error: 'Já existe um posto cadastrado com este CNPJ.' };
         }
+        
+        return { success: false, error: 'Já existe um cadastro com esses dados.' };
+      }
+    }
+
+    return { success: false, error: 'Erro ao salvar posto.' };
+  }
 }
 
 // READ

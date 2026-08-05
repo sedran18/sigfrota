@@ -39,6 +39,8 @@ const AddPosto = ({gasStation} : {gasStation?: GasStationType}) => {
     :
       await createGasStation(data);
     
+    if (!res.success && res.error.toLowerCase().includes('cnpj')) 
+      return form.setError('cnpj', {type: 'manual', message: res.error});
     if (!res.success) return form.setError('root', {type: 'manual', message: res.error});
 
     form.reset();
