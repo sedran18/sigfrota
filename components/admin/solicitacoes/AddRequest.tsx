@@ -53,8 +53,6 @@ const AddRequest = ({request}: {
 
   // só pode atualizar se o fueling não for completo
   const onSubmit = async (data: CreateFuelingRequestType) => {
-
-
     const res =  
     request 
       ? 
@@ -88,10 +86,11 @@ const AddRequest = ({request}: {
       } else {
         setValue('vehicleId', '');
       }
-      
+      // Verifica se veículo é ativo
       const response = await getVehiclesSelectByFuelType(
         { id: true, plate: true, model: true, brand: true, year: true },
-        fuelType
+        fuelType,
+        true,
       );
 
       if (!response.success) {
@@ -204,7 +203,7 @@ const handleOpenChange = (isOpen: boolean) => {
               id="motorista" 
               className={selectStyles} 
               >
-              <option value="" disabled>{motoristas.length > 0 ? 'Selecione o motorista' : 'Não há motoristas disponíveis'}</option>
+              <option value="" disabled>{motoristas?.length > 0 ? 'Selecione o motorista' : 'Não há motoristas disponíveis'}</option>
 
               {motoristas.length > 0 && motoristas.map(m => (
                 <option value={m.id} key={m.id} className="bg-slate-950">{m.name}</option>

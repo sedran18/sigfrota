@@ -31,8 +31,8 @@ const Solicitacoes = async ({
 
   const [solicitacoes, postos, motoristas, veiculos] = await Promise.all([
     getFuelingRequests(camposFiltro),
-    getGasStationsSelect({ id: true, name: true }),
-    getDriversSelect({ id: true, name: true }),
+    getGasStationsSelect({ id: true, name: true, active: true}),
+    getDriversSelect({ id: true, name: true, active: true}),
     getVehiclesSelectByFuelType({ id: true, brand: true, model: true, plate: true, year: true }),
   ])
 
@@ -42,12 +42,15 @@ const Solicitacoes = async ({
     { title: "Veículos", paramName: "vehiclesIds", campos: veiculos.success ? veiculos.data : [] },
     { title: "Combustível", paramName: "fuelType", campos: FuelTypeSchema.options },
     { title: "Status", paramName: "status", campos: RequestStatusSchema.options },
-  ]
+  ];
+
+  const postosAdjusted = postos.success ? postos.data.filter(p => p.active === true) : [];
+  const motoristasAdjusted = motoristas.success ? motoristas.data.filter(m => m.active === true) : [];
 
   return (
     <FuelingDataProvider
-      postos={postos.success ? postos.data : []}
-      motoristas={motoristas.success ? motoristas.data : []}
+      postos={postosAdjusted}
+      motoristas={motoristasAdjusted}
     >
       <HeaderTemplate title="Solicitações" description="Lista de todas as solicitações">
         <DateCalendarPicker />
@@ -68,6 +71,7 @@ const Solicitacoes = async ({
         </div>
       )}
     </FuelingDataProvider>
+
   )
 }
 

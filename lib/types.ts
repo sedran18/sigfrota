@@ -92,7 +92,7 @@ export type ResponseType<T> =
       error: string;
     };
     
-export type OptionType = string | { id: string; name: string } | {id: string, brand: string, model: string, plate: string, year: number}
+export type OptionType = string | { id: string; name: string, active?: boolean } | {id: string, brand: string, model: string, plate: string, year: number, active?: boolean}
 
 
 export interface FilterConfig {

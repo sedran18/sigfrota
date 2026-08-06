@@ -2,7 +2,6 @@ import { CheckCircle2, AlertCircle, XCircle, Fuel, User, Gauge, Calendar } from 
 import { Button } from "@/components/ui/button"
 import { dateToStringDate } from "@/lib/utils"
 import { GetFuelingRequestType } from "@/schemas/fuelingRequest.schema"
-import { RequestStatusType } from "@/schemas/enums.schema"
 import DeleteBtn from "./DeleteBtn"
 import AddRequest from "../AddRequest"
 import PrintOrderButton from "../PrintOrderButton"

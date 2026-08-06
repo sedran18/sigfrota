@@ -188,49 +188,93 @@ export const deleteFuelingRequest = async (id: FuelingRequestIdType): Promise<Re
 // km inicial tem que ser maior que o km anteriro do carro
 // verificar os fuelings depois
 export const updateFuelingRequest = async (
-        id: FuelingRequestIdType, 
-        campos: CreateFuelingRequestType, 
-    ): Promise<ResponseType<string>> => {
-    const vId = FuelingRequestIdSchema.safeParse(id);
-    if (!vId.success) return {success: false, error: vId.error.message};
+  id: FuelingRequestIdType,
+  campos: CreateFuelingRequestType
+): Promise<ResponseType<string>> => {
+  const vId = FuelingRequestIdSchema.safeParse(id);
+  if (!vId.success) return { success: false, error: vId.error.message };
 
-    const vCampos = CreateFuelingRequestSchema.safeParse(campos);
-    if (!vCampos.success) return {success: false, error: vCampos.error.message}
+  const vCampos = CreateFuelingRequestSchema.safeParse(campos);
+  if (!vCampos.success) return { success: false, error: vCampos.error.message };
 
-    const {gasStationId, ...dados} = vCampos.data;
-    
-    try {
-        const contractFuelId = await getContractFuelByGasStationAndFuelType({
-            gasStationId: gasStationId, 
-            fuelType: dados.fuelType
-        });
+  const { gasStationId, ...dados } = vCampos.data;
 
-        if (!contractFuelId.success) return {success:false, error: contractFuelId.error}
+  try {
+    const [contractFuelRes, vehicle] = await Promise.all([
+      getContractFuelByGasStationAndFuelType({
+        gasStationId,
+        fuelType: dados.fuelType,
+      }),
+      prisma.vehicle.findUnique({
+        where: { id: dados.vehicleId },
+        select: { currentOdometer: true, tankCapacity: true },
+      }),
+    ]);
 
-        const res = await prisma.fuelingRequest.update({
-            where: {
-                id: vId.data,
-                status: 'PENDING',
-            },
-            data: {
-                ...dados, 
-                liters: String(dados.liters), 
-                contractFuelId: contractFuelId.data.id
-            }
-        });
+    if (!contractFuelRes.success) return { success: false, error: contractFuelRes.error };
+    if (!vehicle) return { success: false, error: "Veículo não encontrado." };
 
-        if (!res) return {success: false, error: 'Erro ao acessar banco. Verifique o status da solicitação.'}
-
-        revalidatePath('/admin/solicitacoes');
-        return {success: true, data: 'Solicitação atualizada com sucesso!'};
-
-    } catch (err) {
-        console.log(err);
-        return {success:false, error: 'Erro ao atualizar solicitação'}
-
+    if (dados.liters === "FULL" && !vehicle.tankCapacity) {
+      return { success: false, error: "O veículo não possui a capacidade do tanque cadastrada." };
     }
 
+    const litersNum = dados.liters === "FULL" 
+      ? (typeof vehicle.tankCapacity === 'number' ? vehicle.tankCapacity : vehicle.tankCapacity.toNumber())
+      : Number(dados.liters);
 
-}
+    const litersAvailable = contractFuelRes.data.litersAvailable;
+    if (litersNum > litersAvailable) {
+      return {
+        success: false,
+        error: `Não há combustível suficiente no contrato. Restante: ${litersAvailable}L`,
+      };
+    }
+
+    const odometer = vCampos.data.odometer ?? vehicle.currentOdometer;
+    if (odometer < vehicle.currentOdometer) {
+      return {
+        success: false,
+        error: `O odômetro não pode ser menor que o atual (${vehicle.currentOdometer} km).`,
+      };
+    }
+
+    await prisma.fuelingRequest.update({
+      where: {
+        id: vId.data,
+        status: "PENDING",
+      },
+      data: {
+        ...dados,
+        odometer,
+        liters: String(dados.liters),
+        contractFuelId: contractFuelRes.data.id,
+      },
+    });
+
+    revalidatePath("/admin/solicitacoes");
+    return { success: true, data: "Solicitação atualizada com sucesso!" };
+
+  } catch (err) {
+    console.error(err);
+
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === "P2025") {
+        return {
+          success: false,
+          error: "Solicitação não encontrada ou não está mais pendente para alteração.",
+        };
+      }
+      
+      if (err.code === "P2002") {
+        return {
+          success: false,
+          error: "O veículo selecionado já possui outra solicitação pendente.",
+        };
+      }
+    }
+
+    return { success: false, error: "Erro ao atualizar solicitação" };
+  }
+};
 
 // criar fueling sem cascade onDelete

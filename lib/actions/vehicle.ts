@@ -124,6 +124,7 @@ export type SelectedVehicle<T extends Prisma.VehicleSelect> = Prisma.VehicleGetP
 export const getVehiclesSelectByFuelType = async <T extends VehicleSelectType>(
   data: T,
   fuelType?: FuelType,
+  active?:boolean
 ): Promise<ResponseType<SelectedVehicle<T>[]>> => {
     const v = VehicleSelectSchema.safeParse(data);
     if (!v.success) return { success: false, error: 'Select inválido' };
@@ -146,10 +147,12 @@ export const getVehiclesSelectByFuelType = async <T extends VehicleSelectType>(
             fuelTarget = [combustivel as VehicleFuelTypeType];
         }
     }
-    
     try {
         const vehicles = await prisma.vehicle.findMany({
-            where: fuelTarget ? { fuelType: { in: fuelTarget } } : {},
+            where: {
+                ...(fuelTarget ? { fuelType: { in: fuelTarget } } : {}),
+                ...(typeof active === 'boolean' ? { active } : {}),
+            },
             select: select,
         });
 
