@@ -14,7 +14,7 @@ export const FuelingSchema = z.object({
   totalAmount: z.number().positive(),
   distanceTraveled: z.number().int().nonnegative(),
   fuelEfficiency: z.number().positive(),
-  observations: z.string().max(500).optional(),
+  observations: z.string().max(500).optional().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

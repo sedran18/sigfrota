@@ -148,7 +148,7 @@ model FuelingRequest {
   status RequestStatusSchema
 
   fuelings Fueling[]
-  
+
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
   
@@ -167,16 +167,16 @@ model Fueling {
   requestId String @db.Uuid
   request FuelingRequest @relation(fields: [requestId], references: [id])
 
-  contract_fuel_id String @db.Uuid
-  contract_fuel ContractFuel @relation(fields: [contract_fuel_id], references: [id])
+  contractFuelId String @db.Uuid
+  contractFuel ContractFuel @relation(fields: [contractFuelId], references: [id])
 
-	fuel_type FuelType
+	fuelType FuelType
 	odometer Int
 	liters Decimal @db.Decimal(6,2)
-	price_per_liter Decimal @db.Decimal(6,3)
-	total_amount Decimal @db.Decimal(10, 2)
-	distance_traveled Int
-	fuel_efficiency Decimal @db.Decimal(5, 2)
+	pricePerLiter Decimal @db.Decimal(6,3)
+	totalAmount Decimal @db.Decimal(10, 2)
+	distanceTraveled Int
+	fuelEfficiency Decimal @db.Decimal(5, 2)
 	observations String? @db.VarChar(150)
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
