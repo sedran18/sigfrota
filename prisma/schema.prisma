@@ -43,6 +43,7 @@ model Driver {
   active Boolean @default(true)
 
   fuelingRequests FuelingRequest[]
+  fuelings Fueling[]
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
@@ -65,6 +66,7 @@ model Vehicle {
   active Boolean @default(true)
 
   fuelingRequests FuelingRequest[]
+  fuelings Fueling[]
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
@@ -120,6 +122,7 @@ model ContractFuel {
   litersConsumed Decimal @db.Decimal(11,2)
 
   fuelingRequests FuelingRequest[]
+  fuelings Fueling[]
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
@@ -144,8 +147,40 @@ model FuelingRequest {
   odometer Int
   status RequestStatusSchema
 
+  fuelings Fueling[]
+  
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
   
   @@map("fueling_requests")
+}
+
+model Fueling {
+  id String @id @default(uuid()) @db.Uuid
+
+  vehicleId String @db.Uuid
+  vehicle Vehicle  @relation(fields: [vehicleId], references: [id])
+
+  driverId String @db.Uuid
+  driver Driver @relation(fields: [driverId], references: [id])
+
+  requestId String @db.Uuid
+  request FuelingRequest @relation(fields: [requestId], references: [id])
+
+  contract_fuel_id String @db.Uuid
+  contract_fuel ContractFuel @relation(fields: [contract_fuel_id], references: [id])
+
+	fuel_type FuelType
+	odometer Int
+	liters Decimal @db.Decimal(6,2)
+	price_per_liter Decimal @db.Decimal(6,3)
+	total_amount Decimal @db.Decimal(10, 2)
+	distance_traveled Int
+	fuel_efficiency Decimal @db.Decimal(5, 2)
+	observations String? @db.VarChar(150)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("fuelings")
 }

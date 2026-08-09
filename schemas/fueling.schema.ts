@@ -4,7 +4,7 @@ import { FuelTypeSchema } from "./enums.schema";
 export const FuelingSchema = z.object({
   id: z.uuid(),
   vehicleId: z.uuid(),
-  driverId: z.uuid().optional(),
+  driverId: z.uuid(),
   requestId: z.uuid(),
   contractFuelId: z.uuid(),
   fuelType: FuelTypeSchema,
