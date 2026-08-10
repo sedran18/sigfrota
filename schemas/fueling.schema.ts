@@ -35,13 +35,11 @@ export const GetFuelingSchema = FuelingSchema.extend({
 
 export type GetFuelingType = z.infer<typeof GetFuelingSchema>;
 
-export const AddFuelingSchema = FuelingSchema.omit({
-    id: true,
-    pricePerLiter: true,
-    totalAmount: true,
-    distanceTraveled: true,
-    createdAt: true,
-    updatedAt: true
+export const CreateFuelingSchema = FuelingSchema.pick({
+  liters: true,
+  odometer: true, 
+  observations: true,
+  requestId: true,
 })
 
-export type AddFuelingType = z.infer<typeof AddFuelingSchema>;
+export type CreateFuelingType = z.infer<typeof CreateFuelingSchema>;

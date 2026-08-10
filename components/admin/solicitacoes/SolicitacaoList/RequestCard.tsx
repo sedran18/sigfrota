@@ -1,10 +1,10 @@
 import { CheckCircle2, AlertCircle, XCircle, Fuel, User, Gauge, Calendar } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { dateToStringDate } from "@/lib/utils"
 import { GetFuelingRequestType } from "@/schemas/fuelingRequest.schema"
 import DeleteBtn from "./DeleteBtn"
 import AddRequest from "../AddRequest"
 import PrintOrderButton from "../PrintOrderButton"
+import AddFueling from "../../abastecimentos/AddFueling"
 
 
 const statusConfig = {
@@ -81,11 +81,7 @@ const RequestCard = ({ data}: {data:GetFuelingRequestType,}) => {
           <PrintOrderButton data={data}/>
           
           {isPending ? (
-            <Button
-              className="w-full sm:w-auto bg-[#093a1c] hover:bg-emerald-900 text-white font-bold text-xs tracking-wider uppercase rounded-none h-9 px-4 cursor-pointer transition-all shadow-sm"
-            >
-              Completar Solicitação
-            </Button>
+            <AddFueling requestId={data.id}/>
           ) : (
             <span className="w-full sm:w-auto text-center text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-slate-100 border border-slate-200/60 px-3 py-2 select-none">
               Finalizado em {dateToStringDate(data.updatedAt)}
