@@ -43,3 +43,6 @@ export const CreateFuelingSchema = FuelingSchema.pick({
 })
 
 export type CreateFuelingType = z.infer<typeof CreateFuelingSchema>;
+
+export const FuelingIdSchema = z.uuid({error: 'Id inválido'});
+export type FuelingIdType  = z.infer<typeof FuelingIdSchema>;

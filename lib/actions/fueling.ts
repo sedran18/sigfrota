@@ -88,7 +88,7 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
 
         if (distanceTraveled <= 0) return {success: false, error: 'Quilometragem inválida. Precisa ser maior que a quilometragem inicial.'}
 
-        const fuelEfficiency = distanceTraveled / totalAmount;
+        const fuelEfficiency = distanceTraveled / dados.liters;
         console.log(fuelEfficiency)
 
         if (fuelEfficiency < 8 || fuelEfficiency > 15) observations += '. Consumo anormal de combustível.';
@@ -122,5 +122,32 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
     } catch (err) {
         console.log(err);
         return {success: false, error: 'Erro ao criar abastecimento.'}
+    }
+}
+
+
+export const deleteFueling = async (fId: FuelingIdType): Promise<ResponseType<FuelingType>> => {
+    const v = FuelingIdSchema.safeParse(fId);
+    if (!v.success) return {success: false, error: v.error.message}
+
+    try {
+        const deleted = await prisma.fueling.delete({
+            where: {
+                id: v.data
+            }
+        });
+
+        if (!deleted) return {success: false, error: ''}
+
+        return {success: true, data: {
+            ...deleted, 
+            liters: deleted.liters.toNumber(), 
+            pricePerLiter: deleted.pricePerLiter.toNumber(),
+            totalAmount: deleted.totalAmount.toNumber(),
+            fuelEfficiency: deleted.fuelEfficiency.toNumber()
+        }}  
+    } catch (err) {
+        console.log(err);
+        return {success: false, error: 'Erro ao deletar abastecimento.'}
     }
 }
