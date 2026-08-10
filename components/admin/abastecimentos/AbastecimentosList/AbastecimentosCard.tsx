@@ -1,19 +1,20 @@
-import { FuelType,  FuelingType } from "@/lib/types"
 import { dateToStringDate } from "@/lib/utils"
+import { FuelType } from "@/schemas/enums.schema"
+import {  GetFuelingType } from "@/schemas/fueling.schema"
 import { Calendar, Fuel, Gauge, Activity, FileText, User } from "lucide-react"
 import Link from "next/link"
 
 const fuelBadgeStyles: Record<FuelType, string> = {
-  "GASOLINA COMUM": "bg-slate-100 border-slate-300 text-slate-700",
-  "GASOLINA ADITIVADA": "bg-amber-50 border-amber-300 text-amber-800",
+  "GASOLINA_COMUM": "bg-slate-100 border-slate-300 text-slate-700",
+  "GASOLINA_ADITIVADA": "bg-amber-50 border-amber-300 text-amber-800",
   "ETANOL": "bg-emerald-50 border-emerald-300 text-emerald-800",
-  "DIESEL S500": "bg-blue-50 border-blue-300 text-blue-800",
-  "DIESEL S10": "bg-indigo-50 border-indigo-300 text-indigo-800",
+  "DIESEL_COMUM": "bg-blue-50 border-blue-300 text-blue-800",
+  "DIESEL_S10": "bg-indigo-50 border-indigo-300 text-indigo-800",
 }
 
 
 
-const AbastecimentosCard = ({ data }: {data:  FuelingType}) => {
+const AbastecimentosCard = ({ data }: {data:  GetFuelingType}) => {
   const formattedDate = dateToStringDate(data.createdAt) || "---"
   const vehicleLabel = data.vehicleId ? `VEÍCULO ${data.vehicleId.substring(0, 8).toUpperCase()}` : "NÃO INFORMADO"
 
@@ -84,7 +85,7 @@ const AbastecimentosCard = ({ data }: {data:  FuelingType}) => {
                 Posto
               </td>
               <td className="py-1.5 text-right font-bold tabular-nums    align-middle">
-                {data.gasStation}
+                {data.contractFuel.contract.gasStation.name}
               </td>
             </tr>
           </tbody>

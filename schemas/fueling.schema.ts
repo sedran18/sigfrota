@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { FuelTypeSchema } from "./enums.schema";
+import { GasStationSchema } from "./gasStation.schema";
 
 export const FuelingSchema = z.object({
   id: z.uuid(),
@@ -20,6 +21,19 @@ export const FuelingSchema = z.object({
 });
 
 export type FuelingType = z.infer<typeof FuelingSchema>;
+
+export const GetFuelingSchema = FuelingSchema.extend({
+  contractFuel: z.object({
+    contract: z.object({
+      gasStation: GasStationSchema.pick({
+        name: true, 
+        id: true,
+      })
+    })
+  })
+});
+
+export type GetFuelingType = z.infer<typeof GetFuelingSchema>;
 
 export const AddFuelingSchema = FuelingSchema.omit({
     id: true,
