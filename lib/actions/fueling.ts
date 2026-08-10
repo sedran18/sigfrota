@@ -2,7 +2,7 @@
 
 import { ResponseType } from "../types";
 import prisma from "../prisma";
-import { CreateFuelingSchema, CreateFuelingType, GetFuelingType } from "@/schemas/fueling.schema";
+import { CreateFuelingSchema, CreateFuelingType, FuelingIdSchema, FuelingIdType, FuelingType, GetFuelingType } from "@/schemas/fueling.schema";
 
 export const getFuelings = async ():Promise<ResponseType<GetFuelingType[]>> => {
     try {
