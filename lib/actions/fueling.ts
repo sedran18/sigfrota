@@ -9,6 +9,7 @@ import { VehicleIdType } from "@/schemas/vehicle.schema";
 import { Prisma } from "../generated/prisma/client";
 import { toArray } from "../utils";
 import { FuelType } from "@/schemas/enums.schema";
+import { revalidatePath } from "next/cache";
 
 export const getFuelings = async ( {
     gasStationsIds,
@@ -112,8 +113,7 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
             }
         });
         console.log('validação 1');
-        // let observations = dados.observations ?? '';
-        let observations = dados.observations;
+        let observations = dados.observations ?? '';
 
         if (!inherintData) return {success: false, error: 'Não foi possível encontrar a solicitação.'};
 
@@ -161,6 +161,8 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
             data: createFueling
         })
         console.log('validação 3');
+        revalidatePath('/admin/solicitacoes');
+        revalidatePath('/admin/abastecimentos');
         return {success: true, data: 'Abastecimento criado com sucesso.'}
 
 
@@ -184,6 +186,8 @@ export const deleteFueling = async (fId: FuelingIdType): Promise<ResponseType<Fu
 
         if (!deleted) return {success: false, error: ''}
 
+        revalidatePath('/admin/solicitacoes');
+        revalidatePath('/admin/abastecimentos');
         return {success: true, data: {
             ...deleted, 
             liters: deleted.liters.toNumber(), 
