@@ -164,7 +164,7 @@ model Fueling {
   driverId String @db.Uuid
   driver Driver @relation(fields: [driverId], references: [id])
 
-  requestId String @db.Uuid
+  requestId String @db.Uuid @unique
   request FuelingRequest @relation(fields: [requestId], references: [id])
 
   contractFuelId String @db.Uuid
