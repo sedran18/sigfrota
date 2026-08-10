@@ -3,10 +3,55 @@
 import { ResponseType } from "../types";
 import prisma from "../prisma";
 import { CreateFuelingSchema, CreateFuelingType, FuelingIdSchema, FuelingIdType, FuelingType, GetFuelingType } from "@/schemas/fueling.schema";
+import { GasStationIdType } from "@/schemas/gasStation.schema";
+import { DriverIdType } from "@/schemas/driver.schema";
+import { VehicleIdType } from "@/schemas/vehicle.schema";
+import { Prisma } from "../generated/prisma/client";
+import { toArray } from "../utils";
+import { FuelType } from "@/schemas/enums.schema";
 
-export const getFuelings = async ():Promise<ResponseType<GetFuelingType[]>> => {
+export const getFuelings = async ( {
+    gasStationsIds,
+    driversIds,
+    vehiclesIds,
+    fuelType
+}: {
+  gasStationsIds?: GasStationIdType[] | GasStationIdType
+  driversIds?: DriverIdType[] | DriverIdType
+  vehiclesIds?: VehicleIdType[] | VehicleIdType
+  fuelType?: FuelType[] | FuelType
+}):Promise<ResponseType<GetFuelingType[]>> => {
     try {
+
+        const normalizedGasStations = toArray(gasStationsIds);
+        const normalizedDrivers = toArray(driversIds);
+        const normalizedVehicles = toArray(vehiclesIds);
+        const normalizedFuelTypes = toArray(fuelType);
+    
+        const where: Prisma.FuelingWhereInput = {};
+    
+        if (normalizedDrivers?.length) {
+          where.driverId = { in: normalizedDrivers };
+        }
+    
+        if (normalizedVehicles?.length) {
+          where.vehicleId = { in: normalizedVehicles };
+        }
+    
+        if (normalizedGasStations?.length) {
+          where.contractFuel = {
+            contract: {
+              gasStationId: { in: normalizedGasStations },
+            },
+          };
+        }
+    
+        if (normalizedFuelTypes?.length) {
+            where.fuelType = { in: normalizedFuelTypes };
+        }
+        
         const fuelings = await prisma.fueling.findMany({
+            where,
             include: {
                 contractFuel: {
                     select: {
@@ -24,6 +69,7 @@ export const getFuelings = async ():Promise<ResponseType<GetFuelingType[]>> => {
                 }
             }
         });
+
         const fuelingsAdjusted:GetFuelingType[] = fuelings.map(f => ({
             ...f, 
             liters: f.liters.toNumber(), 
@@ -41,10 +87,8 @@ export const getFuelings = async ():Promise<ResponseType<GetFuelingType[]>> => {
 
 
 export const createFueling = async (data: CreateFuelingType): Promise<ResponseType<string>> => {
-    console.log('entrou');
     const v = CreateFuelingSchema.safeParse(data);
     if (!v.success) return {success: false, error: v.error.message}
-    console.log('tesstando')
     const dados =  v.data;
 
     try {
@@ -68,6 +112,7 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
             }
         });
         console.log('validação 1');
+        // let observations = dados.observations ?? '';
         let observations = dados.observations;
 
         if (!inherintData) return {success: false, error: 'Não foi possível encontrar a solicitação.'};
