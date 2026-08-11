@@ -214,6 +214,14 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
 
     } catch (err) {
         console.log(err);
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+            if (err.code === "P2002") {
+                return {
+                    success: false,
+                    error: "Já existe um abastecimento com essa solicitação",
+                }
+            }
+        }
         return {success: false, error: 'Erro ao criar abastecimento.'}
     }
 }
