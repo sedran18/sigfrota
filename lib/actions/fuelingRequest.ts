@@ -219,6 +219,7 @@ export const updateFuelingRequest = async (
   const { gasStationId, ...dados } = vCampos.data;
 
   try {
+    // 1. Otimização: Busca em paralelo contrato e veículo
     const [contractFuelRes, vehicle] = await Promise.all([
       getContractFuelByGasStationAndFuelType({
         gasStationId,
@@ -231,21 +232,23 @@ export const updateFuelingRequest = async (
     ]);
 
     if (!contractFuelRes.success) return { success: false, error: contractFuelRes.error };
-    if (!vehicle) return { success: false, error: "Veículo não encontrado." };
+    if (!vehicle?.currentOdometer) {
+      return { success: false, error: "Não foi possível encontrar o veículo ou seu odômetro." };
+    }
 
     if (dados.liters === "FULL" && !vehicle.tankCapacity) {
       return { success: false, error: "O veículo não possui a capacidade do tanque cadastrada." };
     }
 
     const litersNum = dados.liters === "FULL" 
-      ? (typeof vehicle.tankCapacity === 'number' ? vehicle.tankCapacity : vehicle.tankCapacity.toNumber())
+      ? vehicle.tankCapacity.toNumber() 
       : Number(dados.liters);
 
     const litersAvailable = contractFuelRes.data.litersAvailable;
     if (litersNum > litersAvailable) {
       return {
         success: false,
-        error: `Não há combustível suficiente no contrato. Restante: ${litersAvailable}L`,
+        error: `Não há combustível disponível para esse abastecimento. Combustível restante ${litersAvailable}L`,
       };
     }
 
@@ -261,6 +264,9 @@ export const updateFuelingRequest = async (
       where: {
         id: vId.data,
         status: "PENDING",
+        fuelings: {
+          none: {}
+        }
       },
       data: {
         ...dados,
@@ -280,7 +286,7 @@ export const updateFuelingRequest = async (
       if (err.code === "P2025") {
         return {
           success: false,
-          error: "Solicitação não encontrada ou não está mais pendente para alteração.",
+          error: "Não foi possível atualizar: a solicitação não existe, não está pendente ou já possui um abastecimento vinculado.",
         };
       }
       
@@ -292,6 +298,6 @@ export const updateFuelingRequest = async (
       }
     }
 
-    return { success: false, error: "Erro ao atualizar solicitação" };
+    return { success: false, error: "Erro ao atualizar solicitação." };
   }
 };
