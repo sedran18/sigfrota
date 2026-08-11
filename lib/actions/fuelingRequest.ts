@@ -10,19 +10,24 @@ import { DriverIdType } from "@/schemas/driver.schema";
 import { VehicleIdType } from "@/schemas/vehicle.schema";
 import { Prisma } from "../generated/prisma/client";
 import { toArray } from "../utils";
+import { DateSchema, DateType } from "@/schemas/date.schema";
 
 export const getFuelingRequests = async ({
   gasStationsIds,
   driversIds,
   vehiclesIds,
   status,
-  fuelType
+  fuelType,
+  from,
+  to
 }: {
   gasStationsIds?: GasStationIdType[] | GasStationIdType
   driversIds?: DriverIdType[] | DriverIdType
   vehiclesIds?: VehicleIdType[] | VehicleIdType
   status?: RequestStatusType[] | RequestStatusType
-  fuelType?: FuelType[] | FuelType
+  fuelType?: FuelType[] | FuelType,
+  from?: DateType,
+  to?: DateType,
 }): Promise<ResponseType<GetFuelingRequestType[]>> => {
 
   try {
@@ -54,6 +59,20 @@ export const getFuelingRequests = async ({
 
     if (normalizedFuelTypes?.length) {
       where.fuelType = { in: normalizedFuelTypes };
+    }
+
+    if (from && to) {
+      const fromDate = DateSchema.safeParse(from);
+      const toDate = DateSchema.safeParse(to);
+
+      if (fromDate.success && toDate.success) {
+        toDate.data.setHours(23,59,59,999);
+
+        where.createdAt = {
+          gte: fromDate.data,
+          lte: toDate.data
+        }
+      }
     }
 
     const requests = await prisma.fuelingRequest.findMany({
@@ -276,5 +295,3 @@ export const updateFuelingRequest = async (
     return { success: false, error: "Erro ao atualizar solicitação" };
   }
 };
-
-// criar fueling sem cascade onDelete

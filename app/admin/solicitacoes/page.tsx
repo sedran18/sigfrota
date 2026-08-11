@@ -15,6 +15,7 @@ import { GasStationIdType } from "@/schemas/gasStation.schema"
 import { getVehiclesSelectByFuelType } from "@/lib/actions/vehicle"
 import { FuelType } from "@/lib/generated/prisma/enums"
 import { FilterConfig } from "@/lib/types"
+import { DateType } from "@/schemas/date.schema"
 
 const Solicitacoes = async ({
   searchParams,
@@ -24,7 +25,9 @@ const Solicitacoes = async ({
     driversIds?: DriverIdType[] | DriverIdType
     vehiclesIds?: VehicleIdType[] | VehicleIdType
     status?: RequestStatusType[] | RequestStatusType
-    fuelType?: FuelType[] | FuelType
+    fuelType?: FuelType[] | FuelType,
+    from?: DateType,
+    to?: DateType,
   }>
 }) => {
   const camposFiltro = await searchParams
