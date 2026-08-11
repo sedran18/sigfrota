@@ -15,8 +15,8 @@ import {
 import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
-import { Prisma } from "../generated/prisma/browser";
 import { FuelType, FuelTypeSchema,  VehicleFuelTypeType } from "@/schemas/enums.schema";
+import { Prisma } from "../generated/prisma/client";
 
 export const createVehicle = async (item:CreateVehicleType): Promise<ResponseType<string>> => {
     const v = CreateVehicleSchema.safeParse(item);
@@ -33,6 +33,16 @@ export const createVehicle = async (item:CreateVehicleType): Promise<ResponseTyp
 
     } catch  (err) {
         console.log(err);
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+                  //Violou o unique constraint
+            if (err.code === "P2002") {
+                return {
+                    success: false,
+                    error: "Já existe esse carro no sistema",
+                }
+            }
+        }
+
         return {success: false, error: 'Erro ao criar veículo'}
     }
 }
@@ -90,6 +100,17 @@ export const updateVehicle = async (id: VehicleIdType, campos: UpdateVehicleType
         }};
     } catch (err) {
         console.log(err);
+
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+            //Violou o unique constraint
+            if (err.code === "P2002") {
+                return {
+                    success: false,
+                    error: "Já existe esse carro no sistema",
+                }
+            }
+        }
+
         return {success: false, error: 'Erro ao atualizar veículo'}
     }
 }
