@@ -98,6 +98,17 @@ export const updateGasStation = async (id: GasStationIdType, campos: UpdateGasSt
         return {success: true, data: GasStation};
     } catch (err) {
         console.log(err);
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+            if (err.code === 'P2002') {
+                const target = err.meta?.target as string[] | undefined;
+                
+                if (target?.includes('cnpj')) {
+                return { success: false, error: 'Já existe um posto cadastrado com este CNPJ.' };
+                }
+                
+                return { success: false, error: 'Já existe um cadastro com esses dados.' };
+            }
+        }
         return {success: false, error: 'Erro ao atualizar posto'}
     }
 }
