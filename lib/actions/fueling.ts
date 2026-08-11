@@ -10,17 +10,22 @@ import { Prisma } from "../generated/prisma/client";
 import { toArray } from "../utils";
 import { FuelType } from "@/schemas/enums.schema";
 import { revalidatePath } from "next/cache";
+import { DateSchema, DateType } from "@/schemas/date.schema";
 
 export const getFuelings = async ( {
     gasStationsIds,
     driversIds,
     vehiclesIds,
-    fuelType
+    fuelType,
+    to, 
+    from
 }: {
   gasStationsIds?: GasStationIdType[] | GasStationIdType
   driversIds?: DriverIdType[] | DriverIdType
   vehiclesIds?: VehicleIdType[] | VehicleIdType
-  fuelType?: FuelType[] | FuelType
+  fuelType?: FuelType[] | FuelType,
+  from?: DateType,
+  to?: DateType,
 }):Promise<ResponseType<GetFuelingType[]>> => {
     try {
 
@@ -49,6 +54,19 @@ export const getFuelings = async ( {
     
         if (normalizedFuelTypes?.length) {
             where.fuelType = { in: normalizedFuelTypes };
+        }
+
+        if (from  && to) {
+            const fromDate = DateSchema.safeParse(from);
+            const toDate = DateSchema.safeParse(to);
+            if (fromDate.success && toDate.success){
+                toDate.data.setHours(23, 59, 59, 999);
+
+                where.createdAt = {
+                    gte: fromDate.data,
+                    lte: toDate.data
+                }
+            }
         }
         
         const fuelings = await prisma.fueling.findMany({

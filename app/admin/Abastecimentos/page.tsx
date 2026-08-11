@@ -13,6 +13,7 @@ import { getDriversSelect } from "@/lib/actions/driver";
 import { getVehiclesSelectByFuelType } from "@/lib/actions/vehicle";
 import { FuelTypeSchema } from "@/schemas/enums.schema";
 import { FuelType } from "@/lib/generated/prisma/enums";
+import { DateType } from "@/schemas/date.schema";
 
 
 
@@ -21,7 +22,9 @@ const Abastecimentos = async ({searchParams,} :{
       gasStationsIds?: GasStationIdType[] | GasStationIdType
       driversIds?: DriverIdType[] | DriverIdType
       vehiclesIds?: VehicleIdType[] | VehicleIdType
-      fuelType?: FuelType[] | FuelType
+      fuelType?: FuelType[] | FuelType,
+      to?: DateType,
+      from?: DateType,
     }>
 }) => {
   const camposFiltro = await searchParams
