@@ -97,32 +97,30 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
             where: {
                 id: dados.requestId,
             },
-            select:{
+            include:{
                 contractFuel: {
                     select : {
                         pricePerLiter: true, 
                         litersAvailable: true, 
                     }
                 },
-                vehicleId: true,
-                driverId: true,
-                contractFuelId: true,
-                fuelType: true,
-                odometer: true,
-                liters: true,
             }
         });
-        console.log('validação 1');
-        let observations = dados.observations ?? '';
-
         if (!inherintData) return {success: false, error: 'Não foi possível encontrar a solicitação.'};
 
+        // adiantar o erro kkk
+        if (inherintData.status === 'COMPLETED') {
+            return { success: false, error: 'Esta solicitação já foi finalizada.' };
+        };
+
+
+        const observations = dados.observations ? [dados.observations] : [];
         const litrosSolicitados = inherintData.liters;
 
         if (litrosSolicitados !== 'FULL' && Number(litrosSolicitados) < dados.liters) {
-            observations += '. Abastecimento maior do que o solicitado';
+            observations.push('Abastecimento maior do que o solicitado');
             if (inherintData.contractFuel.litersAvailable.toNumber() < dados.liters){
-                observations += '. Abastecimento maior do que o valor no contrato.'
+                observations.push('Abastecimento maior do que o valor no contrato')
             }
         }
 
@@ -136,7 +134,7 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
         const fuelEfficiency = distanceTraveled / dados.liters;
         console.log(fuelEfficiency)
 
-        if (fuelEfficiency < 8 || fuelEfficiency > 15) observations += '. Consumo anormal de combustível.';
+        if (fuelEfficiency < 8 || fuelEfficiency > 15) observations.push('Consumo anormal de combustível');
         console.log('validação 2');
 
 
@@ -154,12 +152,42 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
             totalAmount,
             distanceTraveled,
             fuelEfficiency,
-            observations,            
+            observations: observations.join('. '),            
         }
 
-        await prisma.fueling.create({
-            data: createFueling
-        })
+        await prisma.$transaction(async (tx) => {
+            await tx.fueling.create({
+                data: createFueling
+            });
+
+            await tx.fuelingRequest.update({
+                where:{
+                    id: dados.requestId
+                }, data :{
+                    status: 'COMPLETED'
+                }
+            });
+
+            await tx.vehicle.update({
+                where: {
+                    id: inherintData.vehicleId
+                },
+                data: {
+                    currentOdometer: dados.odometer
+                }
+            });
+
+            await tx.contractFuel.update({
+                where: {
+                    id: inherintData.contractFuelId
+                },
+                data: {
+                    litersAvailable: { decrement: dados.liters },
+                    litersConsumed: { increment: dados.liters },
+                }
+            })
+        });
+
         console.log('validação 3');
         revalidatePath('/admin/solicitacoes');
         revalidatePath('/admin/abastecimentos');
