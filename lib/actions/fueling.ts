@@ -11,6 +11,7 @@ import { toArray } from "../utils";
 import { FuelType } from "@/schemas/enums.schema";
 import { revalidatePath } from "next/cache";
 import { DateSchema, DateType } from "@/schemas/date.schema";
+import { LineChartItemType } from "@/schemas/dashboard.schema";
 
 export const getFuelings = async ( {
     gasStationsIds,
@@ -307,3 +308,41 @@ export const deleteFueling = async (fId: FuelingIdType): Promise<ResponseType<Fu
         return { success: false, error: 'Erro ao cancelar abastecimento.' };
     }
 };
+
+//sem update, deleta e cria outra se for preciso
+
+export const getLineChartData = async (from?: DateType, to?: DateType): Promise<ResponseType<LineChartItemType[]>> => {
+    const vFrom = DateSchema.safeParse(from);
+    const vTo = DateSchema.safeParse(to);
+
+    const toDate = vTo.success ? vTo.data : new Date();
+
+    const defaultFromDate = new Date(toDate);
+    defaultFromDate.setDate(defaultFromDate.getDate() - 30);
+    defaultFromDate.setHours(0, 0, 0, 0); 
+
+    const fromDate = vFrom.success ? vFrom.data : defaultFromDate;
+    toDate.setHours(23, 59, 59, 999);
+
+    try {
+        const result = await prisma.$queryRaw<LineChartItemType[]>`
+            SELECT 
+                TO_CHAR("createdAt", 'YYYY-MM-DD') AS "date",
+                COALESCE(SUM(CASE WHEN "fuelType" = 'GASOLINA_COMUM' THEN "liters" ELSE 0 END), 0)::NUMERIC AS "GASOLINA_COMUM",
+                COALESCE(SUM(CASE WHEN "fuelType" = 'GASOLINA_ADITIVADA' THEN "liters" ELSE 0 END), 0)::NUMERIC AS "GASOLINA_ADITIVADA",
+                COALESCE(SUM(CASE WHEN "fuelType" = 'ETANOL' THEN "liters" ELSE 0 END), 0)::NUMERIC AS "ETANOL",
+                COALESCE(SUM(CASE WHEN "fuelType" = 'DIESEL_COMUM' THEN "liters" ELSE 0 END), 0)::NUMERIC AS "DIESEL_COMUM",
+                COALESCE(SUM(CASE WHEN "fuelType" = 'DIESEL_S10' THEN "liters" ELSE 0 END), 0)::NUMERIC AS "DIESEL_S10"
+            FROM "fuelings"
+            WHERE "createdAt" >= ${fromDate} AND "createdAt" <= ${toDate}
+            GROUP BY TO_CHAR("createdAt", 'YYYY-MM-DD')
+            ORDER BY "date" ASC;
+        `;
+
+        return { success: true, data: result };
+    } catch (err) {
+        console.error(err);
+        return { success: false, error: 'Erro ao buscar dados para o gráfico.' };
+    }
+
+}
