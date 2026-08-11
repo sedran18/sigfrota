@@ -37,6 +37,7 @@ const AddRequest = ({request}: {
       vehicleId: request ? request.vehicleId : '',
       driverId: '',
       gasStationId: '',
+      odometer: 0,
       liters: 'FULL',
     }
   });
@@ -47,18 +48,21 @@ const AddRequest = ({request}: {
   }, [request]);
 
 
-  const {register, handleSubmit, formState, setValue} =  form;
+  const {register, handleSubmit, formState, setValue, getValues} =  form;
+  const initialOdometer = getValues('odometer');
+
   const fuelType = useWatch({control: form.control, name: 'fuelType' });
   const litersValue = useWatch({control: form.control, name: 'liters' });
 
   // só pode atualizar se o fueling não for completo
   const onSubmit = async (data: CreateFuelingRequestType) => {
+    
     const res =  
     request 
       ? 
-        await updateFuelingRequest(request.id, {...formDefaults, ...data})
+        await updateFuelingRequest(request.id, {...formDefaults, ...data, odometer: Number(initialOdometer) || null})
       : 
-        await createFuelingRequest({...data});
+        await createFuelingRequest({...data,  odometer: Number(initialOdometer) || null});
     
     if (!res.success) return form.setError('root', {type: 'manual', message: res.error});
 
@@ -114,7 +118,7 @@ const AddRequest = ({request}: {
 
   const onError = (err: unknown) => {
       console.log("Erros de validação encontrados:", err);
-      
+      alert(initialOdometer)
       // Exemplo: Mostrar um toast de aviso ou focar no primeiro erro
       alert("Por favor, preencha todos os campos obrigatórios!");
     };
@@ -128,7 +132,7 @@ const handleOpenChange = (isOpen: boolean) => {
       fuelType: 'GASOLINA_COMUM',
       vehicleId: '',
       driverId: '',
-      odometer: "" as unknown as number,
+      odometer: 0,
       gasStationId: '',
       liters: 'FULL',
     });

@@ -10,7 +10,7 @@ export const FuelingRequestSchema = z.object({
     contractFuelId: z.uuid(),
     liters: z.number().positive().or(z.literal("FULL")),
     fuelType: FuelTypeSchema,
-    odometer: z.number().int().nonnegative().optional(),
+    odometer: z.number().int().nonnegative().optional().nullable(),
     status: RequestStatusSchema,
     createdAt: z.date(),
     updatedAt: z.date(),    
