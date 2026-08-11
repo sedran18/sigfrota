@@ -203,28 +203,81 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
 
 export const deleteFueling = async (fId: FuelingIdType): Promise<ResponseType<FuelingType>> => {
     const v = FuelingIdSchema.safeParse(fId);
-    if (!v.success) return {success: false, error: v.error.message}
+    if (!v.success) return { success: false, error: v.error.message };
 
     try {
-        const deleted = await prisma.fueling.delete({
-            where: {
-                id: v.data
-            }
+        const fuelingToDelete = await prisma.fueling.findUnique({
+            where: { id: v.data }
         });
 
-        if (!deleted) return {success: false, error: ''}
+        if (!fuelingToDelete) return { success: false, error: 'Abastecimento não encontrado.' };
+
+        const lastFueling = await prisma.fueling.findFirst({
+            where: { vehicleId: fuelingToDelete.vehicleId },
+            orderBy: { createdAt: 'desc' }
+        });
+
+        if (lastFueling?.id !== fuelingToDelete.id) {
+            return { 
+                success: false, 
+                error: 'Não é possível deletar este abastecimento pois existem registros mais recentes para este veículo.' 
+            };
+        }
+
+        const previousFueling = await prisma.fueling.findFirst({
+            where: { 
+                vehicleId: fuelingToDelete.vehicleId,
+                id: { not: fuelingToDelete.id }
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+
+        const deleted = await prisma.$transaction(async (tx) => {
+            // A. Deleta o abastecimento
+            const del = await tx.fueling.delete({
+                where: { id: v.data }
+            });
+
+            await tx.fuelingRequest.update({
+                where: { id: fuelingToDelete.requestId },
+                data: { status: 'PENDING' } 
+            });
+
+            await tx.contractFuel.update({
+                where: { id: fuelingToDelete.contractFuelId },
+                data: {
+                    litersAvailable: { increment: fuelingToDelete.liters },
+                    litersConsumed: { decrement: fuelingToDelete.liters }
+                }
+            });
+
+            const fallbackOdometer = fuelingToDelete.odometer - fuelingToDelete.distanceTraveled;
+            const newOdometer = previousFueling ? previousFueling.odometer : fallbackOdometer;
+
+            await tx.vehicle.update({
+                where: { id: fuelingToDelete.vehicleId },
+                data: { currentOdometer: newOdometer }
+            });
+
+            return del;
+        });
 
         revalidatePath('/admin/solicitacoes');
         revalidatePath('/admin/abastecimentos');
-        return {success: true, data: {
-            ...deleted, 
-            liters: deleted.liters.toNumber(), 
-            pricePerLiter: deleted.pricePerLiter.toNumber(),
-            totalAmount: deleted.totalAmount.toNumber(),
-            fuelEfficiency: deleted.fuelEfficiency.toNumber()
-        }}  
+
+        return {
+            success: true,
+            data: {
+                ...deleted,
+                liters: deleted.liters.toNumber(),
+                pricePerLiter: deleted.pricePerLiter.toNumber(),
+                totalAmount: deleted.totalAmount.toNumber(),
+                fuelEfficiency: deleted.fuelEfficiency.toNumber()
+            }
+        };
+
     } catch (err) {
-        console.log(err);
-        return {success: false, error: 'Erro ao deletar abastecimento.'}
+        console.error(err);
+        return { success: false, error: 'Erro ao cancelar abastecimento.' };
     }
-}
+};
