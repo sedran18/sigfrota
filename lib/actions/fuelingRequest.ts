@@ -174,7 +174,7 @@ export const createFuelingRequest = async (
     } catch (err) {
         console.error(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
-          // P2002 = Violou a restrição de unicidade (Unique Constraint)
+          //Violou o unique constraint
           if (err.code === "P2002") {
             return {
               success: false,
