@@ -37,9 +37,11 @@ export const getFuelingRequests = async ({
     const normalizedStatus = toArray(status);
     const normalizedFuelTypes = toArray(fuelType);
 
-    const where: Prisma.FuelingRequestWhereInput = {
-      status: normalizedStatus?.length ? { in: normalizedStatus } : 'PENDING',
-    };
+    const where: Prisma.FuelingRequestWhereInput = {};
+
+    if (normalizedStatus?.length) {
+      where.status = { in: normalizedStatus };
+    }
 
     if (normalizedDrivers?.length) {
       where.driverId = { in: normalizedDrivers };

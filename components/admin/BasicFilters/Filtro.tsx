@@ -84,6 +84,7 @@ const Filtro = <T extends OptionType>({ title, paramName, campos }: FiltroProps<
 
     nextSelecionados.forEach((val) => params.append(paramName, val))
     router.push(`${pathname}?${params.toString()}`)
+    router.refresh()
   }
 
   const handleClear = () => {
