@@ -1,7 +1,7 @@
 import DateCalendarPicker from "@/components/shared/DateCalendarPicker";
 import HeaderTemplate from "@/components/admin/HeaderTemplate";
 import FuelConsumptionChartLine from "@/components/admin/dashboard/FuelConsumptionChartLine";  
-import { getLineChartData } from "@/lib/actions/fueling";
+import { getLineChartData } from "@/lib/actions/dashboard";
 import { DateType } from "@/schemas/date.schema";
 import { getDriverFuelData, getFuelEfficiencyByCarData, getKPIData } from "@/lib/actions/dashboard";
 import { KPIList } from "@/components/admin/dashboard/KPIList";

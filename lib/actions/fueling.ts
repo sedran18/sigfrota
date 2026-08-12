@@ -11,7 +11,6 @@ import { toArray } from "../utils";
 import { FuelType } from "@/schemas/enums.schema";
 import { revalidatePath } from "next/cache";
 import { DateSchema, DateType } from "@/schemas/date.schema";
-import { LineChartItemType } from "@/schemas/dashboard.schema";
 
 export const getFuelings = async ( {
     gasStationsIds,
@@ -311,56 +310,3 @@ export const deleteFueling = async (fId: FuelingIdType): Promise<ResponseType<Fu
 
 //sem update, deleta e cria outra se for preciso
 
-export interface RawLineChartItem {
-  date: string
-  GASOLINA_COMUM: Prisma.Decimal
-  GASOLINA_ADITIVADA: Prisma.Decimal
-  ETANOL: Prisma.Decimal
-  DIESEL_COMUM: Prisma.Decimal
-  DIESEL_S10: Prisma.Decimal
-}
-
-export const getLineChartData = async (from?: DateType, to?: DateType): Promise<ResponseType<LineChartItemType[]>> => {
-    const vFrom = DateSchema.safeParse(from);
-    const vTo = DateSchema.safeParse(to);
-
-    const toDate = vTo.success ? vTo.data : new Date();
-
-    const defaultFromDate = new Date(toDate);
-    defaultFromDate.setDate(defaultFromDate.getDate() - 30);
-    defaultFromDate.setHours(0, 0, 0, 0); 
-
-    const fromDate = vFrom.success ? vFrom.data : defaultFromDate;
-    toDate.setHours(23, 59, 59, 999);
-
-    try {
-        const result = await prisma.$queryRaw<RawLineChartItem[]>`
-            SELECT 
-                TO_CHAR("createdAt", 'YYYY-MM-DD') AS "date",
-                COALESCE(SUM(CASE WHEN "fuelType" = 'GASOLINA_COMUM' THEN "liters" ELSE 0 END), 0) AS "GASOLINA_COMUM",
-                COALESCE(SUM(CASE WHEN "fuelType" = 'GASOLINA_ADITIVADA' THEN "liters" ELSE 0 END), 0) AS "GASOLINA_ADITIVADA",
-                COALESCE(SUM(CASE WHEN "fuelType" = 'ETANOL' THEN "liters" ELSE 0 END), 0) AS "ETANOL",
-                COALESCE(SUM(CASE WHEN "fuelType" = 'DIESEL_COMUM' THEN "liters" ELSE 0 END), 0) AS "DIESEL_COMUM",
-                COALESCE(SUM(CASE WHEN "fuelType" = 'DIESEL_S10' THEN "liters" ELSE 0 END), 0) AS "DIESEL_S10"
-            FROM "fuelings"
-            WHERE "createdAt" >= ${fromDate} AND "createdAt" <= ${toDate}
-            GROUP BY TO_CHAR("createdAt", 'YYYY-MM-DD')
-            ORDER BY "date" ASC;
-        `;
-
-        const data: LineChartItemType[] = result.map((row) => ({
-            date: row.date,
-            GASOLINA_COMUM: row.GASOLINA_COMUM.toNumber(),
-            GASOLINA_ADITIVADA: row.GASOLINA_ADITIVADA.toNumber(),
-            ETANOL: row.ETANOL.toNumber(),
-            DIESEL_COMUM: row.DIESEL_COMUM.toNumber(),
-            DIESEL_S10: row.DIESEL_S10.toNumber(),
-        }));
-
-        return { success: true, data };
-    } catch (err) {
-        console.error(err);
-        return { success: false, error: 'Erro ao buscar dados para o gráfico.' };
-    }
-
-}
