@@ -33,7 +33,6 @@ export const getFuelings = async ( {
         const normalizedDrivers = toArray(driversIds);
         const normalizedVehicles = toArray(vehiclesIds);
         const normalizedFuelTypes = toArray(fuelType);
-    
         const where: Prisma.FuelingWhereInput = {};
     
         if (normalizedDrivers?.length) {
@@ -84,6 +83,20 @@ export const getFuelings = async ( {
                                 }
                             }
                         }
+                    }
+                },
+                driver: {
+                    select: {
+                        name: true,
+                        id: true,
+                    }
+                }, 
+                vehicle: {
+                    select: {
+                        brand: true,
+                        model: true,
+                        plate: true,
+                        id: true,
                     }
                 }
             }

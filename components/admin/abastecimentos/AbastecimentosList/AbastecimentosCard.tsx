@@ -17,7 +17,7 @@ const fuelBadgeStyles: Record<FuelType, string> = {
 
 const AbastecimentosCard = ({ data }: {data:  GetFuelingType}) => {
   const formattedDate = dateToStringDate(data.createdAt) || "---"
-  const vehicleLabel = data.vehicleId ? `VEÍCULO ${data.vehicleId.substring(0, 8).toUpperCase()}` : "NÃO INFORMADO"
+  const vehicleLabel = data.vehicle ? `${data.vehicle.brand} ${data.vehicle.model} - ${data.vehicle.plate}` : "N/I"
 
   return (
     <Link
@@ -69,7 +69,7 @@ const AbastecimentosCard = ({ data }: {data:  GetFuelingType}) => {
               <td className="py-1.5 align-middle">
                 <span className="flex items-center justify-end gap-1 font-bold uppercase   ">
                   <User size={12} className="shrink-0 " />
-                  {data.driverId ? data.driverId.substring(0, 8) : "N/I"}
+                  {data.driver ? data.driver.name : "N/I"}
                 </span>
               </td>
             </tr>

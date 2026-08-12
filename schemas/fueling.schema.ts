@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { FuelTypeSchema } from "./enums.schema";
 import { GasStationSchema } from "./gasStation.schema";
+import { DriverSchema } from "./driver.schema";
+import { VehicleSchema } from "./vehicle.schema";
 
 export const FuelingSchema = z.object({
   id: z.uuid(),
@@ -29,8 +31,18 @@ export const GetFuelingSchema = FuelingSchema.extend({
         name: true, 
         id: true,
       })
-    })
-  })
+    }),
+  }),
+  driver: DriverSchema.pick({
+      name: true,
+      id: true,
+    }).optional().nullable(),
+    vehicle: VehicleSchema.pick({
+      brand: true,
+      model: true,
+      plate: true,
+      id: true,
+    }).optional().nullable(),
 });
 
 export type GetFuelingType = z.infer<typeof GetFuelingSchema>;
