@@ -144,30 +144,44 @@ export type SelectedVehicle<T extends Prisma.VehicleSelect> = Prisma.VehicleGetP
 
 export const getVehiclesSelectByFuelType = async <T extends VehicleSelectType>(
   data: T,
-  fuelType?: FuelType,
-  active?:boolean
+  fuelType?: FuelType | FuelType[],
+  active?: boolean
 ): Promise<ResponseType<SelectedVehicle<T>[]>> => {
     const v = VehicleSelectSchema.safeParse(data);
     if (!v.success) return { success: false, error: 'Select inválido' };
-  
+
     const select = v.data as T;
+
+    const fuelTypesArray = fuelType
+      ? (Array.isArray(fuelType) ? fuelType : [fuelType])
+      : undefined;
 
     let fuelTarget: VehicleFuelTypeType[] | undefined;
 
-    if (fuelType) {
-        const vFuel = FuelTypeSchema.safeParse(fuelType);
+    if (fuelTypesArray?.length) {
+        const vFuel = FuelTypeSchema.array().safeParse(fuelTypesArray);
         if (!vFuel.success) return { success: false, error: 'fuelType inválido' };
 
-        const combustivel = vFuel.data.startsWith('GASOLINA') ? 'GASOLINA' : vFuel.data;
+        // monta o conjunto de VehicleFuelType, sem duplicar (Set)
+        const targetSet = new Set<VehicleFuelTypeType>();
 
-        if (combustivel === 'GASOLINA') {
-            fuelTarget = ['GASOLINA', 'FLEX'];
-        } else if (combustivel === 'ETANOL') {
-            fuelTarget = ['ETANOL', 'FLEX'];
-        } else {
-            fuelTarget = [combustivel as VehicleFuelTypeType];
+        for (const tipo of vFuel.data) {
+            const combustivel = tipo.startsWith('GASOLINA') ? 'GASOLINA' : tipo;
+
+            if (combustivel === 'GASOLINA') {
+                targetSet.add('GASOLINA');
+                targetSet.add('FLEX');
+            } else if (combustivel === 'ETANOL') {
+                targetSet.add('ETANOL');
+                targetSet.add('FLEX');
+            } else {
+                targetSet.add(combustivel as VehicleFuelTypeType);
+            }
         }
+
+        fuelTarget = Array.from(targetSet);
     }
+
     try {
         const vehicles = await prisma.vehicle.findMany({
             where: {
@@ -177,8 +191,8 @@ export const getVehiclesSelectByFuelType = async <T extends VehicleSelectType>(
             select: select,
         });
 
-        return { 
-            success: true, 
+        return {
+            success: true,
             data: vehicles
         };
     } catch (err) {

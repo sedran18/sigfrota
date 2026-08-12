@@ -82,7 +82,6 @@ const Filtro = <T extends OptionType>({ title, paramName, campos }: FiltroProps<
       return
     }
 
-    // Caso contrário, injeta os selecionados na URL
     nextSelecionados.forEach((val) => params.append(paramName, val))
     router.push(`${pathname}?${params.toString()}`)
   }

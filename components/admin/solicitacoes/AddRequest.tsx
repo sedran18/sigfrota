@@ -41,6 +41,7 @@ const AddRequest = ({request}: {
       liters: 'FULL',
     }
   });
+
   const formDefaults = useMemo(() => {
     if (!request) return undefined;
     const { contractFuel, driver, vehicle, status, createdAt, updatedAt, id, ...requestData } = request;
@@ -79,6 +80,7 @@ const AddRequest = ({request}: {
   const isFirstRender = useRef(true);
 
   useEffect(() => {
+    if (!open) return;
     const fetchVeiculos = async () => {
       if (!fuelType) {
         setVeiculos([]);
