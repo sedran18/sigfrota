@@ -5,7 +5,7 @@ import { getLineChartData } from "@/lib/actions/dashboard";
 import { DateType } from "@/schemas/date.schema";
 import { getDriverFuelData, getFuelEfficiencyByCarData, getKPIData } from "@/lib/actions/dashboard";
 import { KPIList } from "@/components/admin/dashboard/KPIList";
-import LitersPerDriver from "@/components/admin/dashboard/LitersPerDriver";
+import LitersPerDriverChart from "@/components/admin/dashboard/LitersPerDriverChart";
 import FuelEfficiencyByCarChart from "@/components/admin/dashboard/FuelEfficiencyByCarChart";
 
 const Admin = async ({searchParams}: {
@@ -29,7 +29,7 @@ const Admin = async ({searchParams}: {
         <KPIList items={kpiData.success ? kpiData.data : []} />
       </div>
       <div className="mx-auto w-full max-w-7xl px-4 my-20  sm:px-6 lg:px-8">
-        <LitersPerDriver data={driverFuelData.success ? driverFuelData.data : []} />
+        <LitersPerDriverChart data={driverFuelData.success ? driverFuelData.data : []} />
         <FuelEfficiencyByCarChart data={fuelEfficiencyByCarData.success ? fuelEfficiencyByCarData.data : []} />
       </div>
 

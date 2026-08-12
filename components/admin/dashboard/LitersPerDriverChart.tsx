@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/chart"
 import { FuelBarChartItemType } from "@/schemas/dashboard.schema"
 
-// Verde escuro da logo do Consórcio Bacia do Paramirim
 const chartConfig = {
   liters: {
     label: "Litros",
@@ -27,7 +26,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-const DriverFuelChart = ({ data = [] }: { data: FuelBarChartItemType[] }) => {
+const LitersPerDriverChart = ({ data = [] }: { data: FuelBarChartItemType[] }) => {
   return (
     <Card className="w-full border border-slate-200 bg-white shadow-none dark:border-slate-800 dark:bg-slate-950">
       <CardHeader className="border-b border-slate-100 pb-4 dark:border-slate-800">
@@ -45,7 +44,7 @@ const DriverFuelChart = ({ data = [] }: { data: FuelBarChartItemType[] }) => {
           <BarChart accessibilityLayer data={data}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-slate-100 dark:stroke-slate-800" />
             <XAxis
-              dataKey="driverName"
+              dataKey="name"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
@@ -90,4 +89,4 @@ const DriverFuelChart = ({ data = [] }: { data: FuelBarChartItemType[] }) => {
   )
 }
 
-export default DriverFuelChart
+export default LitersPerDriverChart;
