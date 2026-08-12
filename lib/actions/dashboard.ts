@@ -18,8 +18,7 @@ export const getKPIData = async ({from, to}: {from?: DateType; to?: DateType}): 
         toDate.setHours(23, 59, 59, 999);
 
     try {
-        const res = await prisma.$transaction(async (tx) => {
-            return  tx.fueling.aggregate({
+        const res = await prisma.fueling.aggregate({
                 where: {
                     createdAt: {
                         gte: fromDate,
@@ -37,25 +36,6 @@ export const getKPIData = async ({from, to}: {from?: DateType; to?: DateType}): 
                     id: true,
                 }
             });
-        });
-        // const res = await prisma.fueling.aggregate({
-        //         where: {
-        //             createdAt: {
-        //                 gte: fromDate,
-        //                 lte: toDate,
-        //             }
-        //         },
-        //         _sum: {
-        //             liters: true,
-        //             totalAmount: true,
-        //         },
-        //         _avg: {
-        //             fuelEfficiency: true,
-        //         },
-        //         _count: {
-        //             id: true,
-        //         }
-        //     });
 
         const litros:KPIItemType = {title: 'Litros', value: res._sum.liters?.toNumber() || 0};
         const totalAmount:KPIItemType = {title: 'Total', value: `R$ ${res._sum.totalAmount?.toNumber() || 0}`};
