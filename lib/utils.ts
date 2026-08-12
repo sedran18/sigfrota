@@ -24,3 +24,7 @@ export const toArray = <T>(val?: T[] | T): T[] => {
   if (!val) return [];
   return Array.isArray(val) ? val : [val];
 };
+
+export function slugify(name: string) {
+  return name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_")
+}

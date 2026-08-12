@@ -100,3 +100,11 @@ export interface FilterConfig {
   paramName: string
   campos: OptionType[]
 }
+
+export interface RawFuelEfficiencyItem {
+  "vehicle brand": string
+  "vehicle model": string
+  "vehicle plate": string
+  driver: string
+  efficiency: number
+}

@@ -25,3 +25,11 @@ export const FuelBarChartSchema = z.object({
 });
 
 export type FuelBarChartItemType = z.infer<typeof FuelBarChartSchema>;
+
+export const FuelEfficiencyByVehicleSchema = z
+  .object({
+    carName: z.string(),
+  })
+  .catchall(z.union([z.string(), z.number()]));
+
+export type FuelEfficiencyByVehicleType = z.infer<typeof FuelEfficiencyByVehicleSchema>;
