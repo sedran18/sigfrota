@@ -28,7 +28,6 @@ export const getFuelings = async ( {
   to?: DateType,
 }):Promise<ResponseType<GetFuelingType[]>> => {
     try {
-
         const normalizedGasStations = toArray(gasStationsIds);
         const normalizedDrivers = toArray(driversIds);
         const normalizedVehicles = toArray(vehiclesIds);
@@ -55,17 +54,21 @@ export const getFuelings = async ( {
             where.fuelType = { in: normalizedFuelTypes };
         }
 
-        if (from  && to) {
-            const fromDate = DateSchema.safeParse(from);
-            const toDate = DateSchema.safeParse(to);
-            if (fromDate.success && toDate.success){
-                toDate.data.setHours(23, 59, 59, 999);
-
-                where.createdAt = {
-                    gte: fromDate.data,
-                    lte: toDate.data
-                }
-            }
+        const vFrom = DateSchema.safeParse(from);
+        const vTo = DateSchema.safeParse(to);
+        
+        const toDate = vTo.success ? vTo.data : new Date();
+        
+        const defaultFromDate = new Date(toDate);
+        defaultFromDate.setDate(defaultFromDate.getDate() - 30);
+        defaultFromDate.setHours(0, 0, 0, 0); 
+        
+        const fromDate = vFrom.success ? vFrom.data : defaultFromDate;
+        toDate.setHours(23, 59, 59, 999);
+            
+        where.createdAt = {
+            gte: fromDate,
+            lte: toDate,
         }
         
         const fuelings = await prisma.fueling.findMany({
