@@ -18,3 +18,10 @@ export const KPIItemSchema = z.object({
 });
 
 export type KPIItemType = z.infer<typeof KPIItemSchema>;
+
+export const FuelBarChartSchema = z.object({
+  name: z.string(),
+  liters: z.number()
+});
+
+export type FuelBarChartItemType = z.infer<typeof FuelBarChartSchema>;
