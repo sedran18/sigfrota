@@ -3,12 +3,15 @@ import HeaderTemplate from "@/components/admin/HeaderTemplate";
 import FuelConsumptionChartLine from "@/components/admin/dashboard/FuelConsumptionChartLine";  
 import { getLineChartData } from "@/lib/actions/fueling";
 import { DateType } from "@/schemas/date.schema";
+import { getKPIData } from "@/lib/actions/dashboard";
+import { KPIList } from "@/components/admin/dashboard/KPIList";
 
 const Admin = async ({searchParams}: {
   searchParams: Promise< { from?: DateType, to?: DateType } >
 }) => {
   const { from, to } = await searchParams;
   const lineChartData = await getLineChartData(from, to); 
+  const kpiData = await getKPIData({from, to});
 
   return (
     <>
@@ -18,7 +21,9 @@ const Admin = async ({searchParams}: {
       >
         <DateCalendarPicker />
       </HeaderTemplate>
-      
+      <div className="mx-auto w-full max-w-7xl px-4 h-30 my-10 sm:px-6 lg:px-8">
+        <KPIList items={kpiData.success ? kpiData.data : []} />
+      </div>
       <div className="mx-auto w-full max-w-7xl px-4 h-30 sm:px-6 lg:px-8">
         <FuelConsumptionChartLine data={lineChartData.success ? lineChartData.data : []} />  
       </div>

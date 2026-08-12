@@ -10,3 +10,11 @@ export const LineChartItemSchema = z.object({
 });
 
 export type LineChartItemType = z.infer<typeof LineChartItemSchema>;
+
+export const KPIItemSchema = z.object({
+    title: z.string(),
+    value: z.union([z.string(), z.number()]),
+    description: z.string().optional(),
+});
+
+export type KPIItemType = z.infer<typeof KPIItemSchema>;
