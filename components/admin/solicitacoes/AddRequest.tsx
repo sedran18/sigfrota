@@ -103,7 +103,6 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
 
   const fuelTypes = FuelTypeSchema.options;
 
-  // Fonte reduzida no mobile: text-xs e sm:text-xs para desktop
   const selectStyles = `
     w-full h-10 sm:h-11 px-2.5 text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-200 
     rounded-none cursor-pointer uppercase tracking-wider outline-none transition-all
@@ -115,24 +114,9 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
     alert("Por favor, preencha todos os campos obrigatórios!");
   };
 
-  const handleOpenChange = (isOpen: boolean) => {
-    setOpen(isOpen);
-
-    if (!isOpen) {
-      form.reset(formDefaults ?? {
-        fuelType: 'GASOLINA_COMUM',
-        vehicleId: '',
-        driverId: '',
-        odometer: 0,
-        gasStationId: '',
-        liters: 'FULL',
-      });
-      setFullTank(request ? request.liters === 'FULL' : true);
-    }
-  };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
       className="
         flex items-center justify-center gap-2 h-10 sm:h-11 
@@ -313,7 +297,7 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
             <Button
               type="button"
               variant="ghost"
-              onClick={() => handleOpenChange(false)}
+              onClick={() => setOpen(false)}
               className="w-full sm:w-auto h-10 sm:h-11 rounded-none cursor-pointer font-bold text-[10px] sm:text-xs tracking-wider uppercase text-slate-400 hover:text-white hover:bg-slate-900"
             >
               Cancelar
