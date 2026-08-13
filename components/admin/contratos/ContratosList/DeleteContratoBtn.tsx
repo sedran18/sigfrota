@@ -28,10 +28,12 @@ const DeleteContractCard = ({contractId, isUsed, active}: {contractId :ContractI
     }
 
     return isUsed ? (
-        <Switch
-          checked={active}
-          onCheckedChange={() => handleDelete(contractId)}
-        />
+        // <Switch
+        //   checked={active}
+        //   onCheckedChange={() => handleDelete(contractId)}
+        //   className="cursor-pointer border-2 border-slate-400 bg-slate-300 data-[state=unchecked]:bg-slate-300 data-[state=checked]:bg-primary  data-[state=checked]:[&>span]:bg-white"
+        // />
+        <></>
       ) : (
         <Button
           variant="ghost"

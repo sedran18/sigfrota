@@ -10,7 +10,7 @@ const ContratosList = ({ contratos, postos, isAdmin}: {
 }) => {
 
   return (
-    <div className="grid p-1 md:p-2 lg:p-10 px-auto grid-cols-1 gap-4 w-full overflow-hidden">
+    <div className="grid p-2  lg:p-10 px-auto grid-cols-1 gap-4 w-full overflow-hidden">
       {contratos.map((contrato) => {
         const posto = postos?.find(p => p.id === contrato.gasStationId);
 
