@@ -108,7 +108,7 @@ const AddRequest = ({request}: {
     };
 
     fetchVeiculos();
-  }, [fuelType, setValue]);
+  }, [fuelType, setValue, open ]);
 
   const fuelTypes = FuelTypeSchema.options;
 
