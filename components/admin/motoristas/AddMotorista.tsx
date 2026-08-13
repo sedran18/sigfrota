@@ -49,7 +49,6 @@ const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
     console.log(isEditing);
     const motorista = isEditing ? 
       await updateDriver(driver.id, data)
-      // alterar depois o update para somente dirty fields (patch e não put request)
     :
       await createDriver(data);
 
@@ -99,7 +98,7 @@ const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
         {driver? <><Edit2 size={16} /> Editar </> : <> <Plus size={16} /> Adicionar Motorista </>} 
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-md bg-slate-950 border border-slate-800 rounded-none p-6 shadow-2xl shadow-black/50 text-white h-[90%] overflow-scroll">
+      <DialogContent className="sm:max-w-md bg-slate-950 border border-slate-800 rounded-none p-6 shadow-2xl shadow-black/50 text-white max-h-[90%] overflow-scroll">
         <DialogHeader className="border-b border-slate-900 pb-4 mb-2 relative">
           <span className="absolute -left-6 top-0 bottom-4 w-[3px] bg-[#093a1c]" />
           <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
