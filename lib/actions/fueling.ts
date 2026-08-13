@@ -228,6 +228,7 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
         console.log('validação 3');
         revalidatePath('/admin/solicitacoes');
         revalidatePath('/admin/abastecimentos');
+        revalidatePath('/admin');
         return {success: true, data: 'Abastecimento criado com sucesso.'}
 
 
@@ -307,6 +308,7 @@ export const deleteFueling = async (fId: FuelingIdType): Promise<ResponseType<Fu
 
         revalidatePath('/admin/solicitacoes');
         revalidatePath('/admin/abastecimentos');
+        revalidatePath('/admin');
 
         return {
             success: true,

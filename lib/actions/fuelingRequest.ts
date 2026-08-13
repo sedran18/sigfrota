@@ -177,6 +177,8 @@ export const createFuelingRequest = async (
             }
         });
         revalidatePath('/admin/solicitacoes');
+        revalidatePath('/admin');
+
         return {success:true, data: 'Solicitação criada com sucesso'};
 
     } catch (err) {
@@ -205,6 +207,8 @@ export const deleteFuelingRequest = async (id: FuelingRequestIdType): Promise<Re
             }
         });
         revalidatePath('/admin/solicitacoes');
+        revalidatePath('/admin');
+
         return {success: true, data: {...deleted, liters: deleted.liters === 'FULL' ? 'FULL' as const : Number(deleted.liters)}};
 
     } catch (err) {
