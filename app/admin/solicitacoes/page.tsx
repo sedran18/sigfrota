@@ -60,7 +60,6 @@ const Solicitacoes = async ({
         <AddRequest key="novo" />
       </HeaderTemplate>
 
-      {/* Renderiza os filtros reutilizáveis */}
       <BasicFilters filters={filtersConfig} />
 
       {solicitacoes.success && solicitacoes.data.length > 0 ? (
