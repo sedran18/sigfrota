@@ -6,14 +6,15 @@ import { paginas } from "@/lib/data/paginas";
 
 const NavLinks = ({ isAdmin }: { isAdmin: boolean }) => {
   const pathname = usePathname();
+  
   return (
-    <nav className="flex-1 min-h-0 flex flex-col justify-center overflow-hidden">
+    <nav className="flex-1 min-h-0 flex flex-col justify-start pt-4 overflow-y-auto">
       {paginas.map((p) => {
         const isActive = pathname === '/admin' + p.link;
         if (!isAdmin && p.link.endsWith('usuarios')) return null;
         return (
           <PaginaComponent
-            icone={p.icone}
+            iconName={p.iconName}
             pagina={p.pagina}
             link={p.link}
             isActive={isActive}
@@ -22,7 +23,7 @@ const NavLinks = ({ isAdmin }: { isAdmin: boolean }) => {
         );
       })}
     </nav>
-  )
+  );
 };
 
 export default NavLinks;

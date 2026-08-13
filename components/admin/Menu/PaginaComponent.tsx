@@ -1,39 +1,46 @@
-import { Paginas } from "@/lib/types"
 import Link from "next/link";
+import { Fuel, Car, Users, FileText, LayoutDashboard, LucideIcon } from "lucide-react";
 
-interface PaginaComponentProps extends Paginas {
+const iconsMap: Record<string, LucideIcon> = {
+  dashboard: LayoutDashboard,
+  veiculos: Car,
+  motoristas: Users,
+  contratos: FileText,
+  abastecimento: Fuel,
+};
+
+interface PaginaComponentProps {
+  iconName: string;
+  pagina: string;
+  link: string;
   isActive: boolean;
 }
 
-const PaginaComponent = ({ icone, pagina, link, isActive }: PaginaComponentProps) => {
-  const Icon = icone;
+const PaginaComponent = ({ iconName, pagina, link, isActive }: PaginaComponentProps) => {
+  const Icon = iconsMap[iconName] || LayoutDashboard;
   const fullLink = '/admin' + link;
 
   return (
     <Link 
       href={fullLink}
       className={`
-        flex items-center gap-3 p-3 mx-3 rounded-lg font-medium transition-all duration-200 group
-        py-[clamp(6px,2vh,18px)]
+        flex items-center gap-3 px-4 py-3 border-l-4 transition-colors group
         ${isActive 
-          ? 'bg-[#093a1c] text-white shadow-md shadow-[#093a1c]/20' 
-          : 'text-[var(--bg2)] hover:bg-slate-100 hover:text-slate-900'
+          ? 'bg-[#093a1c]/10 border-[#093a1c] text-[#093a1c] font-bold' 
+          : 'border-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900 font-medium'
         }
       `}
     >
-      <div 
-        className={`shrink-0 transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-emerald-400' : 'text-slate-400 group-hover:text-[#093a1c]'}`}
-        style={{ fontSize: 'clamp(14px, 2vh, 20px)' }}
-      >
-        <Icon />
-      </div>
+      <Icon 
+        className={`
+          w-4 h-4 shrink-0 transition-colors
+          ${isActive ? 'text-[#093a1c]' : 'text-slate-500 group-hover:text-slate-800'}
+        `} 
+      />
       
-      <p 
-        className="tracking-wide truncate"
-        style={{ fontSize: 'clamp(11px, 1.6vh, 14px)' }}
-      >
+      <span className="text-xs tracking-wider uppercase truncate">
         {pagina}
-      </p>
+      </span>
     </Link>
   )
 }

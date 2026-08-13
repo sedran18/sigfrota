@@ -1,5 +1,6 @@
-'use client'
+'use client';
 
+import { useState } from "react";
 import { Menu as MenuBtn } from "lucide-react";
 import {
   Sheet,
@@ -13,66 +14,83 @@ import NavLinks from "./NavLinks";
 import UserProfile from "./UserProfile";
 
 const MenuMobile = ({ userName, isAdmin }: { userName: string; isAdmin: boolean }) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <header
       className="
         md:hidden
         fixed top-0 left-0 right-0 z-40
-        h-16
-        grid grid-cols-3 items-center
+        h-14
+        flex items-center justify-between
         px-4
         bg-white border-b border-slate-200
       "
     >
-      <div className="flex items-center justify-start">
-        <div className="relative h-10 w-24 sm:w-28">
+      {/* Logo Esquerda */}
+      <div className="flex items-center gap-2">
+        <div className="relative h-8 w-24">
           <Image
             src="/logo.png"
-            alt="Logo Curto"
+            alt="Logo Institucional"
             fill
-            sizes="(max-width: 640px) 96px, 112px"
+            sizes="96px"
             className="object-contain object-left"
             priority
           />
         </div>
       </div>
 
-      <div className="flex items-center justify-center">
-        <p className="text-sm font-extrabold uppercase tracking-[0.3em] text-slate-700 select-none">
-          <span className="text-[var(--primary-color)]">SIG</span>FROTA
-        </p>
+      {/* Título Central */}
+      <div className="flex items-center gap-1">
+        <span className="text-xs font-black uppercase tracking-widest text-[#093a1c]">
+          SIG<span className="text-slate-800">FROTA</span>
+        </span>
       </div>
 
-      <div className="flex items-center justify-end">
-        <Sheet>
-          <SheetTrigger className="p-2 text-slate-600 hover:bg-slate-100 active:bg-slate-200 rounded-md transition-colors cursor-pointer outline-none">
-            <MenuBtn size={24} />
-          </SheetTrigger>
+      {/* Botão Hambúrguer / Drawer */}
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger 
+          className="p-2 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors outline-none cursor-pointer"
+          aria-label="Abrir Menu"
+        >
+          <MenuBtn size={20} />
+        </SheetTrigger>
 
-          <SheetContent
-            side="right"
-            className="
-              flex flex-col justify-between
-              h-vh
-              w-[70%] sm:w-[60%]
-              p-0
-              border-none shadow-xl bg-white
-            "
-          >
-            <div className="flex flex-col">
-              <SheetHeader className="p-6 text-left border-b border-slate-100">
-                <SheetTitle className="text-sm font-semibold text-slate-500 tracking-wider uppercase">
-                  Navegação
-                </SheetTitle>
-              </SheetHeader>
+        <SheetContent
+          side="right"
+          className="
+            flex flex-col justify-between
+            h-full w-[280px] sm:w-[320px]
+            p-0
+            border-l border-slate-200 bg-white
+          "
+        >
+          {/* Parte Superior com Scroll de Links */}
+          <div className="flex flex-col flex-1 min-h-0">
+            <div className="h-1.5 w-full bg-[#093a1c] shrink-0" />
+            
+            <SheetHeader className="p-4 text-left border-b border-slate-100 bg-slate-50 shrink-0">
+              <SheetTitle className="text-xs font-bold text-slate-800 tracking-widest uppercase">
+                Menu de Navegação
+              </SheetTitle>
+            </SheetHeader>
 
+            {/* Container dos links com scroll individual */}
+            <div 
+              className="flex-1 overflow-y-auto py-2"
+              onClick={() => setOpen(false)} // Fecha o drawer ao clicar em qualquer item da navegação
+            >
               <NavLinks isAdmin={isAdmin} />
             </div>
+          </div>
 
+          {/* Perfil Fixo no Rodapé */}
+          <div className="shrink-0 border-t border-slate-200">
             <UserProfile userName={userName} />
-          </SheetContent>
-        </Sheet>
-      </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </header>
   );
 };

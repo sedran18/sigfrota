@@ -1,45 +1,48 @@
-import { House, RefreshCcw, Fuel, CarFront, FileText, Users, ClipboardList, User} from 'lucide-react';
-import { type Paginas } from '../types';
+export interface PaginaItem {
+  iconName: string;
+  pagina: string;
+  link: string;
+}
 
-export const paginas: Paginas[]  = [
+export const paginas: PaginaItem[] = [
   {
-    icone: House,
+    iconName: 'dashboard',
     pagina: 'Dashboard',
     link: ''
   }, 
   {
-    icone: ClipboardList,
+    iconName: 'solicitacoes',
     pagina: 'Solicitações',
     link: '/solicitacoes'
   },
   {
-    icone: RefreshCcw,
+    iconName: 'abastecimento',
     pagina: 'Abastecimentos',
     link: '/abastecimentos'
   }, 
   {
-    icone: Fuel,
-    pagina: 'Postos',
+    iconName: 'postos',
+    pagina: 'Postos Credenciados',
     link: '/postos'
   },
   {
-    icone: CarFront ,
-    pagina: 'Veículos',
+    iconName: 'veiculos',
+    pagina: 'Frota de Veículos',
     link: '/veiculos'
   },
   {
-    icone: FileText,
+    iconName: 'contratos',
     pagina: 'Contratos',
     link: '/contratos'
   },
   {
-    icone: Users,
+    iconName: 'motoristas',
     pagina: 'Motoristas',
     link: '/motoristas'
   },
   {
-    icone: User,
-    pagina: 'Usuários',
+    iconName: 'usuarios',
+    pagina: 'Usuários do Sistema',
     link: '/usuarios'
   }
-]
+];
