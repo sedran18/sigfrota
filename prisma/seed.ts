@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs"
 import { PrismaClient } from "../lib/generated/prisma/client"
 
 const prisma = new PrismaClient()
@@ -13,7 +14,18 @@ async function main() {
   await prisma.gasStation.deleteMany()
   await prisma.vehicle.deleteMany()
   await prisma.driver.deleteMany()
+  await prisma.user.deleteMany()
 
+  // 2. USUÁRIO ADMIN
+  const gabrielPassword = await bcrypt.hash('gabriel', 10)
+  await prisma.user.create({
+    data: {
+      name: 'gabriel',
+      password: gabrielPassword,
+      role: 'ADMIN',
+      active: true,
+    },
+  })
   // 2. MOTORISTAS
   const carlos = await prisma.driver.create({ data: { name: 'Carlos Silva', phone: '(11) 98888-1111', active: true } })
   const ana = await prisma.driver.create({ data: { name: 'Ana Souza', phone: '(11) 98888-2222', active: true } })

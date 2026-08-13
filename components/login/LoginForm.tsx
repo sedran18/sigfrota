@@ -1,14 +1,42 @@
 'use client'
 
-import { Lock, Eye, EyeOff, User, CircleUserRound } from "lucide-react";
+import { Lock, Eye, EyeOff, User, CircleUserRound, Loader2 } from "lucide-react";
 import { Input } from "../ui/input";
 import { useState } from 'react';
 import { Button } from "../ui/button";
+import { signIn } from "next-auth/react";
 
 const LoginForm = () => {
     const [user, setUser] = useState('');
     const [senha, setSenha] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [erro, setErro] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!user || !senha) {
+            setErro(true);
+            return;
+        }
+
+        setErro(false);
+        setIsLoading(true);
+
+        try {
+            await signIn("credentials", {
+                name: user,
+                password: senha,
+            });
+
+            window.location.href = '/admin';
+        } catch (err) {
+            console.log(err);
+            setErro(true);
+            setIsLoading(false);
+        }
+    };
 
     return (
             <div className="relative w-full  space-y-8 
@@ -28,7 +56,7 @@ const LoginForm = () => {
                     </div>
                 </div>
 
-                <form className="space-y-5">
+                <form className="space-y-5" onSubmit={handleSubmit}>
                     <div className="space-y-1.5">
                         <label htmlFor="user" className="text-[11px] font-bold uppercase tracking-wider text-[var(--text1)]">
                             Login
@@ -43,8 +71,9 @@ const LoginForm = () => {
                                 id="user"
                                 value={user}
                                 onChange={e => setUser(e.target.value)}
+                                disabled={isLoading}
                                 placeholder='Login'
-                                className="w-full pl-10  h-13 border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-sm transition-all bg-white"
+                                className="w-full pl-10  h-13 border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-sm transition-all bg-white disabled:opacity-60 disabled:cursor-not-allowed"
                             />
                         </div>
                     </div>
@@ -63,21 +92,32 @@ const LoginForm = () => {
                                 id="senha"
                                 value={senha}
                                 onChange={e => setSenha(e.target.value)}
+                                disabled={isLoading}
                                 placeholder='********'
-                                className="w-full h-13 pl-10 pr-10 border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-sm transition-all bg-white"
+                                className="w-full h-13 pl-10 pr-10 border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-sm transition-all bg-white disabled:opacity-60 disabled:cursor-not-allowed"
                             />
                             <button 
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+                                disabled={isLoading}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
                             >
                                 {showPassword ? <EyeOff size={16} className="stroke-[1.75]" /> : <Eye size={16} className="stroke-[1.75]" />}
                             </button>
                         </div>
                     </div>
 
+                    {erro && (
+                        <div className="border border-rose-200 bg-rose-50 px-3 py-2.5 rounded-sm">
+                            <p className="text-xs font-semibold text-rose-700">
+                                Login ou senha inválidos. Verifique e tente novamente.
+                            </p>
+                        </div>
+                    )}
+
                     <Button
                         type="submit" 
+                        disabled={isLoading}
                         className="w-full h-15 bg-emerald-800 hover:bg-emerald-900 
                         text-white font-semibold text-md rounded-sm 
                         shadow-none transition-all duration-200 
@@ -85,9 +125,18 @@ const LoginForm = () => {
                         focus:ring-offset-2 tracking-widest 
                         uppercase mt-4 border border-emerald-900
                         cursor-pointer
+                        disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:bg-emerald-800
+                        flex items-center justify-center gap-2
                         "
                     >
-                        ENTRAR
+                        {isLoading ? (
+                            <>
+                                <Loader2 size={18} className="animate-spin" />
+                                Entrando...
+                            </>
+                        ) : (
+                            "ENTRAR"
+                        )}
                     </Button>
                 </form>
             </div>

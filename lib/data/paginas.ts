@@ -1,4 +1,4 @@
-import { House, RefreshCcw, Fuel, CarFront, FileText, Users, ClipboardList} from 'lucide-react';
+import { House, RefreshCcw, Fuel, CarFront, FileText, Users, ClipboardList, User} from 'lucide-react';
 import { type Paginas } from '../types';
 
 export const paginas: Paginas[]  = [
@@ -36,5 +36,10 @@ export const paginas: Paginas[]  = [
     icone: Users,
     pagina: 'Motoristas',
     link: '/motoristas'
+  },
+  {
+    icone: User,
+    pagina: 'Usuários',
+    link: '/usuarios'
   }
 ]
