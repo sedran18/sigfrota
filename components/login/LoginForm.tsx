@@ -5,37 +5,44 @@ import { Input } from "../ui/input";
 import { useState } from 'react';
 import { Button } from "../ui/button";
 import { signIn } from "next-auth/react";
+import React from "react";
 
 const LoginForm = () => {
     const [user, setUser] = useState('');
     const [senha, setSenha] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [erro, setErro] = useState(false)
+    const [erro, setErro] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const ERROR_MESSAGES: Record<string, string> = {
+        invalid_credentials: "Login ou senha inválidos. Verifique e tente novamente.",
+        inactive_account: "Sua conta está desativada. Contate o administrador.",
+    }
+
+    const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
 
         if (!user || !senha) {
-            setErro(true);
+            setErro("Preencha login e senha.");
             return;
         }
 
-        setErro(false);
+        setErro(null);
         setIsLoading(true);
 
-        try {
-            await signIn("credentials", {
-                name: user,
-                password: senha,
-            });
+        const result = await signIn("credentials", {
+            name: user,
+            password: senha,
+            redirect: false,
+        });
 
-            window.location.href = '/admin';
-        } catch (err) {
-            console.log(err);
-            setErro(true);
+        if (result?.error) {
+            setErro(ERROR_MESSAGES[result.error] ?? "Erro ao entrar. Tente novamente.");
             setIsLoading(false);
+            return;
         }
+
+        window.location.href = '/admin';
     };
 
     return (
