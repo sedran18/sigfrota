@@ -1,3 +1,5 @@
+'use client';
+
 import { signOut } from "next-auth/react";
 import {User, LogOut} from 'lucide-react';
 
