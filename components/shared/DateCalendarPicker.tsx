@@ -11,10 +11,27 @@ import {
 } from "@/components/ui/popover";
 import { DateRange } from "react-day-picker";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState, MouseEvent } from 'react';
+import { useMemo, useState, useEffect, MouseEvent } from 'react';
+
+// Hook simples de media query, sem dependência externa
+const useIsMobile = (breakpoint = 640) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    const update = () => setIsMobile(mql.matches);
+
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, [breakpoint]);
+
+  return isMobile;
+};
 
 const DateCalendarPicker = () => {
   const [open, setOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -130,14 +147,14 @@ const DateCalendarPicker = () => {
       </PopoverTrigger>
 
       <PopoverContent 
-        className="w-auto p-0 rounded-none border border-slate-300 shadow-md bg-slate-900" 
+        className="w-auto max-w-[95vw] p-0 rounded-none border border-slate-300 shadow-md bg-slate-900" 
         align="start"
         sideOffset={4}
       >
         <Calendar
           mode="range"
           selected={displayRange}
-          numberOfMonths={2}
+          numberOfMonths={isMobile ? 1 : 2}
           defaultMonth={subMonths(today, 1)}
           captionLayout="dropdown"
           className="rounded-none p-3 bg-white"
@@ -152,7 +169,10 @@ const DateCalendarPicker = () => {
             today: "border-2 border-[#093a1c] font-bold",
             range_middle: "bg-black text-[#093a1c] rounded-none font-medium",
             range_start: "bg-emerald text-white rounded-none font-bold",
-            range_end: "bg-emerald text-white rounded-none font-bold"
+            range_end: "bg-emerald text-white rounded-none font-bold",
+            caption_label: "text-white font-bold text-sm pointer-events-none",
+            dropdown_root: "relative inline-flex items-center py-2 px-1 -my-2",
+            dropdown: "absolute inset-0 opacity-0 cursor-pointer bg-white text-black",
           }}
         />
       </PopoverContent>
