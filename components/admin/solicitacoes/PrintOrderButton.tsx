@@ -118,7 +118,6 @@ const PrintOrderButton = ({ data }: { data: GetFuelingRequestType }) => {
               letter-spacing: 0.5px;
             }
 
-            /* ÁREA DE PREENCHIMENTO A CANETA */
             .manual-fill-container {
               display: grid;
               grid-template-columns: 1fr 1fr;
@@ -251,12 +250,12 @@ const PrintOrderButton = ({ data }: { data: GetFuelingRequestType }) => {
     <Button
       onClick={handlePrint}
       variant="outline"
-      className="w-full sm:w-auto border-slate-300 text-slate-900 bg-white font-bold text-xs tracking-wider uppercase rounded-none h-9 px-3 gap-1.5 cursor-pointer hover:bg-slate-50 hover:text-slate-950 transition-all"
+      className="w-full sm:w-auto h-10 sm:h-11 border-slate-300 text-slate-900 bg-white font-bold text-[10px] sm:text-xs tracking-wider uppercase rounded-none px-4 gap-2 cursor-pointer hover:bg-slate-50 hover:text-slate-950 transition-all shadow-sm shrink-0"
     >
-      <Printer size={13} />
+      <Printer size={14} className="sm:w-4 sm:h-4 shrink-0" />
       Imprimir
     </Button>
   )
 }
 
-export default PrintOrderButton
+export default PrintOrderButton;
