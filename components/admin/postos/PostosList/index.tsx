@@ -4,7 +4,7 @@ import PostoCard from "./PostoCard"
 
 const PostosList = ({ gasStations, isAdmin}: {gasStations: GasStationWithUsageType[], isAdmin: boolean}) => {
   return (
-    <div className="grid p-1 md:p-2 lg:p-10 px-auto grid-cols-1 gap-4 w-full overflow-hidden">
+    <div className="grid  px-3 lg:px-7 grid-cols-1 gap-4 w-full overflow-hidden">
       {gasStations.map((posto) => (
         <PostoCard key={posto.id} gasStation={posto} isAdmin={isAdmin}/>
       ))}

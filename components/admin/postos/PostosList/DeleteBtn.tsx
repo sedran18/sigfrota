@@ -31,6 +31,7 @@ const DeleteGasStationCard = ({gasStationId, isUsed, active}: {gasStationId:GasS
         <Switch
           checked={active}
           onCheckedChange={() => handleDelete(gasStationId)}
+          className="cursor-pointer border-2 border-slate-400 bg-slate-300 data-[state=unchecked]:bg-slate-300 data-[state=checked]:bg-primary  data-[state=checked]:[&>span]:bg-white"
         />
       ) : (
         <Button
