@@ -38,6 +38,9 @@ export const getDrivers= async (): Promise<ResponseType<DriverWithUsageType[]>> 
                         fuelingRequests: true,
                     }
                 }
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         });
         const driversWithUse:DriverWithUsageType[] = drivers.map(({_count, ...driver}) => ({
@@ -110,6 +113,9 @@ export const getDriversSelect = async <T extends DriverSelectType>(
   try {
     const drivers = await prisma.driver.findMany({
       select: select,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     return { 

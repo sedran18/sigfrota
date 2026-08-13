@@ -20,6 +20,9 @@ export const getContracts =  async ():Promise<ResponseType<GetContractsResponseT
                         }
                     }
                 }
+            },
+            orderBy: {  
+                createdAt: 'desc'
             }
         });
 
@@ -157,6 +160,9 @@ export const getContractFuelByGasStationAndFuelType = async (data:GetContractFue
             select: {
                 id: true,
                 litersAvailable: true,
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         });
 

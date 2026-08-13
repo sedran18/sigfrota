@@ -61,6 +61,9 @@ export const getGasStations= async (): Promise<ResponseType<GasStationWithUsageT
             },
             },
         },
+        orderBy: {
+            createdAt: 'desc',
+        },  
     });
         const GasStationsWithUse:GasStationWithUsageType[] = gasStations.map(({contracts, ...GasStation}) => ({
             ...GasStation, 
@@ -146,6 +149,9 @@ export const getGasStationsSelect = async <T extends GasStationSelectType>(
   try {
     const GasStations = await prisma.gasStation.findMany({
       select: select,
+      orderBy: {
+        createdAt: 'desc',
+      },    
     });
 
     return { 

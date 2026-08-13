@@ -102,6 +102,9 @@ export const getFuelings = async ( {
                         id: true,
                     }
                 }
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         });
 
@@ -256,7 +259,6 @@ export const deleteFueling = async (fId: FuelingIdType): Promise<ResponseType<Fu
 
         const lastFueling = await prisma.fueling.findFirst({
             where: { vehicleId: fuelingToDelete.vehicleId },
-            orderBy: { createdAt: 'desc' }
         });
 
         if (lastFueling?.id !== fuelingToDelete.id) {
@@ -271,7 +273,6 @@ export const deleteFueling = async (fId: FuelingIdType): Promise<ResponseType<Fu
                 vehicleId: fuelingToDelete.vehicleId,
                 id: { not: fuelingToDelete.id }
             },
-            orderBy: { createdAt: 'desc' }
         });
 
         const deleted = await prisma.$transaction(async (tx) => {

@@ -82,6 +82,9 @@ export const getFuelingRequests = async ({
 
     const requests = await prisma.fuelingRequest.findMany({
       where,
+      orderBy: {
+        createdAt: 'desc',
+      },
       include: {
         driver: {
           select: {

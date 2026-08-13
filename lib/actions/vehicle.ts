@@ -58,6 +58,9 @@ export const getVehicles = async (): Promise<ResponseType<VehicleWithUsageType[]
                     take: 1,
                 }, 
             },
+            orderBy: {
+                createdAt: 'desc',
+            },
         });
 
         const vehiclesAdjusted = vehicles.map(({fuelingRequests, ...v}) => ({...v, 
@@ -184,6 +187,9 @@ export const getVehiclesSelectByFuelType = async <T extends VehicleSelectType>(
 
     try {
         const vehicles = await prisma.vehicle.findMany({
+            orderBy: {
+                createdAt: 'desc',
+            },
             where: {
                 ...(fuelTarget ? { fuelType: { in: fuelTarget } } : {}),
                 ...(typeof active === 'boolean' ? { active } : {}),
