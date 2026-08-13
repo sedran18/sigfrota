@@ -16,15 +16,21 @@ const VeiculoCard = ({ vehicle, isAdmin }: {vehicle: VehicleWithUsageType, isAdm
   const currentStatus = statusConfig[vehicle.conservationStatus] || statusConfig.GOOD
 
   return (
-    <div className="relative flex flex-col justify-between gap-6 p-5 sm:p-6 bg-white text-slate-900 border border-slate-200 border-l-4 border-l-[var(--secondary-color)] transition-all rounded-none hover:border-slate-400 hover:shadow-lg group w-full">
-      
+    <div className="relative flex flex-col justify-between gap-6 p-5 sm:p-6 bg-white text-slate-900 border border-slate-200 border-l-4 border-l-[var(--secondary-color)] transition-all rounded-none hover:border-slate-400 shadow-lg group w-full">
+        {
+          isAdmin && (
+          <div className="w-full flex justify-end">
+            <DeleteVehicleBtn vehicleId={vehicle.id} isUsed={vehicle.isUsed} active={vehicle.active}/>
+          </div>
+          )
+        }
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4">
         <div className="flex flex-col gap-1.5 min-w-0">
           <div className="flex items-center gap-2.5 flex-wrap">
             <span className="text-sm font-mono font-black tracking-widest text-emerald-900 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5">
               {vehicle.plate.toUpperCase()}
             </span>
-            <span className="text-xs font-bold text-slate-400 tracking-wider flex items-center gap-1">
+            <span className="text-xs font-bold text-slate-900 tracking-wider flex items-center gap-1">
               <Calendar size={12} />
               ANO: {vehicle.year}
             </span>
@@ -38,29 +44,23 @@ const VeiculoCard = ({ vehicle, isAdmin }: {vehicle: VehicleWithUsageType, isAdm
           <ShieldAlert size={13} />
           {currentStatus.label}
         </span>
-        {
-          isAdmin && (
-          <div>
-            <DeleteVehicleBtn vehicleId={vehicle.id} isUsed={vehicle.isUsed} active={vehicle.active}/>
-          </div>
-          )
-        }
+
         
       </div>
     
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 border-t border-b border-slate-200/80 py-4 text-xs font-bold tracking-wide uppercase text-slate-500">
         <div className="flex items-center gap-3">
-          <Gauge size={16} className="text-slate-400 shrink-0" />
+          <Gauge size={16} className="text-slate-900 shrink-0" />
           <div className="flex flex-col">
-            <span className="text-[10px] text-slate-400 font-sans normal-case font-medium">Quilometragem Atual</span>
+            <span className="text-[10px] text-slate-900 font-sans normal-case font-medium">Quilometragem Atual</span>
             <span className="text-sm font-black text-slate-900 font-mono tracking-tight">{vehicle.currentOdometer.toLocaleString()} KM</span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <Fuel size={16} className="text-slate-400 shrink-0" />
+          <Fuel size={16} className="text-slate-900 shrink-0" />
           <div className="flex flex-col">
-            <span className="text-[10px] text-slate-400 font-sans normal-case font-medium">Consumo Médio</span>
+            <span className="text-[10px] text-slate-900 font-sans normal-case font-medium">Consumo Médio</span>
             <span className="text-sm font-black text-slate-900 font-mono tracking-tight">{vehicle.averageConsumption.toFixed(1)} KM/L</span>
           </div>
         </div>
@@ -73,13 +73,13 @@ const VeiculoCard = ({ vehicle, isAdmin }: {vehicle: VehicleWithUsageType, isAdm
       
       {vehicle.observation && (
         <div className="flex gap-2 text-xs bg-slate-50 border border-slate-200/60 p-3 normal-case font-medium leading-relaxed">
-          <FileText size={14} className="text-slate-400 shrink-0 mt-0.5" />
+          <FileText size={14} className="text-slate-900 shrink-0 mt-0.5" />
           <p className="line-clamp-2">&quot;{vehicle.observation}&quot;</p>
         </div>
       )}
       {
         isAdmin && (
-          <div className="flex items-center justify-end sm:justify-end pt-1 text-xs">
+          <div className="flex h-6 items-center justify-end sm:justify-end  text-xs">
             <AddVeiculo vehicle={vehicle} />
           </div>
         )

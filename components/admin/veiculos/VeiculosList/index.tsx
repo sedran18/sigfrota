@@ -1,12 +1,11 @@
 import VeiculoCard from "./VehicleCard"
 import { VehicleWithUsageType } from "@/schemas/vehicle.schema"
 
-
-const VeiculosList = ({ items, isAdmin }: {items: VehicleWithUsageType[], isAdmin: boolean}) => {
+const VeiculosList = ({ items, isAdmin }: { items: VehicleWithUsageType[], isAdmin: boolean }) => {
   return (
-    <div className="grid p-1 md:p-2 lg:p-10 px-auto grid-cols-1 gap-4 w-full overflow-hidden">
+    <div className="grid grid-cols-1 gap-4 p-3 sm:p-4 lg:p-8 w-full">
       {items.map((veiculo) => (
-        <VeiculoCard key={veiculo.id} vehicle={veiculo} isAdmin={isAdmin}/>
+        <VeiculoCard key={veiculo.id} vehicle={veiculo} isAdmin={isAdmin} />
       ))}
     </div>
   )
