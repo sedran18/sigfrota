@@ -1,6 +1,5 @@
 "use client"
 
-import { Fuel } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import {
@@ -28,42 +27,41 @@ const chartConfig = {
 
 const LitersPerDriverChart = ({ data = [] }: { data: FuelBarChartItemType[] }) => {
   return (
-    <Card className="w-full border border-slate-200 bg-white shadow-none dark:border-slate-800 dark:bg-slate-950">
-      <CardHeader className="border-b border-slate-100 pb-4 dark:border-slate-800">
-        <CardTitle className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-slate-800 dark:text-slate-100">
-          <Fuel className="h-4 w-4 text-[#0f3d21] dark:text-[#4c9a2a]" />
+    <Card className="w-full rounded-none border border-slate-200 bg-white shadow-none h-full">
+      <CardHeader className="border-b border-slate-100 p-4 sm:p-5">
+        <CardTitle className="flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-900">
           Consumo por Motorista
         </CardTitle>
-        <CardDescription className="pt-1 text-xs text-slate-500 dark:text-slate-400">
+        <CardDescription className="pt-0.5 text-[11px] sm:text-xs font-medium text-slate-900">
           Total de litros abastecidos por condutor
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="p-4 sm:p-6">
-        <ChartContainer config={chartConfig} className="max-h-[350px] w-full">
-          <BarChart accessibilityLayer data={data}>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-slate-100 dark:stroke-slate-800" />
+      <CardContent className="p-3 sm:p-5">
+        <ChartContainer config={chartConfig} className="max-h-[300px] w-full">
+          <BarChart accessibilityLayer data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-slate-100" />
             <XAxis
               dataKey="name"
               tickLine={false}
-              tickMargin={10}
+              tickMargin={8}
               axisLine={false}
               stroke="currentColor"
-              tick={{ fill: "#94a3b8", fontSize: 12 }}
+              tick={{ fill: "#0f172a", fontSize: 10, fontWeight: 600 }}
               tickFormatter={(value: string) => value.split(" ")[0]}
             />
             <YAxis
               tickLine={false}
               axisLine={false}
               stroke="currentColor"
-              tick={{ fill: "#94a3b8", fontSize: 12 }}
+              tick={{ fill: "#0f172a", fontSize: 10, fontWeight: 600 }}
               tickFormatter={(value) => `${value}L`}
             />
             <ChartTooltip
               cursor={{ fill: "rgba(15, 61, 33, 0.05)" }}
               content={
                 <ChartTooltipContent
-                  className="rounded-md border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+                  className="rounded-none border border-slate-200 bg-white p-2.5 shadow-md text-slate-900"
                   formatter={(value) => `${value} Litros`}
                 />
               }
@@ -71,17 +69,17 @@ const LitersPerDriverChart = ({ data = [] }: { data: FuelBarChartItemType[] }) =
             <Bar
               dataKey="liters"
               fill="var(--color-liters)"
-              radius={[3, 3, 0, 0]}
+              radius={[2, 2, 0, 0]}
             />
           </BarChart>
         </ChartContainer>
       </CardContent>
 
-      <CardFooter className="flex-col items-start gap-1 border-t border-slate-100 pt-4 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
-        <div className="flex gap-2 font-medium leading-none text-slate-700 dark:text-slate-200">
+      <CardFooter className="flex-col items-start gap-1 border-t border-slate-100 p-3 sm:p-4 text-xs text-slate-900">
+        <div className="font-bold uppercase text-[10px] sm:text-xs">
           Comparativo de abastecimento
         </div>
-        <div className="text-xs leading-none">
+        <div className="text-[10px] sm:text-[11px] font-medium">
           Métricas calculadas com base nos registros do período.
         </div>
       </CardFooter>

@@ -1,7 +1,6 @@
 "use client"
 
-import { Gauge } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { useMemo } from "react"
 
 import {
@@ -59,41 +58,47 @@ const FuelEfficiencyByCarChart = ({
   }, [data, driverLabels])
 
   return (
-    <Card className="border border-slate-200 bg-white shadow-none dark:border-slate-800 dark:bg-slate-950">
-      <CardHeader className="border-b border-slate-100 pb-4 dark:border-slate-800">
-        <CardTitle className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-slate-800 dark:text-slate-100">
-          <Gauge className="h-4 w-4 text-[#0f3d21] dark:text-[#4c9a2a]" />
+    <Card className="w-full h-full rounded-none border border-slate-200 bg-white shadow-none">
+      <CardHeader className="border-b border-slate-100 p-4 sm:p-5">
+        <CardTitle className="flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-900">
           Eficiência por Veículo
         </CardTitle>
-        <CardDescription className="pt-1 text-xs text-slate-500 dark:text-slate-400">
+        <CardDescription className="pt-0.5 text-[11px] sm:text-xs font-medium text-slate-900">
           Média de km/L por motorista, no período selecionado
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="p-4 sm:p-6">
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={data}>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-slate-100 dark:stroke-slate-800" />
+      <CardContent className="p-3 sm:p-5">
+        <ChartContainer config={chartConfig} className="max-h-[300px] w-full">
+          <BarChart accessibilityLayer data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-slate-100" />
             <XAxis
               dataKey="carName"
               tickLine={false}
-              tickMargin={10}
+              tickMargin={8}
               axisLine={false}
               stroke="currentColor"
-              tick={{ fill: "#94a3b8", fontSize: 12 }}
+              tick={{ fill: "#0f172a", fontSize: 10, fontWeight: 600 }}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              stroke="currentColor"
+              tick={{ fill: "#0f172a", fontSize: 10, fontWeight: 600 }}
+              tickFormatter={(val) => `${val} km/L`}
             />
             <ChartTooltip
               cursor={{ fill: "rgba(15, 61, 33, 0.05)" }}
               content={
                 <ChartTooltipContent
                   hideLabel
-                  className="rounded-md border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+                  className="rounded-none border border-slate-200 bg-white p-2.5 shadow-md text-slate-900"
                 />
               }
             />
             <ChartLegend
               content={
-                <ChartLegendContent className="flex-wrap gap-3 pt-4 text-xs font-medium text-slate-500 dark:text-slate-400" />
+                <ChartLegendContent className="flex-wrap gap-2 pt-3 text-[11px] font-bold text-slate-900 uppercase" />
               }
             />
             {driverKeys.map((driverKey, index) => (
@@ -104,9 +109,9 @@ const FuelEfficiencyByCarChart = ({
                 fill={`var(--color-${driverKey})`}
                 radius={
                   index === 0
-                    ? [0, 0, 3, 3]
+                    ? [0, 0, 2, 2]
                     : index === driverKeys.length - 1
-                    ? [3, 3, 0, 0]
+                    ? [2, 2, 0, 0]
                     : [0, 0, 0, 0]
                 }
               />
@@ -118,4 +123,4 @@ const FuelEfficiencyByCarChart = ({
   )
 }
 
-export default FuelEfficiencyByCarChart
+export default FuelEfficiencyByCarChart;
