@@ -134,13 +134,13 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
-        className="
-          flex items-center w-full justify-center gap-2 h-10 sm:h-11 
-          bg-[#093a1c] text-white text-[10px] sm:text-xs font-bold uppercase tracking-wider 
-          rounded-none cursor-pointer shadow-md transition-all duration-150
-          hover:bg-[#093a1c]/90 sm:w-auto sm:min-w-55 px-4
-        "
-      >
+      className="
+        flex items-center justify-center gap-2 h-10 sm:h-11 
+        bg-[#093a1c] text-white text-[10px] sm:text-xs font-bold uppercase tracking-wider 
+        rounded-none cursor-pointer shadow-md transition-all duration-150
+        hover:bg-[#093a1c]/90 px-4 whitespace-nowrap shrink-0 w-full sm:w-auto
+      "
+    >
         {request ? (
           <>
             <Edit2 size={14} className="sm:w-4 sm:h-4" />

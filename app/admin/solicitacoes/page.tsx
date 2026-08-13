@@ -55,10 +55,12 @@ const Solicitacoes = async ({
       postos={postosAdjusted}
       motoristas={motoristasAdjusted}
     >
-      <HeaderTemplate title="Solicitações" description="Lista de todas as solicitações">
+    <HeaderTemplate title="Solicitações" description="Lista de todas as solicitações">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
         <DateCalendarPicker />
         <AddRequest key="novo" />
-      </HeaderTemplate>
+      </div>
+    </HeaderTemplate>
 
       <BasicFilters filters={filtersConfig} />
 
