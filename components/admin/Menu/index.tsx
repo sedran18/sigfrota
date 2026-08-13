@@ -14,7 +14,7 @@ import {
 import NavLinks from "./NavLinks";
 import UserProfile from "./UserProfile";
 
-const Menu = () => {
+const Menu = ({userName}: {userName: string}) => {
   const pathname = usePathname();
 
   return (
@@ -36,7 +36,7 @@ const Menu = () => {
           <NavLinks pathname={pathname} paginas={paginas}/>
         </div>
 
-        <UserProfile />
+        <UserProfile userName={userName} />
       </aside>
 
       {/* Mobile */}
@@ -86,7 +86,7 @@ const Menu = () => {
                 <NavLinks pathname={pathname} paginas={paginas}/>
                 </div>
 
-                <UserProfile />
+                <UserProfile userName={userName}/>
             </SheetContent>
             </Sheet>
         </div>
