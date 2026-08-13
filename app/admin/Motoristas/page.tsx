@@ -11,7 +11,7 @@ const Motoristas = async () => {
 
   return (
     <>
-      <HeaderTemplate title="Contratos">
+      <HeaderTemplate title="Motoristas">
         {isAdmin && <AddMotorista />}
       </HeaderTemplate>
 
