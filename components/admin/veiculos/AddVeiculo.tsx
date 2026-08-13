@@ -72,7 +72,7 @@ const AddVeiculo = ({ vehicle }: { vehicle?: VehicleWithUsageType }) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="w-full sm:w-auto bg-[#093a1c] hover:bg-[#0f5c2c] active:bg-[#093a1c] flex items-center justify-center cursor-pointer text-white font-bold text-xs tracking-wider uppercase rounded-lg h-11 px-5 gap-2 shadow-md hover:shadow-lg hover:shadow-[#093a1c]/30 transition-all duration-200">
+      <DialogTrigger className="w-full sm:w-auto bg-[#093a1c] hover:bg-[#0f5c2c] active:bg-[#093a1c] flex items-center justify-center cursor-pointer text-white font-bold text-xs tracking-wider uppercase h-11 px-5 gap-2 shadow-md hover:shadow-lg hover:shadow-[#093a1c]/30 transition-all duration-200">
         {vehicle ? (
           <>
             <Edit2 size={16} />
