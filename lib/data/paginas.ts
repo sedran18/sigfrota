@@ -22,12 +22,12 @@ export const paginas: PaginaItem[] = [
   }, 
   {
     iconName: 'postos',
-    pagina: 'Postos Credenciados',
+    pagina: 'Postos',
     link: '/postos'
   },
   {
     iconName: 'veiculos',
-    pagina: 'Frota de Veículos',
+    pagina: 'Veículos',
     link: '/veiculos'
   },
   {
@@ -42,7 +42,7 @@ export const paginas: PaginaItem[] = [
   },
   {
     iconName: 'usuarios',
-    pagina: 'Usuários do Sistema',
+    pagina: 'Usuários',
     link: '/usuarios'
   }
 ];

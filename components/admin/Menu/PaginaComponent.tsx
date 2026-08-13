@@ -1,12 +1,25 @@
 import Link from "next/link";
-import { Fuel, Car, Users, FileText, LayoutDashboard, LucideIcon } from "lucide-react";
+import { 
+  Fuel, 
+  Car, 
+  Users, 
+  FileText, 
+  LayoutDashboard, 
+  ClipboardList, 
+  Building2, 
+  UserCheck, 
+  LucideIcon 
+} from "lucide-react";
 
 const iconsMap: Record<string, LucideIcon> = {
   dashboard: LayoutDashboard,
-  veiculos: Car,
-  motoristas: Users,
-  contratos: FileText,
+  solicitacoes: ClipboardList,
   abastecimento: Fuel,
+  postos: Building2,
+  veiculos: Car,
+  contratos: FileText,
+  motoristas: Users,
+  usuarios: UserCheck,
 };
 
 interface PaginaComponentProps {
@@ -24,25 +37,25 @@ const PaginaComponent = ({ iconName, pagina, link, isActive }: PaginaComponentPr
     <Link 
       href={fullLink}
       className={`
-        flex items-center gap-3 px-4 py-3 border-l-4 transition-colors group
+        flex items-center gap-3.5 px-5 py-3.5 border-l-4 transition-all duration-150 group select-none
         ${isActive 
-          ? 'bg-[#093a1c]/10 border-[#093a1c] text-[#093a1c] font-bold' 
-          : 'border-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900 font-medium'
+          ? 'bg-[#093a1c] border-[#093a1c] text-white font-bold shadow-sm' 
+          : 'border-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900 font-semibold'
         }
       `}
     >
       <Icon 
         className={`
-          w-4 h-4 shrink-0 transition-colors
-          ${isActive ? 'text-[#093a1c]' : 'text-slate-500 group-hover:text-slate-800'}
+          w-5 h-5 shrink-0 transition-colors
+          ${isActive ? 'text-white' : 'text-slate-600 group-hover:text-slate-900'}
         `} 
       />
       
-      <span className="text-xs tracking-wider uppercase truncate">
+      <span className="text-sm font-bold tracking-wider uppercase truncate">
         {pagina}
       </span>
     </Link>
-  )
-}
+  );
+};
 
 export default PaginaComponent;
