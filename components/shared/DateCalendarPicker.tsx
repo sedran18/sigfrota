@@ -13,7 +13,6 @@ import { DateRange } from "react-day-picker";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState, useEffect, MouseEvent } from 'react';
 
-// Hook simples de media query, sem dependência externa
 const useIsMobile = (breakpoint = 640) => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -54,23 +53,17 @@ const DateCalendarPicker = () => {
 
   const displayRange = tempRange ?? urlRange;
 
-  // Não confiamos mais no "range" que o react-day-picker calcula.
-  // Usamos o dia clicado (2º argumento do onSelect) e montamos a lógica nós mesmos.
   const handleDayClick = (day: Date | undefined) => {
     if (!day) return;
 
     const current = tempRange;
 
-    // Caso 1: ainda não tem "from", OU já tem um range completo (from + to)
-    // => este clique inicia um NOVO range
     if (!current?.from || (current.from && current.to)) {
       setTempRange({ from: day, to: undefined });
       return;
     }
 
-    // Caso 2: já tem "from" e não tem "to" => este é o segundo clique
     if (current.from && !current.to) {
-      // clicou na mesma data do "from" de novo: mantém como seleção de 1 dia só
       if (isSameDay(current.from, day)) {
         setTempRange({ from: current.from, to: current.from });
       }
