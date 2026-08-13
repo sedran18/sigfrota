@@ -14,7 +14,8 @@ import {
 import NavLinks from "./NavLinks";
 import UserProfile from "./UserProfile";
 
-const Menu = ({userName}: {userName: string}) => {
+//mudar desktop para server e mobile para client rendering
+const Menu = ({userName, isAdmin}: {userName: string, isAdmin: boolean}) => {
   const pathname = usePathname();
 
   return (
@@ -33,7 +34,7 @@ const Menu = ({userName}: {userName: string}) => {
               priority
             />
           </div>
-          <NavLinks pathname={pathname} paginas={paginas}/>
+          <NavLinks pathname={pathname} paginas={paginas} isAdmin={isAdmin}/>
         </div>
 
         <UserProfile userName={userName} />
@@ -83,7 +84,7 @@ const Menu = ({userName}: {userName: string}) => {
                     </SheetTitle>
                 </SheetHeader>
                 
-                <NavLinks pathname={pathname} paginas={paginas}/>
+                <NavLinks pathname={pathname} paginas={paginas} isAdmin={isAdmin}/>
                 </div>
 
                 <UserProfile userName={userName}/>

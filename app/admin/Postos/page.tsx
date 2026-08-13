@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import HeaderTemplate from "@/components/admin/HeaderTemplate";
 import AddPosto from "@/components/admin/postos/AddPosto";
 import PostosList from "@/components/admin/postos/PostosList";
@@ -6,14 +7,18 @@ import { Building2 } from "lucide-react";
 
 const Postos = async () => {
     const gasStations = await getGasStations();
-
+    const session = await auth();
+    const isAdmin = session?.user.role === 'ADMIN';
+    
     return (<>
         <HeaderTemplate title="Postos">
-            <AddPosto />
+            {
+                isAdmin && (<AddPosto/>)
+            }
         </HeaderTemplate>
         {
             gasStations.success && gasStations.data.length > 0?
-                <PostosList gasStations={gasStations.data}  />
+                <PostosList gasStations={gasStations.data}  isAdmin={isAdmin}/>
             :
                 <div className="flex m-2 lg:m-10 flex-col gasStations-center justify-center text-center p-12 bg-slate-50 border border-slate-200 rounded-none">
                     <Building2 size={32} className="text-slate-400 mb-2.5" />

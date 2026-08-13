@@ -4,7 +4,7 @@ import {  Phone, Calendar} from "lucide-react"
 import AddMotorista from "../AddMotorista"
 import DeleteDriverCard from "./DeleteDriverCard"
 
-const MotoristaCard = ({ driver }: {driver: DriverWithUsageType}) => {
+const MotoristaCard = ({ driver, isAdmin}: {driver: DriverWithUsageType, isAdmin: boolean}) => {
   
   return (
     <div className="relative flex flex-col justify-between gap-5 p-6 bg-white border border-slate-200 transition-all duration-300 hover:border-slate-350 hover:shadow-lg group border-l-4 border-l-[var(--secondary-color)]">
@@ -18,10 +18,14 @@ const MotoristaCard = ({ driver }: {driver: DriverWithUsageType}) => {
             {driver.name}
           </h3>
         </div>
-
-        <div className="flex items-center gap-2">
-          <DeleteDriverCard driverId={driver.id} isUsed={driver.isUsed} active={driver.active}/>
-        </div>
+        {
+          isAdmin &&  (
+            <div className="flex items-center gap-2">
+              <DeleteDriverCard driverId={driver.id} isUsed={driver.isUsed} active={driver.active}/>
+            </div>
+          )
+        }
+        
       </div>
 
       <div className="flex flex-col gap-3.5 border-t border-b border-slate-100 py-4 text-[11px] font-bold tracking-wide uppercase">
@@ -38,10 +42,14 @@ const MotoristaCard = ({ driver }: {driver: DriverWithUsageType}) => {
         </div>
 
       </div>
-
-      <div className="flex items-center justify-ceenter md:justify-end pt-1">
-        <AddMotorista driver={driver} />
-      </div>
+        {
+          isAdmin && (
+            <div className="flex items-center justify-ceenter md:justify-end pt-1">
+              <AddMotorista driver={driver} />
+            </div>
+          )
+        }
+      
 
     </div>
   )

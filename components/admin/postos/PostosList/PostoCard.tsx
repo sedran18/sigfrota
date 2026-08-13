@@ -4,7 +4,7 @@ import AddPosto from "../AddPosto";
 import DeleteBtn from "./DeleteBtn";
 
 
-const PostoCard = ({ gasStation }: {gasStation: GasStationWithUsageType}) => {
+const PostoCard = ({ gasStation, isAdmin }: {gasStation: GasStationWithUsageType, isAdmin: boolean}) => {
   return (
     <div className="relative flex flex-col justify-between gap-6 p-5 sm:p-6 bg-white text-slate-900 border border-slate-200 transition-all
      rounded-none hover:border-slate-400 hover:shadow-lg group w-full border-l-4 border-l-[var(--secondary-color)]">
@@ -14,7 +14,11 @@ const PostoCard = ({ gasStation }: {gasStation: GasStationWithUsageType}) => {
           {gasStation.name}
         </h3>
       </div>
-      <DeleteBtn gasStationId={gasStation.id} isUsed={gasStation.isUsed} active={gasStation.active}/>
+      {
+        isAdmin && (
+          <DeleteBtn gasStationId={gasStation.id} isUsed={gasStation.isUsed} active={gasStation.active}/>
+        )
+      }
       
       <div className="flex flex-col gap-4 border-t border-b border-slate-200/80 py-4 text-xs font-bold tracking-wide uppercase text-slate-500">
         <div className="flex items-center gap-3">
@@ -35,12 +39,14 @@ const PostoCard = ({ gasStation }: {gasStation: GasStationWithUsageType}) => {
           </div>
         </div>
       </div>
-
-      <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:items-center gap-3 text-xs">
-
-        
-        <AddPosto gasStation={gasStation}/>
-      </div>
+      {
+        isAdmin && (
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:items-center gap-3 text-xs">
+          <AddPosto gasStation={gasStation}/>
+        </div>
+        )
+      }
+      
 
     </div>
   )

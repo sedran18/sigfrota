@@ -4,7 +4,7 @@ import { Calendar, FileText, ShieldCheck, ShieldAlert } from "lucide-react"
 import DeleteContratoBtn from "./DeleteContratoBtn";
 
 
-const ContratoCard = ({ contrato, postoName }: {contrato: GetContractsResponseType, postoName: string}) => {
+const ContratoCard = ({ contrato, postoName, isAdmin }: {contrato: GetContractsResponseType, postoName: string, isAdmin: boolean}) => {
   return (
     <div className="relative flex flex-col justify-between gap-6 p-6 bg-white  
      border border-slate-200 transition-all rounded-none hover:border-slate-400 hover:shadow-lg group border-l-4 border-l-[var(--secondary-color)]">
@@ -28,7 +28,11 @@ const ContratoCard = ({ contrato, postoName }: {contrato: GetContractsResponseTy
           {contrato.active ? "VIGENTE" : "ENCERRADO"}
         </span>
       </div>
-        <DeleteContratoBtn contractId={contrato.id} isUsed={contrato.isUsed} active={contrato.active} />
+      {
+        isAdmin && (
+          <DeleteContratoBtn contractId={contrato.id} isUsed={contrato.isUsed} active={contrato.active} />
+        )
+      }
 
       <div className="grid grid-cols-2 gap-x-6 gap-y-4 border-t border-b border-slate-200/80 py-4 text-xs font-bold tracking-wide uppercase ">
         <div className="flex items-center gap-3">

@@ -12,7 +12,7 @@ const statusConfig: Record<ConservationStatusType, { bg: string, text: string, l
   DEFFECTED: { bg: "bg-rose-100 border-rose-300", text: "text-rose-900", label: "INOPERANTE" }
 }
 
-const VeiculoCard = ({ vehicle }: {vehicle: VehicleWithUsageType}) => {
+const VeiculoCard = ({ vehicle, isAdmin }: {vehicle: VehicleWithUsageType, isAdmin: boolean}) => {
   const currentStatus = statusConfig[vehicle.conservationStatus] || statusConfig.GOOD
 
   return (
@@ -38,9 +38,14 @@ const VeiculoCard = ({ vehicle }: {vehicle: VehicleWithUsageType}) => {
           <ShieldAlert size={13} />
           {currentStatus.label}
         </span>
-        <div>
-          <DeleteVehicleBtn vehicleId={vehicle.id} isUsed={vehicle.isUsed} active={vehicle.active}/>
-        </div>
+        {
+          isAdmin && (
+          <div>
+            <DeleteVehicleBtn vehicleId={vehicle.id} isUsed={vehicle.isUsed} active={vehicle.active}/>
+          </div>
+          )
+        }
+        
       </div>
     
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 border-t border-b border-slate-200/80 py-4 text-xs font-bold tracking-wide uppercase text-slate-500">
@@ -72,10 +77,14 @@ const VeiculoCard = ({ vehicle }: {vehicle: VehicleWithUsageType}) => {
           <p className="line-clamp-2">&quot;{vehicle.observation}&quot;</p>
         </div>
       )}
-
-      <div className="flex items-center justify-end sm:justify-end pt-1 text-xs">
-        <AddVeiculo vehicle={vehicle} />
-      </div>
+      {
+        isAdmin && (
+          <div className="flex items-center justify-end sm:justify-end pt-1 text-xs">
+            <AddVeiculo vehicle={vehicle} />
+          </div>
+        )
+      }
+      
 
     </div>
   )

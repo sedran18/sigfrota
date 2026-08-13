@@ -3,9 +3,10 @@ import ContratoCard from "./ContratoCard"
 import { GasStationType } from "@/schemas/gasStation.schema";
 
 
-const ContratosList = ({ contratos, postos }: {
+const ContratosList = ({ contratos, postos, isAdmin}: {
   contratos: GetContractsResponseType[],
-  postos: GasStationType[]
+  postos: GasStationType[],
+  isAdmin: boolean
 }) => {
 
   return (
@@ -13,7 +14,7 @@ const ContratosList = ({ contratos, postos }: {
       {contratos.map((contrato) => {
         const posto = postos?.find(p => p.id === contrato.gasStationId);
 
-        return (<ContratoCard key={contrato.id} contrato={contrato} postoName={posto?.name ?? 'Não encontrado!'}/>);
+        return (<ContratoCard key={contrato.id} contrato={contrato} postoName={posto?.name ?? 'Não encontrado!'} isAdmin={isAdmin}/>);
     }
     )}
     </div>
