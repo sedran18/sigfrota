@@ -40,11 +40,12 @@ export const createUser = async (item: CreateUserType): Promise<ResponseType<str
     if (!v.success) return { success: false, error: v.error.message }
 
     try {
-        const hashedPassword = await bcrypt.hash(v.data.password, 10)
+        const hashedPassword = await bcrypt.hash(v.data.password, 10);
+        const nameFormatted = v.data.name.replace(' ', '_').toLowerCase();
 
         await prisma.user.create({
             data: {
-                name: v.data.name,
+                name: nameFormatted,
                 password: hashedPassword,
                 role: v.data.role,
             },
@@ -108,7 +109,7 @@ export const removeUser = async (id: UserIdType): Promise<ResponseType<string>> 
         revalidatePath('/admin/usuarios')
         return { success: true, data: 'Usuário removido com sucesso' }
     } catch (err) {
-        console.log(err)
-        return { success: false, error: 'Erro ao remover usuário' }
+        console.log(err);
+        return { success: false, error: 'Erro ao remover usuário. Usuário não pode ter abastecimentos ou solicitações em seu nome.' }
     }
 }
