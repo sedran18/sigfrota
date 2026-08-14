@@ -31,15 +31,15 @@ export const getLineChartData = async (from?: DateType, to?: DateType): Promise<
     try {
         const result = await prisma.$queryRaw<RawLineChartItem[]>`
             SELECT 
-                TO_CHAR("createdAt", 'YYYY-MM-DD') AS "date",
-                COALESCE(SUM(CASE WHEN "fuelType" = 'GASOLINA_COMUM' THEN "liters" ELSE 0 END), 0) AS "GASOLINA_COMUM",
-                COALESCE(SUM(CASE WHEN "fuelType" = 'GASOLINA_ADITIVADA' THEN "liters" ELSE 0 END), 0) AS "GASOLINA_ADITIVADA",
-                COALESCE(SUM(CASE WHEN "fuelType" = 'ETANOL' THEN "liters" ELSE 0 END), 0) AS "ETANOL",
-                COALESCE(SUM(CASE WHEN "fuelType" = 'DIESEL_COMUM' THEN "liters" ELSE 0 END), 0) AS "DIESEL_COMUM",
-                COALESCE(SUM(CASE WHEN "fuelType" = 'DIESEL_S10' THEN "liters" ELSE 0 END), 0) AS "DIESEL_S10"
+                TO_CHAR("created_at", 'YYYY-MM-DD') AS "date",
+                COALESCE(SUM(CASE WHEN "fuel_type" = 'GASOLINA_COMUM' THEN "liters" ELSE 0 END), 0) AS "GASOLINA_COMUM",
+                COALESCE(SUM(CASE WHEN "fuel_type" = 'GASOLINA_ADITIVADA' THEN "liters" ELSE 0 END), 0) AS "GASOLINA_ADITIVADA",
+                COALESCE(SUM(CASE WHEN "fuel_type" = 'ETANOL' THEN "liters" ELSE 0 END), 0) AS "ETANOL",
+                COALESCE(SUM(CASE WHEN "fuel_type" = 'DIESEL_COMUM' THEN "liters" ELSE 0 END), 0) AS "DIESEL_COMUM",
+                COALESCE(SUM(CASE WHEN "fuel_type" = 'DIESEL_S10' THEN "liters" ELSE 0 END), 0) AS "DIESEL_S10"
             FROM "fuelings"
-            WHERE "createdAt" >= ${fromDate} AND "createdAt" <= ${toDate}
-            GROUP BY TO_CHAR("createdAt", 'YYYY-MM-DD')
+            WHERE "created_at" >= ${fromDate} AND "created_at" <= ${toDate}
+            GROUP BY TO_CHAR("created_at", 'YYYY-MM-DD')
             ORDER BY "date" ASC;
         `;
 
@@ -124,9 +124,9 @@ export const getDriverFuelData = async ({from, to}: {from?: DateType; to?: DateT
                 d.name AS "name",
                 COALESCE(SUM(f.liters), 0)::float AS "liters"
             FROM "fuelings" f
-            JOIN "drivers" d ON d.id = f."driverId"
-            WHERE f."createdAt" >= ${fromDate} 
-                AND f."createdAt" <= ${toDate}
+            JOIN "drivers" d ON d.id = f."driver_id"
+            WHERE f."created_at" >= ${fromDate} 
+                AND f."created_at" <= ${toDate}
             GROUP BY d.id, d.name
             HAVING SUM(f.liters) > 0
             ORDER BY "liters" DESC
@@ -159,12 +159,12 @@ export const getFuelEfficiencyByCarData = async ({from, to}: {from?: DateType; t
                 v.model AS "vehicle model",
                 v.plate AS "vehicle plate",
                 d.name AS "driver",
-                ROUND(AVG(f."fuelEfficiency")::numeric, 2)::float AS "efficiency"
+                ROUND(AVG(f."fuel_efficiency")::numeric, 2)::float AS "efficiency"
             FROM "fuelings" f
-            JOIN "vehicles" v ON v.id = f."vehicleId"
-            JOIN "drivers" d ON d.id = f."driverId"
-            WHERE f."createdAt" >= ${fromDate}
-                AND f."createdAt" <= ${toDate}
+            JOIN "vehicles" v ON v.id = f."vehicle_id"
+            JOIN "drivers" d ON d.id = f."driver_id"
+            WHERE f."created_at" >= ${fromDate}
+                AND f."created_at" <= ${toDate}
             GROUP BY v.brand, v.model, v.plate, d.name
             ORDER BY "efficiency" DESC;
         `
