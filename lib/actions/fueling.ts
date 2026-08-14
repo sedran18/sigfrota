@@ -11,6 +11,7 @@ import { toArray } from "../utils";
 import { FuelType } from "@/schemas/enums.schema";
 import { revalidatePath } from "next/cache";
 import { DateSchema, DateType } from "@/schemas/date.schema";
+import { auth } from "@/auth";
 
 export const getFuelings = async ( {
     gasStationsIds,
@@ -101,6 +102,12 @@ export const getFuelings = async ( {
                         plate: true,
                         id: true,
                     }
+                },
+                createdBy: {
+                    select:{
+                        name: true, 
+                        id: true,
+                    }
                 }
             },
             orderBy: {
@@ -130,6 +137,10 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
     const dados =  v.data;
 
     try {
+        const session = await auth();
+        const createdById = session?.user.id;
+        if (!createdById) return {success: false, error: 'Usuário não logado'};
+        
         const inherintData = await prisma.fuelingRequest.findUnique({
             where: {
                 id: dados.requestId,
@@ -178,6 +189,7 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
 
 
         const createFueling = {
+            createdById,
             vehicleId: inherintData.vehicleId,
             driverId: inherintData.driverId,
             requestId: dados.requestId,
@@ -193,9 +205,9 @@ export const createFueling = async (data: CreateFuelingType): Promise<ResponseTy
         }
 
         await prisma.$transaction(async (tx) => {
-            await tx.fueling.create({
-                data: createFueling
-            });
+                await tx.fueling.create({
+                    data: createFueling
+                });
 
             await tx.fuelingRequest.update({
                 where:{
@@ -364,6 +376,12 @@ export const getFuelingById = async (fuelingId: FuelingIdType):Promise<ResponseT
                         brand: true,
                         model: true,
                         plate: true,
+                        id: true,
+                    }
+                }, 
+                createdBy: {
+                    select: {
+                        name :true,
                         id: true,
                     }
                 }

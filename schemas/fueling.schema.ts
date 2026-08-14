@@ -25,6 +25,10 @@ export const FuelingSchema = z.object({
 export type FuelingType = z.infer<typeof FuelingSchema>;
 
 export const GetFuelingSchema = FuelingSchema.extend({
+  createdBy: z.object({
+    name: z.string(),
+    id: z.uuid(), 
+  }),
   contractFuel: z.object({
     contract: z.object({
       gasStation: GasStationSchema.pick({

@@ -1,7 +1,7 @@
 import { dateToStringDate } from "@/lib/utils"
 import { FuelType } from "@/schemas/enums.schema"
 import { GetFuelingType } from "@/schemas/fueling.schema"
-import { Calendar, Fuel, Gauge, Activity, FileText, User, ExternalLink } from "lucide-react"
+import { Calendar, Fuel, Gauge, Activity, FileText, User, ExternalLink, UserCheck } from "lucide-react"
 import Link from "next/link"
 import DeleteFuelingCard from "./DeleteBtn"
 
@@ -79,6 +79,16 @@ const AbastecimentosCard = ({ data }: { data: GetFuelingType }) => {
               {data.contractFuel.contract.gasStation.name}
             </span>
           </div>
+
+          {data.createdBy?.name && (
+            <div className="flex flex-col gap-0.5 min-w-0 col-span-2 pt-1 border-t border-slate-100">
+              <span className="text-[11px] font-semibold text-slate-800 uppercase tracking-wide">Criado por</span>
+              <span className="flex items-center gap-1 font-bold uppercase text-[var(--bg2)] truncate">
+                <UserCheck size={12} className="shrink-0 text-slate-500" />
+                {data.createdBy.name.replace('_', ' ')}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-2.5 bg-slate-50 border border-[var(--border)] rounded-lg px-3 py-2 text-[12.5px]">
