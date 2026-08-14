@@ -26,7 +26,6 @@ export type ConservationStatusType= z.infer<typeof ConservationStatusSchema>;
 export const RequestStatusSchema = z.enum([
   'PENDING', 
   'COMPLETED', 
-  'CANCELED'
 ]);
 
 export type RequestStatusType = z.infer<typeof RequestStatusSchema>;
