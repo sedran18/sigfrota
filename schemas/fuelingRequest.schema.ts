@@ -20,6 +20,10 @@ export type FuelingRequestType = z.infer<typeof FuelingRequestSchema>;
 
 export const GetFuelingRequestSchema = FuelingRequestSchema.extend({
   fuelingId: z.uuid(),
+  createdBy: z.object({
+    name: z.string(),
+    id: z.uuid()
+  }),
   driver: z.object({
     id: z.uuid(),
     name: z.string(),

@@ -1,4 +1,4 @@
-import { CheckCircle2, AlertCircle, XCircle, Fuel, User, Gauge, Calendar, ExternalLink } from "lucide-react"
+import { CheckCircle2, AlertCircle, XCircle, Fuel, User, Gauge, Calendar, ExternalLink, UserCheck } from "lucide-react"
 import { dateToStringDate } from "@/lib/utils"
 import { GetFuelingRequestType } from "@/schemas/fuelingRequest.schema"
 import DeleteBtn from "./DeleteBtn"
@@ -72,6 +72,13 @@ const RequestCard = ({ data }: { data: GetFuelingRequestType }) => {
           <Fuel size={13} className="shrink-0 text-slate-900 sm:w-3.5 sm:h-3.5" />
           <span className="text-slate-900">Volume Solicitado: <strong className="text-slate-900 font-black uppercase">{data.liters === "FULL" ? "Tanque Cheio" : `${data.liters} L`}</strong></span>
         </div>
+
+        {data.createdBy?.name && (
+          <div className="flex items-center gap-2 col-span-1 sm:col-span-2 pt-1 border-t border-slate-100">
+            <UserCheck size={13} className="shrink-0 text-slate-900 sm:w-3.5 sm:h-3.5" />
+            <span className="text-slate-900">Criado por: <strong className="text-slate-900 font-bold uppercase">{data.createdBy.name.replace('_', ' ')}</strong></span>
+          </div>
+        )}
       </div>
         
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pt-1">
@@ -107,4 +114,4 @@ const RequestCard = ({ data }: { data: GetFuelingRequestType }) => {
   )
 }
 
-export default RequestCard
+export default RequestCard;

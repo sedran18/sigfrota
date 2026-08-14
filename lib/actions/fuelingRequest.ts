@@ -11,6 +11,7 @@ import { VehicleIdType } from "@/schemas/vehicle.schema";
 import { Prisma } from "../generated/prisma/client";
 import { toArray } from "../utils";
 import { DateSchema, DateType } from "@/schemas/date.schema";
+import { auth } from "@/auth";
 
 export const getFuelingRequests = async ({
   gasStationsIds,
@@ -86,6 +87,12 @@ export const getFuelingRequests = async ({
         createdAt: 'desc',
       },
       include: {
+        createdBy: {
+          select: {
+            name: true,
+            id: true
+          }
+        },
         fuelings: {
           select: {
             id: true,
@@ -144,6 +151,10 @@ export const createFuelingRequest = async (
     const {gasStationId, ...dados} = v.data;
 
     try {
+        const session = await auth();
+        const createdById = session?.user.id;
+        if (!createdById) return {success: false, error: 'Usuário não logado!'};
+
         const contractFuelId = await getContractFuelByGasStationAndFuelType({gasStationId: gasStationId, fuelType: dados.fuelType});
         if (!contractFuelId.success) return {success:false, error: contractFuelId.error}
 
@@ -176,6 +187,7 @@ export const createFuelingRequest = async (
             data: {
                 ...dados, 
                 odometer, 
+                createdById,
                 liters: String(dados.liters), 
                 status: 'PENDING', 
                 contractFuelId: 
@@ -363,6 +375,12 @@ export const getFuelingRequestById = async (id: FuelingRequestIdType):Promise<Re
         },
         fuelings: {
           select: {
+            id: true,
+          }
+        },
+        createdBy :{
+          select: {
+            name: true, 
             id: true,
           }
         }
