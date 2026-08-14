@@ -329,3 +329,58 @@ export const deleteFueling = async (fId: FuelingIdType): Promise<ResponseType<Fu
 
 //sem update, deleta e cria outra se for preciso
 
+export const getFuelingById = async (fuelingId: FuelingIdType):Promise<ResponseType<GetFuelingType>> => {
+    const v = FuelingIdSchema.safeParse(fuelingId);
+    if (!v.success) return {success: false, error: v.error.message}
+    const id = v.data;
+    try {
+        const fueling = await prisma.fueling.findUnique({
+            where: {
+                id,
+            },
+            include: {
+                contractFuel: {
+                    select: {
+                        contract: {
+                            select: {
+                                gasStation: {
+                                    select: {
+                                        name: true, 
+                                        id: true,
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                driver: {
+                    select: {
+                        name: true,
+                        id: true,
+                    }
+                }, 
+                vehicle: {
+                    select: {
+                        brand: true,
+                        model: true,
+                        plate: true,
+                        id: true,
+                    }
+                }
+            }
+        });
+
+        if (!fueling) return {success: false, error: 'Não foi possível encontrar esse abastecimento'}
+
+        return {success: true, data: {
+            ...fueling, 
+            liters: fueling.liters.toNumber(), 
+            pricePerLiter: fueling.pricePerLiter.toNumber(),
+            totalAmount: fueling.totalAmount.toNumber(),
+            fuelEfficiency: fueling.fuelEfficiency.toNumber()
+        }}
+    } catch (err) {
+        console.log(err);
+        return {success: false, error: 'Erro ao listar abastecimentos'}
+    }
+}

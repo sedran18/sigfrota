@@ -1,10 +1,11 @@
-import { CheckCircle2, AlertCircle, XCircle, Fuel, User, Gauge, Calendar } from "lucide-react"
+import { CheckCircle2, AlertCircle, XCircle, Fuel, User, Gauge, Calendar, ExternalLink } from "lucide-react"
 import { dateToStringDate } from "@/lib/utils"
 import { GetFuelingRequestType } from "@/schemas/fuelingRequest.schema"
 import DeleteBtn from "./DeleteBtn"
 import AddRequest from "../AddRequest"
 import PrintOrderButton from "../PrintOrderButton"
 import AddFueling from "../../abastecimentos/AddFueling"
+import Link from "next/link"
 
 const statusConfig = {
   PENDING: { 
@@ -88,12 +89,16 @@ const RequestCard = ({ data }: { data: GetFuelingRequestType }) => {
           }
 
           
-          {isPending ? (
+          {isPending && !data.fuelingId ? (
             <AddFueling requestId={data.id}/>
           ) : (
-            <span className="w-full sm:w-auto text-center text-[9px] sm:text-[10px] font-bold text-slate-900 uppercase tracking-wider bg-slate-100 border border-slate-200/60 px-3 py-2 select-none flex justify-center items-center">
-              Finalizado em {dateToStringDate(data.updatedAt)}
-            </span>
+          <Link
+            href={`/admin/abastecimentos/${data.fuelingId}`} 
+            className="w-full sm:w-auto h-10 sm:h-11 border border-slate-300 text-slate-900 bg-white hover:bg-slate-50 font-bold text-[10px] sm:text-xs tracking-wider uppercase rounded-none px-4 gap-2 flex items-center justify-center transition-all shadow-sm shrink-0"
+          >
+            <ExternalLink size={14} className="sm:w-4 sm:h-4 shrink-0 text-slate-700" />
+            <span>Ver Abastecimento</span>
+          </Link>
           )}
         </div>
       </div>

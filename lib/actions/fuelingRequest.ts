@@ -86,6 +86,11 @@ export const getFuelingRequests = async ({
         createdAt: 'desc',
       },
       include: {
+        fuelings: {
+          select: {
+            id: true,
+          }
+        },
         driver: {
           select: {
             name: true,
@@ -120,6 +125,7 @@ export const getFuelingRequests = async ({
     const requestsAdjusted = requests.map((req) => ({
       ...req,
       liters: req.liters === 'FULL' ? ('FULL' as const) : Number(req.liters),
+      fuelingId: req.fuelings[0]?.id ?? ''
     }));
 
     return { success: true, data:  requestsAdjusted};
@@ -311,5 +317,68 @@ export const updateFuelingRequest = async (
     }
 
     return { success: false, error: "Erro ao atualizar solicitação." };
+  }
+};
+
+export const getFuelingRequestById = async (id: FuelingRequestIdType):Promise<ResponseType<GetFuelingRequestType>> => {
+  const v = FuelingRequestIdSchema.safeParse(id);
+
+  if (!v.success) return {success: false, error: v.error.message};
+
+  const requestId = v.data;
+
+  try {
+   const request = await prisma.fuelingRequest.findUnique({
+      where: {
+        id: requestId,
+      },
+      include: {
+        driver: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+        vehicle: {
+          select: {
+            brand: true,
+            model: true,
+            year: true,
+            plate: true,
+          },
+        },
+        contractFuel: {
+          select: {
+            contract: {
+              select: {
+                gasStation: {
+                  select: {
+                    name: true,
+                    id: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        fuelings: {
+          select: {
+            id: true,
+          }
+        }
+      },
+    });
+
+    if (!request) return {success: false, error: 'Não foi possível encontrar essa solicitação'};
+
+
+    return { success: true, data:  {
+      ...request,
+      liters: request.liters === 'FULL' ? ('FULL' as const) : Number(request.liters),
+      fuelingId: request.fuelings[0]?.id ?? ''
+    }};
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: 'Erro ao buscar solicitação' };
   }
 };

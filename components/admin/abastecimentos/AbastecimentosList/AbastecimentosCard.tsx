@@ -1,7 +1,7 @@
 import { dateToStringDate } from "@/lib/utils"
 import { FuelType } from "@/schemas/enums.schema"
 import { GetFuelingType } from "@/schemas/fueling.schema"
-import { Calendar, Fuel, Gauge, Activity, FileText, User } from "lucide-react"
+import { Calendar, Fuel, Gauge, Activity, FileText, User, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import DeleteFuelingCard from "./DeleteBtn"
 
@@ -18,8 +18,7 @@ const AbastecimentosCard = ({ data }: { data: GetFuelingType }) => {
   const vehicleLabel = data.vehicle ? `${data.vehicle.brand} ${data.vehicle.model} - ${data.vehicle.plate}` : "N/I"
 
   return (
-    <Link
-      href={`/admin/abastecimentos/${data.id}`}
+    <div
       className="group relative flex flex-col bg-white border border-[var(--border)]
                  rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5
                  transition-all duration-150 overflow-hidden text-[var(--text1)]"
@@ -104,7 +103,18 @@ const AbastecimentosCard = ({ data }: { data: GetFuelingType }) => {
           </div>
         )}
       </div>
-    </Link>
+      {data.requestId && (
+        <div className="flex justify-end border-t border-slate-100 pt-2.5 m-4">
+          <Link
+            href={`/admin/solicitacoes/${data.requestId}`}
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#093a1c] hover:text-[#093a1c]/80 uppercase tracking-wider transition-colors hover:underline"
+          >
+            <span>Ver Solicitação</span>
+            <ExternalLink size={12} className="shrink-0" />
+          </Link>
+        </div>
+      )}
+    </div>
   )
 }
 
