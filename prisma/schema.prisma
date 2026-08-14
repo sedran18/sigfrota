@@ -31,9 +31,8 @@ enum ConservationStatus {
 }
 
 enum RequestStatusSchema {
-  PENDING 
+  PENDING
   COMPLETED
-  CANCELED
 }
 
 enum UserRole {
@@ -48,61 +47,64 @@ model User {
   role     UserRole @default(USER)
   active   Boolean  @default(true)
 
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  createdFuelings        Fueling[]        @relation("FuelingCreatedBy")
+  createdFuelingRequests FuelingRequest[] @relation("FuelingRequestCreatedBy")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("users")
 }
 
 model Driver {
-  id        String   @id @default(uuid()) @db.Uuid
-  name String @db.VarChar(100)
-  phone String? 
+  id     String  @id @default(uuid()) @db.Uuid
+  name   String  @db.VarChar(100)
+  phone  String?
   active Boolean @default(true)
 
   fuelingRequests FuelingRequest[]
-  fuelings Fueling[]
+  fuelings        Fueling[]
 
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("drivers")
 }
 
 model Vehicle {
-  id String @id @default(uuid()) @db.Uuid
-  plate String @unique @db.VarChar(7)
-  model String @db.VarChar(100)
-  brand String @db.VarChar(50)
-  year Int
-  fuelType VehicleFuelType @default(GASOLINA)
-  tankCapacity Decimal @db.Decimal(10, 2)
-  conservationStatus ConservationStatus @default(GOOD)
-  observation String? @db.VarChar(500)
-  averageConsumption Decimal @db.Decimal(5,2)
-  currentOdometer Int
-  active Boolean @default(true)
+  id                 String             @id @default(uuid()) @db.Uuid
+  plate              String             @unique @db.VarChar(7)
+  model              String             @db.VarChar(100)
+  brand              String             @db.VarChar(50)
+  year               Int
+  fuelType           VehicleFuelType    @default(GASOLINA) @map("fuel_type")
+  tankCapacity       Decimal            @map("tank_capacity") @db.Decimal(10, 2)
+  conservationStatus ConservationStatus @default(GOOD) @map("conservation_status")
+  observation        String?            @db.VarChar(500)
+  averageConsumption Decimal            @map("average_consumption") @db.Decimal(5, 2)
+  currentOdometer    Int                @map("current_odometer")
+  active             Boolean            @default(true)
 
   fuelingRequests FuelingRequest[]
-  fuelings Fueling[]
+  fuelings        Fueling[]
 
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("vehicles")
 }
 
 model GasStation {
-  id String @id @default(uuid()) @db.Uuid
-  name String @db.VarChar(100)
-  cnpj String @unique @db.VarChar(18)
-  active Boolean @default(true)
-  address String @db.VarChar(255)
+  id      String  @id @default(uuid()) @db.Uuid
+  name    String  @db.VarChar(100)
+  cnpj    String  @unique @db.VarChar(18)
+  active  Boolean @default(true)
+  address String  @db.VarChar(255)
 
   contracts Contract[]
 
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("gas_stations")
 }
@@ -110,19 +112,19 @@ model GasStation {
 model Contract {
   id String @id @default(uuid()) @db.Uuid
 
-  contractNumber String
+  contractNumber String @map("contract_number")
 
-  startDate DateTime @db.Date
-  endDate DateTime @db.Date
+  startDate DateTime @map("start_date") @db.Date
+  endDate   DateTime @map("end_date") @db.Date
 
-  gasStationId  String  @db.Uuid
-  gasStation  GasStation  @relation(fields: [gasStationId], references: [id], onDelete: Cascade)
+  gasStationId String     @map("gas_station_id") @db.Uuid
+  gasStation   GasStation @relation(fields: [gasStationId], references: [id], onDelete: Cascade)
 
   contractFuels ContractFuel[]
 
-  active Boolean @default(true)
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("contracts")
 }
@@ -130,20 +132,20 @@ model Contract {
 model ContractFuel {
   id String @id @default(uuid()) @db.Uuid
 
-  contractId  String  @db.Uuid
-  contract  Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  contractId String   @db.Uuid
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
 
-  fuelType FuelType
-  pricePerLiter Decimal @db.Decimal(5,2)
-  litersContracted Decimal @db.Decimal(11,2)
-  litersAvailable Decimal @db.Decimal(11,2)
-  litersConsumed Decimal @db.Decimal(11,2)
+  fuelType         FuelType @map("fuel_type")
+  pricePerLiter    Decimal  @map("price_per_liter") @db.Decimal(5, 2)
+  litersContracted Decimal  @map("liters_contracted") @db.Decimal(11, 2)
+  litersAvailable  Decimal  @map("liters_available") @db.Decimal(11, 2)
+  litersConsumed   Decimal  @map("liters_consumed") @db.Decimal(11, 2)
 
   fuelingRequests FuelingRequest[]
-  fuelings Fueling[]
+  fuelings        Fueling[]
 
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("contract_fuels")
 }
@@ -151,54 +153,60 @@ model ContractFuel {
 model FuelingRequest {
   id String @id @default(uuid()) @db.Uuid
 
-  vehicleId String @db.Uuid
-  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+  vehicleId String  @map("vehicle_id") @db.Uuid
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
 
-  driverId String @db.Uuid
-  driver Driver @relation(fields: [driverId], references: [id])
-  
-  contractFuelId String @db.Uuid
-  contractFuel ContractFuel @relation(fields: [contractFuelId], references: [id]) 
+  driverId String @map("driver_id") @db.Uuid
+  driver   Driver @relation(fields: [driverId], references: [id])
 
-  liters String
-  fuelType FuelType
+  contractFuelId String       @map("contract_fuel_id") @db.Uuid
+  contractFuel   ContractFuel @relation(fields: [contractFuelId], references: [id])
+
+  createdById String @map("created_by") @db.Uuid
+  createdBy   User   @relation("FuelingRequestCreatedBy", fields: [createdById], references: [id])
+
+  liters   String
+  fuelType FuelType            @map("fuel_type")
   odometer Int
-  status RequestStatusSchema
+  status   RequestStatusSchema
 
   fuelings Fueling[]
 
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
-  
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
   @@map("fueling_requests")
 }
 
 model Fueling {
   id String @id @default(uuid()) @db.Uuid
 
-  vehicleId String @db.Uuid
-  vehicle Vehicle  @relation(fields: [vehicleId], references: [id])
+  vehicleId String  @map("vehicle_id") @db.Uuid
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
 
-  driverId String @db.Uuid
-  driver Driver @relation(fields: [driverId], references: [id])
+  driverId String @map("driver_id") @db.Uuid
+  driver   Driver @relation(fields: [driverId], references: [id])
 
-  requestId String @db.Uuid @unique
-  request FuelingRequest @relation(fields: [requestId], references: [id])
+  requestId String         @unique @map("request_id") @db.Uuid
+  request   FuelingRequest @relation(fields: [requestId], references: [id])
 
-  contractFuelId String @db.Uuid
-  contractFuel ContractFuel @relation(fields: [contractFuelId], references: [id])
+  contractFuelId String       @map("contract_fuel_id") @db.Uuid
+  contractFuel   ContractFuel @relation(fields: [contractFuelId], references: [id])
 
-	fuelType FuelType
-	odometer Int
-	liters Decimal @db.Decimal(6,2)
-	pricePerLiter Decimal @db.Decimal(6,3)
-	totalAmount Decimal @db.Decimal(10, 2)
-	distanceTraveled Int
-	fuelEfficiency Decimal @db.Decimal(5, 2)
-	observations String? @db.VarChar(150)
+  createdById String @map("created_by") @db.Uuid
+  createdBy   User   @relation("FuelingCreatedBy", fields: [createdById], references: [id])
 
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  fuelType         FuelType @map("fuel_type")
+  odometer         Int
+  liters           Decimal  @db.Decimal(6, 2)
+  pricePerLiter    Decimal  @map("price_per_liter") @db.Decimal(6, 3)
+  totalAmount      Decimal  @map("total_amount") @db.Decimal(10, 2)
+  distanceTraveled Int      @map("distance_traveled")
+  fuelEfficiency   Decimal  @map("fuel_efficiency") @db.Decimal(5, 2)
+  observations     String?  @db.VarChar(150)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("fuelings")
 }
