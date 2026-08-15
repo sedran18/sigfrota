@@ -88,10 +88,13 @@ const RequestCard = ({ data }: { data: GetFuelingRequestType }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-2.5 w-full sm:w-auto">
-          <AddRequest request={data} key={'update'}/>
+
           {
             data.status === 'PENDING' && (
-              <PrintOrderButton data={data}/>
+              <>
+                <AddRequest request={data} key={'update'}/>
+                <PrintOrderButton data={data}/>
+              </>
             )
           }
 
