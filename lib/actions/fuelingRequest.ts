@@ -173,20 +173,11 @@ export const createFuelingRequest = async (
 
         const litersAvailable = contractFuelId.data.litersAvailable;
         if (litersNum > litersAvailable) return {success:false, error: `Não há combustível disponível para esse abastecimento. Combustível restante ${litersAvailable}`}
-
-        const odometer = v.data.odometer ?? vehicle.currentOdometer;
-
-        if (odometer < vehicle.currentOdometer) {
-          return {
-            success: false,
-            error: `O odômetro não pode ser menor que o atual (${vehicle.currentOdometer} km).`,
-          };
-        }
         
         await prisma.fuelingRequest.create({
             data: {
                 ...dados, 
-                odometer, 
+                odometer: vehicle.currentOdometer, 
                 createdById,
                 liters: String(dados.liters), 
                 status: 'PENDING', 
@@ -282,14 +273,6 @@ export const updateFuelingRequest = async (
       };
     }
 
-    const odometer = vCampos.data.odometer ?? vehicle.currentOdometer;
-    if (odometer < vehicle.currentOdometer) {
-      return {
-        success: false,
-        error: `O odômetro não pode ser menor que o atual (${vehicle.currentOdometer} km).`,
-      };
-    }
-
     await prisma.fuelingRequest.update({
       where: {
         id: vId.data,
@@ -300,7 +283,7 @@ export const updateFuelingRequest = async (
       },
       data: {
         ...dados,
-        odometer,
+        odometer: vehicle.currentOdometer,
         liters: String(dados.liters),
         contractFuelId: contractFuelRes.data.id,
       },

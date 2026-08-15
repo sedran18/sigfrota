@@ -51,6 +51,7 @@ export const CreateFuelingRequestSchema = FuelingRequestSchema.omit({
     status: true,
     contractFuelId: true, 
     createdAt: true, 
+    odometer: true,
     updatedAt: true
 }).extend({
     gasStationId: GasStationIdSchema,

@@ -34,7 +34,6 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
       vehicleId: request ? request.vehicleId : '',
       driverId: '',
       gasStationId: '',
-      odometer: 0,
       liters: 'FULL',
     }
   });
@@ -46,15 +45,14 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
   }, [request]);
 
   const { register, handleSubmit, formState, setValue, getValues } = form;
-  const initialOdometer = getValues('odometer');
 
   const fuelType = useWatch({ control: form.control, name: 'fuelType' });
   const litersValue = useWatch({ control: form.control, name: 'liters' });
 
   const onSubmit = async (data: CreateFuelingRequestType) => {
     const res = request
-      ? await updateFuelingRequest(request.id, { ...formDefaults, ...data, odometer: Number(initialOdometer) || null })
-      : await createFuelingRequest({ ...data, odometer: Number(initialOdometer) || null });
+      ? await updateFuelingRequest(request.id, { ...formDefaults, ...data})
+      : await createFuelingRequest(data);
 
     if (!res.success) return form.setError('root', { type: 'manual', message: res.error });
 
@@ -151,7 +149,6 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
 
         <form className="flex flex-col gap-3 sm:gap-4" onSubmit={handleSubmit(onSubmit, onError)}>
           
-          {/* Veículo */}
           <div className="flex flex-col gap-1">
             <Label htmlFor="carro" className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">
               Veículo
@@ -172,7 +169,6 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
             )}
           </div>
 
-          {/* Motorista */}
           <div className="flex flex-col gap-1">
             <Label htmlFor="motorista" className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">
               Motorista
@@ -193,7 +189,6 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
             )}
           </div>
 
-          {/* Posto */}
           <div className="flex flex-col gap-1">
             <Label htmlFor="posto" className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">
               Posto de Combustível
@@ -214,7 +209,6 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
             )}
           </div>
 
-          {/* Combustível */}
           <div className="flex flex-col gap-1">
             <Label htmlFor="combustivel" className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">
               Tipo de Combustível
@@ -234,27 +228,9 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
             )}
           </div>
 
-          {/* Grid responsivo */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             
-            {/* Quilometragem */}
-            <div className="flex flex-col gap-1 justify-end">
-              <Label htmlFor="km" className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                Quilometragem Inicial (KM)
-              </Label>
-              <Input
-                {...register('odometer', { valueAsNumber: true })}
-                id="km"
-                type="number"
-                placeholder="Ex: 145200"
-                className="h-10 sm:h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-600 font-mono text-xs sm:text-sm focus-visible:ring-[#093a1c]"
-              />
-              {formState.errors.odometer && (
-                <span className="text-[10px] sm:text-xs text-red-500">{formState.errors.odometer.message}</span>
-              )}
-            </div>
-
-            {/* Litros */}
+            
             <div className="flex flex-col gap-1 justify-end">
               <label className="flex items-center gap-1.5 text-[11px] sm:text-[13px] font-bold uppercase tracking-wide text-emerald-400 cursor-pointer pb-0.5 select-none">
                 <input
@@ -292,7 +268,6 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
             </div>
           </div>
 
-          {/* Botões do Rodapé */}
           <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3 border-t border-slate-900 pt-3 sm:pt-4 mt-1 sm:mt-2">
             <Button
               type="button"
