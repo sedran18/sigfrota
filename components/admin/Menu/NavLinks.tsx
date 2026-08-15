@@ -3,8 +3,9 @@
 import PaginaComponent from "./PaginaComponent";
 import { usePathname } from "next/navigation";
 import { paginas } from "@/lib/data/paginas";
+import { Dispatch, SetStateAction } from "react";
 
-const NavLinks = ({ isAdmin }: { isAdmin: boolean }) => {
+const NavLinks = ({ isAdmin, setIsOpen }: { isAdmin: boolean, setIsOpen?: Dispatch<SetStateAction<boolean>> }) => {
   const pathname = usePathname();
 
   return (
@@ -14,6 +15,7 @@ const NavLinks = ({ isAdmin }: { isAdmin: boolean }) => {
         if (!isAdmin && p.link.endsWith('usuarios')) return null;
         return (
           <PaginaComponent
+            setIsOpen={setIsOpen}
             iconName={p.iconName}
             pagina={p.pagina}
             link={p.link}

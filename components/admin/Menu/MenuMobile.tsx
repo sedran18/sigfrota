@@ -27,7 +27,6 @@ const MenuMobile = ({ userName, isAdmin }: { userName: string; isAdmin: boolean 
         bg-white border-b border-slate-200
       "
     >
-      {/* Logo Esquerda */}
       <div className="flex items-center gap-2">
         <div className="relative h-8 w-24">
           <Image
@@ -41,14 +40,12 @@ const MenuMobile = ({ userName, isAdmin }: { userName: string; isAdmin: boolean 
         </div>
       </div>
 
-      {/* Título Central */}
       <div className="flex items-center gap-1">
         <span className="text-xs font-black uppercase tracking-widest text-[#093a1c]">
           SIG<span className="text-slate-800">FROTA</span>
         </span>
       </div>
 
-      {/* Botão Hambúrguer / Drawer */}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger 
           className="p-2 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors outline-none cursor-pointer"
@@ -66,7 +63,6 @@ const MenuMobile = ({ userName, isAdmin }: { userName: string; isAdmin: boolean 
             border-l border-slate-200 bg-white
           "
         >
-          {/* Parte Superior com Scroll de Links */}
           <div className="flex flex-col flex-1 min-h-0">
             <div className="h-1.5 w-full bg-[#093a1c] shrink-0" />
             
@@ -76,16 +72,14 @@ const MenuMobile = ({ userName, isAdmin }: { userName: string; isAdmin: boolean 
               </SheetTitle>
             </SheetHeader>
 
-            {/* Container dos links com scroll individual */}
             <div 
               className="flex-1 overflow-y-auto py-2"
-              onClick={() => setOpen(false)} // Fecha o drawer ao clicar em qualquer item da navegação
+              onClick={() => setOpen(false)} 
             >
               <NavLinks isAdmin={isAdmin} />
             </div>
           </div>
 
-          {/* Perfil Fixo no Rodapé */}
           <div className="shrink-0 border-t border-slate-200">
             <UserProfile userName={userName} />
           </div>

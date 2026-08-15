@@ -10,6 +10,7 @@ import {
   UserCheck, 
   LucideIcon 
 } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
 
 const iconsMap: Record<string, LucideIcon> = {
   dashboard: LayoutDashboard,
@@ -27,15 +28,22 @@ interface PaginaComponentProps {
   pagina: string;
   link: string;
   isActive: boolean;
+  setIsOpen?: Dispatch<SetStateAction<boolean>>
 }
 
-const PaginaComponent = ({ iconName, pagina, link, isActive }: PaginaComponentProps) => {
+const PaginaComponent = ({ 
+  iconName, 
+  pagina, 
+  link, 
+  isActive, 
+  setIsOpen }: PaginaComponentProps) => {
   const Icon = iconsMap[iconName] || LayoutDashboard;
   const fullLink = '/admin' + link;
 
   return (
     <Link 
       href={fullLink}
+      onClick={() => setIsOpen?.(false)}
       className={`
         flex items-center gap-3.5 px-5 py-3.5 border-l-4 transition-all duration-150 group select-none
         ${isActive 
