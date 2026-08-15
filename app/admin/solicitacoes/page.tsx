@@ -7,7 +7,7 @@ import { getFuelingRequests } from "@/lib/actions/fuelingRequest"
 import { Inbox } from "lucide-react"
 import { getGasStationsSelect } from "@/lib/actions/gasStation"
 import { getDriversSelect } from "@/lib/actions/driver"
-import { FuelTypeSchema, RequestStatusSchema, RequestStatusType } from "@/schemas/enums.schema"
+import { FuelTypeSchema,  RequestStatusType } from "@/schemas/enums.schema"
 import { FuelingDataProvider } from "@/providers/FuelingDataProvider"
 import { DriverIdType } from "@/schemas/driver.schema"
 import { VehicleIdType } from "@/schemas/vehicle.schema"
@@ -38,13 +38,17 @@ const Solicitacoes = async ({
     getDriversSelect({ id: true, name: true, active: true}),
     getVehiclesSelectByFuelType({ id: true, brand: true, model: true, plate: true, year: true }),
   ])
+  const statusOptions = [
+    { id: "PENDING", name: "Pendente" },
+    { id: "COMPLETED", name: "Concluído" },
+  ];
 
   const filtersConfig: FilterConfig[] = [
     { title: "Posto", paramName: "gasStationsIds", campos: postos.success ? postos.data : [] },
     { title: "Motorista", paramName: "driversIds", campos: motoristas.success ? motoristas.data : [] },
     { title: "Veículos", paramName: "vehiclesIds", campos: veiculos.success ? veiculos.data : [] },
     { title: "Combustível", paramName: "fuelType", campos: FuelTypeSchema.options },
-    { title: "Status", paramName: "status", campos: RequestStatusSchema.options },
+    { title: "Status", paramName: "status", campos: statusOptions },
   ];
 
   const postosAdjusted = postos.success ? postos.data.filter(p => p.active === true) : [];
