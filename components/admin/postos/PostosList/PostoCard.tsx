@@ -1,7 +1,7 @@
 import { FileText, MapPin } from "lucide-react"
 import {GasStationWithUsageType } from "@/schemas/gasStation.schema";
 import AddPosto from "../AddPosto";
-import DeleteBtn from "./DeleteBtn";
+import DeleteGasStationBtn from "./DeleteGasStationBtn";
 
 
 const PostoCard = ({ gasStation, isAdmin }: {gasStation: GasStationWithUsageType, isAdmin: boolean}) => {
@@ -11,7 +11,7 @@ const PostoCard = ({ gasStation, isAdmin }: {gasStation: GasStationWithUsageType
       {
         isAdmin && (
           <div className="w-full flex justify-end">
-            <DeleteBtn gasStationId={gasStation.id} isUsed={gasStation.isUsed} active={gasStation.active}/>
+            <DeleteGasStationBtn gasStationId={gasStation.id} isUsed={gasStation.isUsed} active={gasStation.active}/>
           </div>
         )
       }

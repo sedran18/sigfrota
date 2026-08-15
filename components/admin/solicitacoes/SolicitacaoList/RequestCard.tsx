@@ -1,7 +1,7 @@
 import { CheckCircle2, AlertCircle, XCircle, Fuel, User, Gauge, Calendar, ExternalLink, UserCheck } from "lucide-react"
 import { dateToStringDate } from "@/lib/utils"
 import { GetFuelingRequestType } from "@/schemas/fuelingRequest.schema"
-import DeleteBtn from "./DeleteBtn"
+import DeleteFuelingRequestBtn from "./DeleteFuelingRequestBtn"
 import AddRequest from "../AddRequest"
 import PrintOrderButton from "../PrintOrderButton"
 import AddFueling from "../../abastecimentos/AddFueling"
@@ -35,7 +35,7 @@ const RequestCard = ({ data }: { data: GetFuelingRequestType }) => {
       ${isPending ? "hover:border-slate-300 hover:shadow-md before:absolute before:top-0 before:left-0 before:w-full before:h-[3px] before:bg-emerald-800" : "bg-slate-50/50"}
     `}>
       <div className="w-full flex justify-end">
-        <DeleteBtn status={data.status} fuelingRequestId={data.id}/>
+        <DeleteFuelingRequestBtn status={data.status} fuelingRequestId={data.id}/>
       </div>
       
       <div className="flex justify-between items-start gap-2.5 sm:gap-4">

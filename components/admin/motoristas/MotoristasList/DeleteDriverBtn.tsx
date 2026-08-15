@@ -1,4 +1,4 @@
-// DeleteDriverCard.tsx
+// DeleteDriverBtn.tsx
 "use client";
 import { Button } from "@/components/ui/button";
 import { removeDriver, updateDriver } from "@/lib/actions/driver";
@@ -6,7 +6,7 @@ import { DriverIdSchema, DriverIdType } from "@/schemas/driver.schema";
 import { X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
-const DeleteDriverCard = ({
+const DeleteDriverBtn = ({
   driverId,
   isUsed,
   active,
@@ -56,4 +56,4 @@ const DeleteDriverCard = ({
   );
 };
 
-export default DeleteDriverCard;
+export default DeleteDriverBtn;

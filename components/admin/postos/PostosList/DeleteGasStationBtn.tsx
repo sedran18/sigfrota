@@ -5,7 +5,7 @@ import { Switch } from '@/components/ui/switch';
 import { GasStationIdSchema, GasStationIdType } from '@/schemas/gasStation.schema';
 import { removeGasStation, updateGasStation } from '@/lib/actions/gasStation';
 
-const DeleteGasStationCard = ({gasStationId, isUsed, active}: {gasStationId:GasStationIdType, isUsed: boolean, active: boolean}) => {
+const DeleteGasStationBtn = ({gasStationId, isUsed, active}: {gasStationId:GasStationIdType, isUsed: boolean, active: boolean}) => {
 
     const handleDelete = async (id: GasStationIdType) => {
         //valide aqui e lançe um toast caso der erro
@@ -45,4 +45,4 @@ const DeleteGasStationCard = ({gasStationId, isUsed, active}: {gasStationId:GasS
       );
     };
 
-export default DeleteGasStationCard
+export default DeleteGasStationBtn

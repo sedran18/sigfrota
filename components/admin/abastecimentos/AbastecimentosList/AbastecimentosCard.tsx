@@ -3,7 +3,7 @@ import { FuelType } from "@/schemas/enums.schema"
 import { GetFuelingType } from "@/schemas/fueling.schema"
 import { Calendar, Fuel, Gauge, Activity, FileText, User, ExternalLink, UserCheck } from "lucide-react"
 import Link from "next/link"
-import DeleteFuelingCard from "./DeleteBtn"
+import DeleteFuelingBtn from "./DeleteFuelingBtn"
 
 const fuelBadgeStyles: Record<FuelType, string> = {
   "GASOLINA_COMUM": "bg-slate-100 border-slate-300 text-slate-700",
@@ -24,7 +24,7 @@ const AbastecimentosCard = ({ data }: { data: GetFuelingType }) => {
                  transition-all duration-150 overflow-hidden text-[var(--text1)]"
     >
       <div className="w-full flex justify-end p-2">
-        <DeleteFuelingCard fuelingId={data.id} />
+        <DeleteFuelingBtn fuelingId={data.id} />
       </div>
 
       <span className="absolute left-0 top-0 h-full w-1 bg-[var(--secondary-color)]" />

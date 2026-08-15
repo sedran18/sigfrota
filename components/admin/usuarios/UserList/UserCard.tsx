@@ -1,7 +1,7 @@
 import { ShieldCheck, User as UserIcon } from "lucide-react"
 import { UserListItemType } from "@/schemas/user.schema"
 import EditUser from "./EditUser"
-import DeleteUser from "./DeleteUser"
+import DeleteUserBtn from "./DeleteUserBtn"
 
 const UserCard = ({ usuario }: { usuario: UserListItemType }) => {
   const isAdmin = usuario.role === "ADMIN"
@@ -36,7 +36,7 @@ const UserCard = ({ usuario }: { usuario: UserListItemType }) => {
 
         <div className="flex gap-2">
           <EditUser usuario={usuario} />
-          <DeleteUser id={usuario.id} name={usuario.name} />
+          <DeleteUserBtn id={usuario.id} name={usuario.name} />
         </div>
       </div>
     </div>

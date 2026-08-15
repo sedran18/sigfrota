@@ -4,7 +4,7 @@ import { Trash2 } from "lucide-react"
 import { removeUser } from "@/lib/actions/user"
 import { useState } from "react"
 
-const DeleteUser = ({ id, name }: { id: string; name: string }) => {
+const DeleteUserBtn = ({ id, name }: { id: string; name: string }) => {
   const [loading, setLoading] = useState(false)
 
   const handleDelete = async () => {
@@ -31,4 +31,4 @@ const DeleteUser = ({ id, name }: { id: string; name: string }) => {
   )
 }
 
-export default DeleteUser
+export default DeleteUserBtn

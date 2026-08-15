@@ -2,7 +2,7 @@ import { dateToStringDate } from "@/lib/utils";
 import { DriverWithUsageType } from "@/schemas/driver.schema";
 import { Phone, Calendar } from "lucide-react";
 import AddMotorista from "../AddMotorista";
-import DeleteDriverCard from "./DeleteDriverCard";
+import DeleteDriverBtn from "./DeleteDriverBtn";
 
 const MotoristaCard = ({
   driver,
@@ -26,7 +26,7 @@ const MotoristaCard = ({
 
         {isAdmin && (
           <div className="flex items-center gap-2 shrink-0">
-            <DeleteDriverCard
+            <DeleteDriverBtn
               driverId={driver.id}
               isUsed={driver.isUsed}
               active={driver.active}

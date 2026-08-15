@@ -5,7 +5,7 @@ import { RequestStatusType } from '@/schemas/enums.schema';
 import { deleteFuelingRequest } from '@/lib/actions/fuelingRequest';
 import { FuelingRequestIdType } from '@/schemas/fuelingRequest.schema';
 
-const DeleteFuelingRequestCard = ({fuelingRequestId, status}: {fuelingRequestId: FuelingRequestIdType,status: RequestStatusType}) => {
+const DeleteFuelingRequestBtn = ({fuelingRequestId, status}: {fuelingRequestId: FuelingRequestIdType,status: RequestStatusType}) => {
 
     const handleDelete = async () => {
         const isAssured = confirm('Você tem certeza que deseja excluir essa solicitação? ');
@@ -29,4 +29,4 @@ const DeleteFuelingRequestCard = ({fuelingRequestId, status}: {fuelingRequestId:
              )
     };
 
-export default DeleteFuelingRequestCard
+export default DeleteFuelingRequestBtn

@@ -5,7 +5,7 @@ import { FuelingIdType } from '@/schemas/fueling.schema';
 import { X } from 'lucide-react'
 
 
-const DeleteFuelingCard = ({ fuelingId }: { fuelingId: FuelingIdType }) => {
+const DeleteFuelingBtn = ({ fuelingId }: { fuelingId: FuelingIdType }) => {
 
     const handleDelete = async (e: React.MouseEvent) => {
         e.preventDefault();
@@ -33,4 +33,4 @@ const DeleteFuelingCard = ({ fuelingId }: { fuelingId: FuelingIdType }) => {
     )
 };
 
-export default DeleteFuelingCard
+export default DeleteFuelingBtn;
