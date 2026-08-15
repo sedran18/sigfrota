@@ -1,61 +1,44 @@
 import { z } from "zod";
-import {
-  ConservationStatusSchema,
-  VehicleFuelTypeSchema,
-} from "./enums.schema";
+import { ConservationStatusSchema, VehicleFuelTypeSchema } from "./enums.schema";
 
 export const VehicleSchema = z.object({
-  id: z.uuid({ error: 'ID inválido' }),
-
+  id: z.uuid({ error: "ID inválido" }),
   plate: z
-    .string({ error: 'Placa tem tipo inválido' })
+    .string({ error: "Placa tem tipo inválido" })
     .length(7, { error: "A placa deve conter exatamente 7 caracteres" }),
-
   model: z
-    .string({ error: 'Modelo tem tipo inválido' })
-    .min(2, { error: 'Modelo precisa ter no mínimo 2 caracteres' })
-    .max(100, { error: 'Modelo precisa ter no máximo 100 caracteres' }),
-
+    .string({ error: "Modelo tem tipo inválido" })
+    .min(2, { error: "Modelo precisa ter no mínimo 2 caracteres" })
+    .max(100, { error: "Modelo precisa ter no máximo 100 caracteres" }),
   brand: z
-    .string({ error: 'Marca tem tipo inválido' })
-    .min(2, { error: 'Marca precisa ter no mínimo 2 caracteres' })
-    .max(100, { error: 'Marca precisa ter no máximo 100 caracteres' }),
-
+    .string({ error: "Marca tem tipo inválido" })
+    .min(2, { error: "Marca precisa ter no mínimo 2 caracteres" })
+    .max(100, { error: "Marca precisa ter no máximo 100 caracteres" }),
   year: z
-    .number({ error: 'Ano tem tipo inválido' })
-    .int({ error: 'Ano deve ser um número inteiro' })
-    .min(1900, { error: 'Ano precisa ser no mínimo 1900' }),
-
+    .number({ error: "Ano tem tipo inválido" })
+    .int({ error: "Ano deve ser um número inteiro" })
+    .min(1900, { error: "Ano precisa ser no mínimo 1900" }),
   fuelType: VehicleFuelTypeSchema,
-
   tankCapacity: z
-    .number({ error: 'Capacidade do tanque precisa ser um número' })
-    .positive({ error: 'Capacidade do tanque deve ser maior que zero' }),
-
+    .number({ error: "Capacidade do tanque precisa ser um número" })
+    .positive({ error: "Capacidade do tanque deve ser maior que zero" }),
   conservationStatus: ConservationStatusSchema,
-
   observation: z
-    .string({ error: 'Observação tem tipo inválido' })
-    .max(500, { error: 'Observação pode ter no máximo 500 caracteres' })
+    .string({ error: "Observação tem tipo inválido" })
+    .max(500, { error: "Observação pode ter no máximo 500 caracteres" })
     .nullable()
     .optional(),
-
   averageConsumption: z
-    .number({ error: 'Consumo médio precisa ser um número' })
-    .positive({ error: 'Consumo médio deve ser maior que zero' }),
-
-  active: z.boolean(),
-  
+    .number({ error: "Consumo médio precisa ser um número" })
+    .positive({ error: "Consumo médio deve ser maior que zero" }),
+  active: z.boolean({ error: "Active precisa ser boolean" }),
   currentOdometer: z
-    .number({ error: 'Quilometragem atual precisa ser um número' })
-    .int({ error: 'Quilometragem atual deve ser um número inteiro' })
-    .nonnegative({ error: 'Quilometragem atual não pode ser negativa' }),
-  // active: z.boolean(),
-  createdAt: z.date({ error: 'Data de criação inválida' }),
-
-  updatedAt: z.date({ error: 'Data de atualização inválida' }),
+    .number({ error: "Quilometragem atual precisa ser um número" })
+    .int({ error: "Quilometragem atual deve ser um número inteiro" })
+    .nonnegative({ error: "Quilometragem atual não pode ser negativa" }),
+  createdAt: z.date({ error: "Data de criação inválida" }),
+  updatedAt: z.date({ error: "Data de atualização inválida" }),
 });
-
 export type VehicleType = z.infer<typeof VehicleSchema>;
 
 export const CreateVehicleSchema = VehicleSchema.omit({
@@ -64,39 +47,35 @@ export const CreateVehicleSchema = VehicleSchema.omit({
   createdAt: true,
   updatedAt: true,
 });
-
 export type CreateVehicleType = z.infer<typeof CreateVehicleSchema>;
 
-export const VehicleIdSchema = z.uuid({error: 'Id com formato inválido'})
-export type VehicleIdType = z.infer<typeof VehicleIdSchema>
+export const VehicleIdSchema = z.uuid({ error: "Id com formato inválido" });
+export type VehicleIdType = z.infer<typeof VehicleIdSchema>;
 
 export const UpdateVehicleSchema = CreateVehicleSchema.extend({
-    active: z.boolean({error: 'Active precisa ser boolean'}).default(true),
+  active: z.boolean({ error: "Active precisa ser boolean" }).default(true),
 }).partial();
-
 export type UpdateVehicleType = z.infer<typeof UpdateVehicleSchema>;
 
 export const VehicleWithUsageSchema = VehicleSchema.extend({
-    isUsed: z.boolean({error: 'isUsed precisa ser boolean'})
-})
-
-export type VehicleWithUsageType = z.infer<typeof VehicleWithUsageSchema>
+  isUsed: z.boolean({ error: "isUsed precisa ser boolean" }),
+});
+export type VehicleWithUsageType = z.infer<typeof VehicleWithUsageSchema>;
 
 export const VehicleSelectSchema = z.object({
-  id: z.boolean().optional(),
-  plate: z.boolean().optional(),
-  model: z.boolean().optional(),
-  brand: z.boolean().optional(),
-  year: z.boolean().optional(),
-  fuelType: z.boolean().optional(),
-  tankCapacity:z.boolean().optional(),
-  conservationStatus: z.boolean().optional(),
-  observation: z.boolean().optional(),
-  averageConsumption: z.boolean().optional(),
-  active: z.boolean().optional(),
-  currentOdometer: z.boolean().optional(),
-  createdAt: z.boolean().optional(),
-  updatedAt: z.boolean().optional(),
+  id: z.boolean({ error: "Campo id inválido" }).optional(),
+  plate: z.boolean({ error: "Campo plate inválido" }).optional(),
+  model: z.boolean({ error: "Campo model inválido" }).optional(),
+  brand: z.boolean({ error: "Campo brand inválido" }).optional(),
+  year: z.boolean({ error: "Campo year inválido" }).optional(),
+  fuelType: z.boolean({ error: "Campo fuelType inválido" }).optional(),
+  tankCapacity: z.boolean({ error: "Campo tankCapacity inválido" }).optional(),
+  conservationStatus: z.boolean({ error: "Campo conservationStatus inválido" }).optional(),
+  observation: z.boolean({ error: "Campo observation inválido" }).optional(),
+  averageConsumption: z.boolean({ error: "Campo averageConsumption inválido" }).optional(),
+  active: z.boolean({ error: "Campo active inválido" }).optional(),
+  currentOdometer: z.boolean({ error: "Campo currentOdometer inválido" }).optional(),
+  createdAt: z.boolean({ error: "Campo createdAt inválido" }).optional(),
+  updatedAt: z.boolean({ error: "Campo updatedAt inválido" }).optional(),
 });
-
-export type VehicleSelectType = z.infer<typeof VehicleSelectSchema>
+export type VehicleSelectType = z.infer<typeof VehicleSelectSchema>;

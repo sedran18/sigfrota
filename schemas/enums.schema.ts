@@ -1,42 +1,40 @@
 import { z } from "zod";
 
-// Fuel Type
 export const FuelTypeSchema = z.enum([
   "GASOLINA_COMUM",
   "ETANOL",
   "DIESEL_COMUM",
   "DIESEL_S10",
-  "GASOLINA_ADITIVADA"
-]);
-
+  "GASOLINA_ADITIVADA",
+], {
+  error: "Tipo de combustível inválido",
+});
 export type FuelType = z.infer<typeof FuelTypeSchema>;
 
-
-// Conservation Status
 export const ConservationStatusSchema = z.enum([
   "GOOD",
   "UNDER_MAINTENANCE",
-  "DEFFECTED"
-])  
+  "DEFFECTED",
+], {
+  error: "Status de conservação inválido",
+});
+export type ConservationStatusType = z.infer<typeof ConservationStatusSchema>;
 
-export type ConservationStatusType= z.infer<typeof ConservationStatusSchema>;
-
-
-// Request Status
 export const RequestStatusSchema = z.enum([
-  'PENDING', 
-  'COMPLETED', 
-]);
-
+  "PENDING",
+  "COMPLETED",
+], {
+  error: "Status da solicitação inválido",
+});
 export type RequestStatusType = z.infer<typeof RequestStatusSchema>;
 
-
-// User Role
-export const UserRoleSchema = z.enum(['ADMIN', 'OPERATOR']);
-
+export const UserRoleSchema = z.enum(["ADMIN", "OPERATOR"], {
+  error: "Perfil de usuário inválido",
+});
 export type UserRoleType = z.infer<typeof UserRoleSchema>;
 
-
-//Vehicle Fuel Type
- export const VehicleFuelTypeSchema = z.enum(['GASOLINA', 'ETANOL', 'DIESEL_COMUM', 'DIESEL_S10', 'FLEX']);
- export type VehicleFuelTypeType = z.infer<typeof VehicleFuelTypeSchema>
+export const VehicleFuelTypeSchema = z.enum(
+  ["GASOLINA", "ETANOL", "DIESEL_COMUM", "DIESEL_S10", "FLEX"],
+  { error: "Tipo de combustível do veículo inválido" }
+);
+export type VehicleFuelTypeType = z.infer<typeof VehicleFuelTypeSchema>;

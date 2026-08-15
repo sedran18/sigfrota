@@ -1,49 +1,48 @@
-import z from "zod";
+import { z } from "zod";
 
 export const DriverSchema = z.object({
-    id: z.uuid({error: 'Id com formato inválido'}),
-    name: z.string().min(2, {error: 'Nome deve ter no mínimo 2 caracteres'}).max(100, {error: 'Nome deve ter no máximo 100 caracteres'}),
-    phone: z.string().regex(/^\(?\d{2}\)?\s?9?\d{4}-?\d{4}$/, {error: 'Telefone inválido'}).nullish(),
-    active: z.boolean({error: 'Active precisa ser boolean'}).default(true),
-    createdAt: z.date({error: 'createdAt com formato inválido'}),
-    updatedAt: z.date({error: 'updatedAt com formato inválido'}),    
-})
-
+  id: z.uuid({ error: "Id com formato inválido" }),
+  name: z
+    .string({ error: "Nome tem tipo inválido" })
+    .min(2, { error: "Nome deve ter no mínimo 2 caracteres" })
+    .max(100, { error: "Nome deve ter no máximo 100 caracteres" }),
+  phone: z
+    .string({ error: "Telefone tem tipo inválido" })
+    .regex(/^\(?\d{2}\)?\s?9?\d{4}-?\d{4}$/, { error: "Telefone inválido" })
+    .nullish(),
+  active: z.boolean({ error: "Active precisa ser boolean" }).default(true),
+  createdAt: z.date({ error: "createdAt com formato inválido" }),
+  updatedAt: z.date({ error: "updatedAt com formato inválido" }),
+});
 export type DriverType = z.infer<typeof DriverSchema>;
 
 export const CreateDriverSchema = DriverSchema.omit({
-    id: true,
-    active: true,
-    createdAt: true,
-    updatedAt: true,
-})
-
-export type CreateDriverType = z.infer<typeof CreateDriverSchema>
-
-export const DriverIdSchema = z.uuid({
-  error: "Id precisa ser um UUID válido",
+  id: true,
+  active: true,
+  createdAt: true,
+  updatedAt: true,
 });
+export type CreateDriverType = z.infer<typeof CreateDriverSchema>;
 
+export const DriverIdSchema = z.uuid({ error: "Id precisa ser um UUID válido" });
 export type DriverIdType = z.infer<typeof DriverIdSchema>;
 
 export const UpdateDriverSchema = CreateDriverSchema.extend({
-    active: z.boolean({error: 'Active precisa ser boolean'}).default(true),
+  active: z.boolean({ error: "Active precisa ser boolean" }).default(true),
 }).partial();
 export type UpdateDriverType = z.infer<typeof UpdateDriverSchema>;
 
 export const DriverWithUsageSchema = DriverSchema.extend({
-    isUsed: z.boolean({error: 'isUsed precisa ser boolean'})
-})
-
-export type DriverWithUsageType = z.infer<typeof DriverWithUsageSchema>
+  isUsed: z.boolean({ error: "isUsed precisa ser boolean" }),
+});
+export type DriverWithUsageType = z.infer<typeof DriverWithUsageSchema>;
 
 export const DriverSelectSchema = z.object({
-    id: z.boolean().optional(),
-    name: z.boolean().optional(),
-    phone: z.boolean().optional(),
-    active: z.boolean().optional(),
-    createdAt:z.boolean().optional(),
-    updatedAt: z.boolean().optional(),
-})
-
-export type DriverSelectType = z.infer<typeof DriverSelectSchema>
+  id: z.boolean({ error: "Campo id inválido" }).optional(),
+  name: z.boolean({ error: "Campo name inválido" }).optional(),
+  phone: z.boolean({ error: "Campo phone inválido" }).optional(),
+  active: z.boolean({ error: "Campo active inválido" }).optional(),
+  createdAt: z.boolean({ error: "Campo createdAt inválido" }).optional(),
+  updatedAt: z.boolean({ error: "Campo updatedAt inválido" }).optional(),
+});
+export type DriverSelectType = z.infer<typeof DriverSelectSchema>;
