@@ -1,11 +1,12 @@
 'use client'
 
-const CurvedDivider = () =>  {
+const CurvedDivider = () => {
   return (
     <div 
       className="
-        hidden md:block absolute top-0 bottom-0 
-        left-[54%] -translate-x-1/2 h-full w-32 z-30 pointer-events-none
+        hidden lg:block absolute top-0 bottom-0 
+        left-[57%] -translate-x-[120px]
+        h-full w-32 z-30 pointer-events-none
       "
     >
       <svg
@@ -18,16 +19,16 @@ const CurvedDivider = () =>  {
         <path
           d="M120 0 
              C20 250, 100 750, 120 1000 
-             L120 0 Z"
-          fill="#F8FAFC"
+             L95 1000 
+             C50 700, -60 300, 95 0 Z"
+          fill="#065f46" 
         />
 
         <path
           d="M120 0 
              C20 250, 100 750, 120 1000 
-             L95 1000 
-             C50 700, -60 300, 95 0 Z"
-          fill="#155314" 
+             L120 0 Z"
+          fill="var(--background, #ffffff)"
         />
       </svg>
     </div>

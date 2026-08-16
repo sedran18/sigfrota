@@ -47,7 +47,7 @@ const LoginForm = () => {
 
     return (
             <div className="relative w-full  space-y-8 
-            rounded-sm border border-slate-200/80 bg-[#fefefe] p-12 shadow-[0_0px_30px_rgb(0,0,0,0.04)]">
+            rounded-sm border border-slate-200/80 bg-[#fefefe] py-10 p-4 sm:p-8 lg:p-12 shadow-[0_0px_30px_rgb(0,0,0,0.04)]">
                 <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 p-7 bg-emerald-700 rounded-full">
                    <User className="text-white" size={30}/>
                 </div>
@@ -58,7 +58,7 @@ const LoginForm = () => {
                             Bem vindo!
                         </p>
                         <h1 className="text-sm mt-5 tracking-tight text-[var(--text1)]  mx-auto">
-                            Acesse o sistema integrado de gestão de frota
+                            Sistema Integrado de Gestão de Frota
                         </h1>
                     </div>
                 </div>
