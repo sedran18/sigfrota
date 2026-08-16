@@ -16,7 +16,7 @@ import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
 import { FuelType, FuelTypeSchema,  VehicleFuelTypeType } from "@/schemas/enums.schema";
-import { Prisma } from "../generated/prisma/client";
+import { Prisma } from "@prisma/client";
 
 export const createVehicle = async (item:CreateVehicleType): Promise<ResponseType<string>> => {
     const v = CreateVehicleSchema.safeParse(item);

@@ -4,7 +4,7 @@ import { prisma } from "../prisma";
 import { DateSchema, DateType } from "@/schemas/date.schema";
 import { FuelBarChartItemType, FuelEfficiencyByVehicleType, KPIItemType, LineChartItemType } from "@/schemas/dashboard.schema";
 import { slugify } from "../utils";
-import { Prisma } from "../generated/prisma/client";
+import { Prisma } from "@prisma/client";
 
 export interface RawLineChartItem {
   date: string

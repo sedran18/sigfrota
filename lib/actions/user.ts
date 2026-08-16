@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs"
 import { CreateUserSchema, CreateUserType, UpdateUserSchema, UpdateUserType, UserIdSchema, UserIdType, UserListItemType } from "@/schemas/user.schema"
 import { ResponseType } from "../types"
 import prisma from "../prisma"
-import { Prisma } from "../generated/prisma/client"
+import { Prisma } from "@prisma/client"
 import { requireAdmin } from "../auth-guard";
 import { revalidatePath } from "next/cache"
 

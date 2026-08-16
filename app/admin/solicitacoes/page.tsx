@@ -13,7 +13,7 @@ import { DriverIdType } from "@/schemas/driver.schema"
 import { VehicleIdType } from "@/schemas/vehicle.schema"
 import { GasStationIdType } from "@/schemas/gasStation.schema"
 import { getVehiclesSelectByFuelType } from "@/lib/actions/vehicle"
-import { FuelType } from "@/lib/generated/prisma/enums"
+import { FuelType } from "@prisma/client"
 import { FilterConfig } from "@/lib/types"
 import { DateType } from "@/schemas/date.schema"
 

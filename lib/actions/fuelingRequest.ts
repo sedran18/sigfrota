@@ -8,7 +8,7 @@ import { getContractFuelByGasStationAndFuelType } from "./contract";
 import { GasStationIdType } from "@/schemas/gasStation.schema";
 import { DriverIdType } from "@/schemas/driver.schema";
 import { VehicleIdType } from "@/schemas/vehicle.schema";
-import { Prisma } from "../generated/prisma/client";
+import { Prisma } from "@prisma/client";
 import { toArray } from "../utils";
 import { DateSchema, DateType } from "@/schemas/date.schema";
 import { auth } from "@/auth";

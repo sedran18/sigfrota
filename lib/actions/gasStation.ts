@@ -4,7 +4,7 @@ import { CreateGasStationSchema, CreateGasStationType, GasStationIdSchema, GasSt
 import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
-import { GasStation, Prisma} from "../generated/prisma/client";
+import { GasStation, Prisma} from "@prisma/client";
 
 export const createGasStation = async (item: CreateGasStationType):Promise<ResponseType<string>> => {
         const v = CreateGasStationSchema.safeParse(item);

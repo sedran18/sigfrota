@@ -6,7 +6,7 @@ import { CreateFuelingSchema, CreateFuelingType, FuelingIdSchema, FuelingIdType,
 import { GasStationIdType } from "@/schemas/gasStation.schema";
 import { DriverIdType } from "@/schemas/driver.schema";
 import { VehicleIdType } from "@/schemas/vehicle.schema";
-import { Prisma } from "../generated/prisma/client";
+import { Prisma } from "@prisma/client";
 import { toArray } from "../utils";
 import { FuelType } from "@/schemas/enums.schema";
 import { revalidatePath } from "next/cache";

@@ -12,7 +12,7 @@ import { getGasStationsSelect } from "@/lib/actions/gasStation";
 import { getDriversSelect } from "@/lib/actions/driver";
 import { getVehiclesSelectByFuelType } from "@/lib/actions/vehicle";
 import { FuelTypeSchema } from "@/schemas/enums.schema";
-import { FuelType } from "@/lib/generated/prisma/enums";
+import { FuelType } from "@prisma/client";
 import { DateType } from "@/schemas/date.schema";
 
 

@@ -4,7 +4,7 @@ import { CreateDriverSchema, CreateDriverType, DriverIdSchema, DriverIdType, Dri
 import { ResponseType } from "../types";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
-import { Driver, Prisma} from "../generated/prisma/client";
+import { Driver, Prisma} from "@prisma/client";
 
 export const createDriver = async (item: CreateDriverType):Promise<ResponseType<string>> => {
         const v = CreateDriverSchema.safeParse(item);
