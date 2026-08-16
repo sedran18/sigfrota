@@ -12,6 +12,10 @@ export default auth((req) => {
   const isProtectedRoute = pathname.startsWith("/admin")
   const isAuthRoute = pathname === "/login";
   
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/login", req.nextUrl))
+  }
+
   if (isAuthRoute) {
     if (isLoggedIn) {
       return NextResponse.redirect(new URL("/admin/solicitacoes", req.nextUrl))
@@ -35,5 +39,5 @@ export default auth((req) => {
 })
 
 export const config = {
-  matcher: ["/admin/:path*", "/login"],
+  matcher: ["/", "/admin/:path*", "/login"],
 }
