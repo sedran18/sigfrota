@@ -41,7 +41,7 @@ const AddContrato = ({ postos = [] }: { postos: GasStationWithUsageType[] }) => 
 
   const inputStyles = `
     h-10 sm:h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 
-    placeholder:text-slate-600 text-xs sm:text-sm font-medium focus-visible:ring-[#093a1c]
+    placeholder:text-slate-600 text-xs sm:text-base font-medium focus-visible:ring-[#093a1c]
   `;
 
   const selectStyles = `
@@ -59,7 +59,7 @@ const AddContrato = ({ postos = [] }: { postos: GasStationWithUsageType[] }) => 
       
       <DialogContent className="w-[95vw] sm:max-w-xl max-h-[90vh] overflow-y-auto bg-slate-950 border border-slate-800 rounded-none p-4 sm:p-6 shadow-2xl">
         <DialogHeader className="border-b border-slate-900 pb-2 sm:pb-4 mb-3 sm:mb-4">
-          <DialogTitle className="text-xs sm:text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
+          <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
             Vincular Novo Contrato
           </DialogTitle>
         </DialogHeader>

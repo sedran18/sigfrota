@@ -59,7 +59,7 @@ const PaginaComponent = ({
         `} 
       />
       
-      <span className="text-sm font-bold tracking-wider uppercase truncate">
+      <span className="text-base font-bold tracking-wider uppercase truncate">
         {pagina}
       </span>
     </Link>

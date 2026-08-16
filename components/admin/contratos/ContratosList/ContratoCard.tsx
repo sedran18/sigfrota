@@ -17,7 +17,7 @@ const ContratoCard = ({ contrato, postoName, isAdmin }: { contrato: GetContracts
             <FileText size={13} className="shrink-0 text-slate-900 sm:w-3.5 sm:h-3.5" />
             <span>Nº CONTRATO: {contrato.contractNumber}</span>
           </div>
-          <h3 className="text-sm sm:text-base font-black tracking-wide uppercase mt-0.5 text-slate-900 truncate">
+          <h3 className="text-base sm:text-base font-black tracking-wide uppercase mt-0.5 text-slate-900 truncate">
             {postoName.toUpperCase()}
           </h3>
         </div>
@@ -39,7 +39,7 @@ const ContratoCard = ({ contrato, postoName, isAdmin }: { contrato: GetContracts
           <Calendar size={14} className="shrink-0 text-slate-900 sm:w-4 sm:h-4" />
           <div className="flex flex-col">
             <span className="text-[9px] sm:text-[10px] font-sans normal-case font-medium text-slate-900">Início do Contrato</span>
-            <span className="text-xs sm:text-sm font-black font-mono tracking-tight text-slate-900">
+            <span className="text-xs sm:text-base font-black font-mono tracking-tight text-slate-900">
               {dateToStringDate(contrato.startDate)}
             </span>
           </div>
@@ -49,7 +49,7 @@ const ContratoCard = ({ contrato, postoName, isAdmin }: { contrato: GetContracts
           <Calendar size={14} className="shrink-0 text-slate-900 sm:w-4 sm:h-4" />
           <div className="flex flex-col">
             <span className="text-[9px] sm:text-[10px] font-sans normal-case font-medium text-slate-900">Término do Contrato</span>
-            <span className="text-xs sm:text-sm font-black font-mono tracking-tight text-slate-900">
+            <span className="text-xs sm:text-base font-black font-mono tracking-tight text-slate-900">
               {dateToStringDate(contrato.endDate)}
             </span>
           </div>
@@ -57,7 +57,7 @@ const ContratoCard = ({ contrato, postoName, isAdmin }: { contrato: GetContracts
       </div>
 
       <div className="space-y-2.5 sm:space-y-3">
-        <p className="text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-wide">
+        <p className="text-xs sm:text-base font-bold text-slate-900 uppercase tracking-wide">
           Combustíveis
         </p>
 
@@ -68,7 +68,7 @@ const ContratoCard = ({ contrato, postoName, isAdmin }: { contrato: GetContracts
               className="rounded-none border border-slate-200 bg-white p-3 sm:p-4 shadow-sm"
             >
               <div className="mb-2 sm:mb-3 flex items-center justify-between border-b border-slate-100 pb-1.5 sm:pb-2">
-                <h3 className="font-bold text-xs sm:text-sm text-slate-900 uppercase">
+                <h3 className="font-bold text-xs sm:text-base text-slate-900 uppercase">
                   {fuel.fuelType.includes('_') ? fuel.fuelType.replace('_', ' ') : fuel.fuelType}
                 </h3>
               </div>
@@ -76,28 +76,28 @@ const ContratoCard = ({ contrato, postoName, isAdmin }: { contrato: GetContracts
               <div className="grid grid-cols-2 gap-2 sm:gap-3 text-xs">
                 <div>
                   <p className="text-[10px] sm:text-xs text-slate-900 font-medium">Preço/L</p>
-                  <p className="font-bold text-slate-900 font-mono text-xs sm:text-sm">
+                  <p className="font-bold text-slate-900 font-mono text-xs sm:text-base">
                     R$ {fuel.pricePerLiter.toFixed(2)}
                   </p>
                 </div>
 
                 <div>
                   <p className="text-[10px] sm:text-xs text-slate-900 font-medium">Contratados</p>
-                  <p className="font-bold text-slate-900 font-mono text-xs sm:text-sm">
+                  <p className="font-bold text-slate-900 font-mono text-xs sm:text-base">
                     {fuel.litersContracted} L
                   </p>
                 </div>
 
                 <div>
                   <p className="text-[10px] sm:text-xs text-slate-900 font-medium">Disponíveis</p>
-                  <p className="font-bold text-slate-900 font-mono text-xs sm:text-sm">
+                  <p className="font-bold text-slate-900 font-mono text-xs sm:text-base">
                     {fuel.litersAvailable} L
                   </p>
                 </div>
 
                 <div>
                   <p className="text-[10px] sm:text-xs text-slate-900 font-medium">Consumidos</p>
-                  <p className="font-bold text-slate-900 font-mono text-xs sm:text-sm">
+                  <p className="font-bold text-slate-900 font-mono text-xs sm:text-base">
                     {fuel.litersConsumed} L
                   </p>
                 </div>

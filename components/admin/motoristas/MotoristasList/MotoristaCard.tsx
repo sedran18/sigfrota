@@ -44,7 +44,7 @@ const MotoristaCard = ({
             <span className="text-[9px] text-slate-900 font-sans normal-case font-medium">
               Contato Direto
             </span>
-            <span className="text-sm font-black text-slate-900 font-mono tracking-tight truncate">
+            <span className="text-base font-black text-slate-900 font-mono tracking-tight truncate">
               {driver.phone || "NÃO INFORMADO"}
             </span>
           </div>

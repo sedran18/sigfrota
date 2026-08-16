@@ -36,7 +36,7 @@ const AbastecimentosCard = ({ data }: { data: GetFuelingType }) => {
               <Calendar size={12} className="shrink-0" />
               <span>{formattedDate}</span>
             </div>
-            <h3 className="text-sm font-bold tracking-tight uppercase text-[var(--bg2)] truncate">
+            <h3 className="text-base font-bold tracking-tight uppercase text-[var(--bg2)] truncate">
               {vehicleLabel}
             </h3>
           </div>

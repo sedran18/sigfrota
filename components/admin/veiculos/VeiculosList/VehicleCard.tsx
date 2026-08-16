@@ -27,7 +27,7 @@ const VeiculoCard = ({ vehicle, isAdmin }: {vehicle: VehicleWithUsageType, isAdm
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4">
         <div className="flex flex-col gap-1.5 min-w-0">
           <div className="flex items-center gap-2.5 flex-wrap">
-            <span className="text-sm font-mono font-black tracking-widest text-emerald-900 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5">
+            <span className="text-base font-mono font-black tracking-widest text-emerald-900 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5">
               {vehicle.plate.toUpperCase()}
             </span>
             <span className="text-xs font-bold text-slate-900 tracking-wider flex items-center gap-1">
@@ -53,7 +53,7 @@ const VeiculoCard = ({ vehicle, isAdmin }: {vehicle: VehicleWithUsageType, isAdm
           <Gauge size={16} className="text-slate-900 shrink-0" />
           <div className="flex flex-col">
             <span className="text-[10px] text-slate-900 font-sans normal-case font-medium">Quilometragem Atual</span>
-            <span className="text-sm font-black text-slate-900 font-mono tracking-tight">{vehicle.currentOdometer.toLocaleString()} KM</span>
+            <span className="text-base font-black text-slate-900 font-mono tracking-tight">{vehicle.currentOdometer.toLocaleString()} KM</span>
           </div>
         </div>
 
@@ -61,7 +61,7 @@ const VeiculoCard = ({ vehicle, isAdmin }: {vehicle: VehicleWithUsageType, isAdm
           <Fuel size={16} className="text-slate-900 shrink-0" />
           <div className="flex flex-col">
             <span className="text-[10px] text-slate-900 font-sans normal-case font-medium">Consumo Médio</span>
-            <span className="text-sm font-black text-slate-900 font-mono tracking-tight">{vehicle.averageConsumption.toFixed(1)} KM/L</span>
+            <span className="text-base font-black text-slate-900 font-mono tracking-tight">{vehicle.averageConsumption.toFixed(1)} KM/L</span>
           </div>
         </div>
 

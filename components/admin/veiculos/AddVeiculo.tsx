@@ -56,13 +56,13 @@ const AddVeiculo = ({ vehicle }: { vehicle?: VehicleWithUsageType }) => {
 
   const inputStyles = `
     h-11 w-full rounded-lg bg-slate-900 border border-slate-700 text-slate-100 
-    placeholder:text-slate-500 font-medium text-sm
+    placeholder:text-slate-500 font-medium text-base
     focus:border-[#0f5c2c] focus:ring-1 focus:ring-[#0f5c2c] 
     hover:border-slate-600 transition-all duration-200
   `;
 
   const selectStyles = `
-    h-11 w-full px-3 text-sm font-semibold bg-slate-900 border border-slate-700 text-slate-100 
+    h-11 w-full px-3 text-base font-semibold bg-slate-900 border border-slate-700 text-slate-100 
     rounded-lg cursor-pointer uppercase tracking-wider
     focus:border-[#0f5c2c] focus:ring-1 focus:ring-[#0f5c2c]
     hover:border-slate-600 transition-all duration-200
@@ -90,7 +90,7 @@ const AddVeiculo = ({ vehicle }: { vehicle?: VehicleWithUsageType }) => {
 
         <DialogHeader className="shrink-0 border-b border-slate-800 px-7 sm:px-8 pt-5 sm:pt-8 pb-5 relative">
           <span className="absolute left-0 sm:left-2 top-0 bottom-5 w-1 bg-gradient-to-b from-[#093a1c] to-transparent" />
-          <DialogTitle className="text-sm sm:text-lg font-black uppercase tracking-widest text-white flex items-center gap-2.5 sm:gap-3">
+          <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2.5 sm:gap-3">
             {vehicle ? 'Atualizar Veículo' : 'Integrar Veículo à Frota'}
           </DialogTitle>
         </DialogHeader>
@@ -225,7 +225,7 @@ const AddVeiculo = ({ vehicle }: { vehicle?: VehicleWithUsageType }) => {
                 {...register('observation')}
                 id="observation"
                 placeholder="Detalhes adicionais sobre restrições de uso, sinistros, características especiais..."
-                className="w-full min-h-[80px] sm:min-h-[88px] p-3.5 text-sm bg-slate-900 border border-slate-700 text-slate-100 rounded-lg placeholder:text-slate-500 resize-y focus:border-[#0f5c2c] focus:ring-1 focus:ring-[#0f5c2c] transition-all"
+                className="w-full min-h-[80px] sm:min-h-[88px] p-3.5 text-base bg-slate-900 border border-slate-700 text-slate-100 rounded-lg placeholder:text-slate-500 resize-y focus:border-[#0f5c2c] focus:ring-1 focus:ring-[#0f5c2c] transition-all"
               />
               {formState.errors.observation && <span className="text-rose-400 text-xs mt-1">{formState.errors.observation.message}</span>}
             </div>

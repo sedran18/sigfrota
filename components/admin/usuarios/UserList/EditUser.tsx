@@ -56,7 +56,7 @@ const EditUser = ({ usuario }: { usuario: UserListItemType }) => {
 
       <DialogContent className="sm:max-w-md bg-slate-950 border border-slate-800 text-slate-200 rounded-none p-6 shadow-2xl">
         <DialogHeader className="border-b border-slate-900 pb-4 mb-2">
-          <DialogTitle className="text-sm font-black uppercase tracking-widest text-white">
+          <DialogTitle className="text-base font-black uppercase tracking-widest text-white">
             Editar Usuário
           </DialogTitle>
         </DialogHeader>

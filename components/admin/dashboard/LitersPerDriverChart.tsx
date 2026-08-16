@@ -29,7 +29,7 @@ const LitersPerDriverChart = ({ data = [] }: { data: FuelBarChartItemType[] }) =
   return (
     <Card className="w-full rounded-none border border-slate-200 bg-white shadow-none h-full">
       <CardHeader className="border-b border-slate-100 p-4 sm:p-5">
-        <CardTitle className="flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-900">
+        <CardTitle className="flex items-center gap-2 text-xs sm:text-base font-bold uppercase tracking-wider text-slate-900">
           Consumo por Motorista
         </CardTitle>
         <CardDescription className="pt-0.5 text-[11px] sm:text-xs font-medium text-slate-900">

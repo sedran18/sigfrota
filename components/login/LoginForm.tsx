@@ -57,7 +57,7 @@ const LoginForm = () => {
                         <p className="text-2xl font-bold  mt-4 text-[var(--secondary-color)] uppercase">
                             Bem vindo!
                         </p>
-                        <h1 className="text-sm mt-5 tracking-tight text-[var(--text1)]  mx-auto">
+                        <h1 className="text-base mt-5 tracking-tight text-[var(--text1)]  mx-auto">
                             Sistema Integrado de Gestão de Frota
                         </h1>
                     </div>
@@ -80,7 +80,7 @@ const LoginForm = () => {
                                 onChange={e => setUser(e.target.value)}
                                 disabled={isLoading}
                                 placeholder='Login'
-                                className="w-full pl-10  h-13 border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-sm transition-all bg-white disabled:opacity-60 disabled:cursor-not-allowed"
+                                className="w-full pl-10  h-13 border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-base transition-all bg-white disabled:opacity-60 disabled:cursor-not-allowed"
                             />
                         </div>
                     </div>
@@ -101,7 +101,7 @@ const LoginForm = () => {
                                 onChange={e => setSenha(e.target.value)}
                                 disabled={isLoading}
                                 placeholder='********'
-                                className="w-full h-13 pl-10 pr-10 border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-sm transition-all bg-white disabled:opacity-60 disabled:cursor-not-allowed"
+                                className="w-full h-13 pl-10 pr-10 border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-base transition-all bg-white disabled:opacity-60 disabled:cursor-not-allowed"
                             />
                             <button 
                                 type="button"

@@ -163,7 +163,7 @@ const DateCalendarPicker = () => {
             range_middle: "bg-black text-[#093a1c] rounded-none font-medium",
             range_start: "bg-emerald text-white rounded-none font-bold",
             range_end: "bg-emerald text-white rounded-none font-bold",
-            caption_label: "text-white font-bold text-sm pointer-events-none",
+            caption_label: "text-white font-bold text-base pointer-events-none",
             dropdown_root: "relative inline-flex items-center py-2 px-1 -my-2",
             dropdown: "absolute inset-0 opacity-0 cursor-pointer bg-white text-black",
           }}

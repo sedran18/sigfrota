@@ -24,7 +24,7 @@ const AbastecimentoDetailPage = async ({ params }: SolicitacaoDetailPageProps) =
             <div className="p-3 bg-slate-100 text-slate-500 rounded-none">
               <Inbox size={32} />
             </div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-800">
+            <h3 className="text-base font-bold uppercase tracking-wider text-slate-800">
               Abastecimento não encontrado
             </h3>
             <p className="text-xs text-slate-500">

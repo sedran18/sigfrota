@@ -33,7 +33,7 @@ export default function NotFound() {
             <h1 className="text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl">
               Página não encontrada
             </h1>
-            <p className="text-xs text-slate-600 sm:text-sm">
+            <p className="text-xs text-slate-600 sm:text-base">
               A página que você está tentando acessar não existe ou foi movida.
             </p>
           </div>

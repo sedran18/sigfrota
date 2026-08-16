@@ -13,7 +13,7 @@ const UserCard = ({ usuario }: { usuario: UserListItemType }) => {
           <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${isAdmin ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-600"}`}>
             {isAdmin ? <ShieldCheck size={16} /> : <UserIcon size={16} />}
           </span>
-          <h3 className="text-sm font-black text-slate-800 uppercase tracking-wide truncate">
+          <h3 className="text-base font-black text-slate-800 uppercase tracking-wide truncate">
             {usuario.name}
           </h3>
         </div>

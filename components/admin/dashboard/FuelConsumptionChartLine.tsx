@@ -47,7 +47,7 @@ const FuelConsumptionChartLine = ({ data }: { data: LineChartItemType[] }) => {
     <Card className="w-full rounded-none border border-slate-200 bg-white shadow-none">
       <CardHeader className="border-b border-slate-100 p-4 sm:p-5">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-900">
+          <CardTitle className="flex items-center gap-2 text-xs sm:text-base font-bold uppercase tracking-wider text-slate-900">
             Consumo de Combustível
           </CardTitle>
           <span className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-900">

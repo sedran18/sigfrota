@@ -138,7 +138,7 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
 
       <DialogContent className="w-[95vw] max-w-lg bg-slate-950 border border-slate-800 text-slate-200 rounded-none p-4 sm:p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="border-b border-slate-900 pb-2 sm:pb-3 mb-1 sm:mb-2">
-          <DialogTitle className="text-xs sm:text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
+          <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
             {request ? "Editar Solicitação" : "Adicionar Nova Solicitação"}
           </DialogTitle>
         </DialogHeader>
@@ -260,7 +260,7 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
                   setValue('liters', Number(e.target.value), { shouldValidate: true });
                 }}
                 placeholder={fullTank ? "Tanque Cheio" : "Ex: 45.50"}
-                className="h-10 sm:h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-600 font-mono text-xs sm:text-sm focus-visible:ring-[#093a1c] disabled:opacity-40 disabled:cursor-not-allowed"
+                className="h-10 sm:h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-600 font-mono text-xs sm:text-base focus-visible:ring-[#093a1c] disabled:opacity-40 disabled:cursor-not-allowed"
               />
               {formState.errors.liters && (
                 <span className="text-[10px] sm:text-xs text-red-500">{formState.errors.liters.message}</span>

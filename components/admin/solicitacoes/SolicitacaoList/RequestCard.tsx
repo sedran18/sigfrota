@@ -40,7 +40,7 @@ const RequestCard = ({ data }: { data: GetFuelingRequestType }) => {
       
       <div className="flex justify-between items-start gap-2.5 sm:gap-4">
         <div className="flex flex-col gap-1 min-w-0">
-          <h3 className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide truncate max-w-[200px] sm:max-w-xs">
+          <h3 className="text-xs sm:text-base font-black text-slate-900 uppercase tracking-wide truncate max-w-[200px] sm:max-w-xs">
             {data.vehicle.brand}, {data.vehicle.model}, {data.vehicle.plate}, {data.vehicle.year}
           </h3>
         </div>
@@ -52,7 +52,7 @@ const RequestCard = ({ data }: { data: GetFuelingRequestType }) => {
       </div>
 
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 sm:gap-y-3 gap-x-4 border-t border-b border-slate-100 py-3 sm:py-4 my-0.5 text-xs sm:text-sm text-slate-900">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 sm:gap-y-3 gap-x-4 border-t border-b border-slate-100 py-3 sm:py-4 my-0.5 text-xs sm:text-base text-slate-900">
         <div className="flex items-center gap-2">
           <User size={13} className="shrink-0 text-slate-900 sm:w-3.5 sm:h-3.5" />
           <span className="text-slate-900">Condutor: <strong className="text-slate-900 font-bold uppercase">{data.driver.name}</strong></span>

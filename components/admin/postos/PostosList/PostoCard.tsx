@@ -27,7 +27,7 @@ const PostoCard = ({ gasStation, isAdmin }: {gasStation: GasStationWithUsageType
           <FileText size={16} className="text-slate-900 shrink-0" />
           <div className="flex flex-col">
             <span className="text-[10px] font-sans normal-case font-medium text-slate-900">Documentação</span>
-            <span className="text-sm font-black text-slate-900 font-mono tracking-tight">CNPJ: {gasStation.cnpj}</span>
+            <span className="text-base font-black text-slate-900 font-mono tracking-tight">CNPJ: {gasStation.cnpj}</span>
           </div>
         </div>
 
