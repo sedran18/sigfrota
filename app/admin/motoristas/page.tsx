@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import HeaderTemplate from "@/components/admin/HeaderTemplate";
-import AddMotorista from "@/components/admin/motoristas/AddMotorista";
+import AddDriver from "@/components/admin/motoristas/AddDriver";
 import MotoristasList from "@/components/admin/motoristas/MotoristasList";
 import { getDrivers } from "@/lib/actions/driver";
 import { Inbox } from "lucide-react";
@@ -13,7 +13,7 @@ const Motoristas = async () => {
   return (
     <>
       <HeaderTemplate title="Motoristas">
-        {isAdmin && <AddMotorista />}
+        {isAdmin && <AddDriver />}
       </HeaderTemplate>
 
       {drivers.success && drivers.data.length > 0 ? (

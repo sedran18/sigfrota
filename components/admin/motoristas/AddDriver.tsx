@@ -13,13 +13,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateDriverSchema, CreateDriverType, DriverWithUsageType} from "@/schemas/driver.schema";
+import { CreateDriverSchema, CreateDriverType, DriverWithUsageType } from "@/schemas/driver.schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createDriver, updateDriver } from "@/lib/actions/driver";
 
-
-const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
+const AddDriver = ({ driver }: { driver?: DriverWithUsageType }) => {
   const [open, setOpen] = useState(false);
   const isEditing = !!driver;
 
@@ -32,21 +31,19 @@ const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
   });
 
   useEffect(() => {
-      if (driver) {
-        form.reset({
-          name: driver.name,
-          phone: driver.phone ?? "",   
-        });
-      } else {
-        form.reset({ name: "", phone: "" });
-      }
-    }, [driver, form]);
+    if (driver) {
+      form.reset({
+        name: driver.name,
+        phone: driver.phone ?? "",   
+      });
+    } else {
+      form.reset({ name: "", phone: "" });
+    }
+  }, [driver, form]);
 
-  const router =  useRouter();
+  const router = useRouter();
 
   const handleSubmit = async (data: CreateDriverType) => {
-    console.log(data);
-    console.log(isEditing);
     const motorista = isEditing ? 
       await updateDriver(driver.id, data)
     :
@@ -60,7 +57,6 @@ const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
     form.reset();
     router.refresh();
     setOpen(false);
-
   };
 
   const handleClose = () => {
@@ -70,9 +66,9 @@ const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
 
   const inputStyles = `
     h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 
-     font-medium transition-colors duration-150 text-[11px]  md:text-md lg:text-[12px]
+    font-medium transition-colors duration-150 text-base
     focus-visible:ring-2 focus-visible:ring-[#0f5c2c] focus-visible:ring-offset-0
-    focus-visible:border-[#0f5c2c] hover:border-slate-700
+    focus-visible:border-[#0f5c2c] hover:border-slate-700 w-full min-w-0 font-mono
   `;
 
   const fieldError = (message?: string) =>
@@ -93,18 +89,18 @@ const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
     >
       <DialogTrigger className="bg-[#093a1c] flex items-center justify-center cursor-pointer 
       hover:bg-[#0f5c2c] active:bg-[#093a1c] transition-colors duration-150 
-      text-white font-bold text-xs  tracking-wider uppercase rounded-none 
+      text-white font-bold text-xs tracking-wider uppercase rounded-none 
       h-11 px-4 gap-2 shadow-md hover:shadow-lg hover:shadow-[#093a1c]/30">
-        {driver? <><Edit2 size={16} /> Editar </> : <> <Plus size={16} /> Adicionar Motorista </>} 
+        {driver ? <><Edit2 size={16} /> Editar </> : <><Plus size={16} /> Adicionar Motorista </>} 
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-md bg-slate-950 border border-slate-800 rounded-none p-6 shadow-2xl shadow-black/50 text-white max-h-[90%] overflow-scroll">
+      <DialogContent className="w-[95vw] sm:max-w-md bg-slate-950 border border-slate-800 rounded-none p-4 sm:p-6 shadow-2xl shadow-black/50 text-white max-h-[90vh] overflow-y-auto">
         <DialogHeader className="border-b border-slate-900 pb-4 mb-2 relative">
-          <span className="absolute -left-6 top-0 bottom-4 w-[3px] bg-[#093a1c]" />
-          <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
+          <span className="absolute -left-4 sm:-left-6 top-0 bottom-4 w-[3px] bg-[#093a1c]" />
+          <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2 w-[85%]">
             {driver ? 'Atualizar' : 'Cadastrar Novo'} Condutor
           </DialogTitle>
-          <p className="text-[11px] font-medium  tracking-wide">
+          <p className="text-[11px] font-medium tracking-wide text-slate-400">
             Preencha os dados abaixo
           </p>
         </DialogHeader>
@@ -116,18 +112,17 @@ const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
           </div>
         )}
 
-
         <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-4 text-white">
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1.5 w-full min-w-0">
             <Label
               htmlFor="driver_name"
-              className="text-[10px] font-bold uppercase tracking-wider"
+              className="text-[10px] font-bold uppercase tracking-wider text-slate-400"
             >
               Nome Completo *
             </Label>
 
-            <div className="relative">
-              <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2" />
+            <div className="relative w-full">
+              <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <Input
                 {...form.register("name")}
                 id="driver_name"
@@ -139,16 +134,16 @@ const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
             {fieldError(form.formState.errors.name?.message)}
           </div>
 
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1.5 w-full min-w-0">
             <Label
               htmlFor="driver_phone"
-              className="text-[10px] font-bold uppercase tracking-wider"
+              className="text-[10px] font-bold uppercase tracking-wider text-slate-400"
             >
               Telefone corporativo / pessoal *
             </Label>
 
-            <div className="relative">
-              <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2" />
+            <div className="relative w-full">
+              <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <Input
                 {...form.register("phone")}
                 id="driver_phone"
@@ -161,19 +156,19 @@ const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
             {fieldError(form.formState.errors.phone?.message)}
           </div>
 
-          <div className="flex justify-end gap-3 border-t border-slate-900 pt-4 mt-2">
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3 border-t border-slate-900 pt-4 mt-2">
             <Button
               type="button"
               variant="ghost"
               onClick={handleClose}
-              className="rounded-none cursor-pointer font-bold text-xs tracking-wider uppercase hover:text-white hover:bg-slate-900 transition-colors duration-150"
+              className="rounded-none cursor-pointer font-bold text-xs tracking-wider uppercase hover:text-white hover:bg-slate-900 transition-colors duration-150 text-slate-400"
             >
               Cancelar
             </Button>
             <Button
               type="submit"
               disabled={form.formState.isSubmitting}
-              className="cursor-pointer bg-[#093a1c] hover:bg-[#0f5c2c] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-xs tracking-wider uppercase rounded-none px-1 sm:px-2 md:px-6 h-11 transition-colors duration-150 flex items-center gap-2"
+              className="cursor-pointer bg-[#093a1c] hover:bg-[#0f5c2c] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-xs tracking-wider uppercase rounded-none px-6 h-11 transition-colors duration-150 flex items-center gap-2"
             >
               {form.formState.isSubmitting && <Loader2 size={14} className="animate-spin" />}
               Salvar 
@@ -185,4 +180,4 @@ const AddMotorista = ({driver}: {driver?:DriverWithUsageType}) => {
   );
 };
 
-export default AddMotorista;
+export default AddDriver;

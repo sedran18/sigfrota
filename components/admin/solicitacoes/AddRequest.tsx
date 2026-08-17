@@ -1,6 +1,6 @@
 "use client"
 
-import { Edit2, Plus } from "lucide-react";
+import { Edit2, Plus, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -44,14 +44,14 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
     return { ...requestData, gasStationId: contractFuel.contract.gasStation.id };
   }, [request]);
 
-  const { register, handleSubmit, formState, setValue, getValues } = form;
+  const { register, handleSubmit, formState, setValue } = form;
 
   const fuelType = useWatch({ control: form.control, name: 'fuelType' });
   const litersValue = useWatch({ control: form.control, name: 'liters' });
 
   const onSubmit = async (data: CreateFuelingRequestType) => {
     const res = request
-      ? await updateFuelingRequest(request.id, { ...formDefaults, ...data})
+      ? await updateFuelingRequest(request.id, { ...formDefaults, ...data })
       : await createFuelingRequest(data);
 
     if (!res.success) return form.setError('root', { type: 'manual', message: res.error });
@@ -102,27 +102,33 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
   const fuelTypes = FuelTypeSchema.options;
 
   const selectStyles = `
-    w-full h-10 sm:h-11 px-2.5 text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-200 
-    rounded-none cursor-pointer uppercase tracking-wider outline-none transition-all
+    w-full min-w-0 h-10 sm:h-11 px-2.5 text-base font-semibold bg-slate-900 border border-slate-800 text-slate-200 
+    rounded-none cursor-pointer uppercase tracking-wider outline-none transition-all appearance-none font-mono
     focus:border-[#093a1c] focus:ring-1 focus:ring-[#093a1c]
   `;
 
+  const fieldError = (message?: string) =>
+    message && (
+      <span className="flex items-center gap-1.5 text-[11px] font-medium text-rose-400 mt-1">
+        <AlertCircle size={12} className="shrink-0" />
+        {message}
+      </span>
+    );
+
   const onError = (err: unknown) => {
     console.log("Erros de validação encontrados:", err);
-    alert("Por favor, preencha todos os campos obrigatórios!");
   };
-
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
-      className="
-        flex items-center justify-center gap-2 h-10 sm:h-11 
-        bg-[#093a1c] text-white text-[10px] sm:text-xs font-bold uppercase tracking-wider 
-        rounded-none cursor-pointer shadow-md transition-all duration-150
-        hover:bg-[#093a1c]/90 px-4 whitespace-nowrap shrink-0 w-full sm:w-auto
-      "
-    >
+        className="
+          flex items-center justify-center gap-2 h-10 sm:h-11 
+          bg-[#093a1c] text-white text-[10px] sm:text-xs font-bold uppercase tracking-wider 
+          rounded-none cursor-pointer shadow-md transition-all duration-150
+          hover:bg-[#093a1c]/90 px-4 whitespace-nowrap shrink-0 w-full sm:w-auto
+        "
+      >
         {request ? (
           <>
             <Edit2 size={14} className="sm:w-4 sm:h-4" />
@@ -138,18 +144,21 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
 
       <DialogContent className="w-[95vw] max-w-lg bg-slate-950 border border-slate-800 text-slate-200 rounded-none p-4 sm:p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="border-b border-slate-900 pb-2 sm:pb-3 mb-1 sm:mb-2">
-          <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
+          <DialogTitle className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2 w-[85%]">
             {request ? "Editar Solicitação" : "Adicionar Nova Solicitação"}
           </DialogTitle>
         </DialogHeader>
 
         {formState.errors.root && (
-          <span className="text-[10px] sm:text-xs text-red-500 font-semibold">{formState.errors.root.message}</span>
+          <div className="flex items-center gap-2 bg-rose-950/40 border border-rose-900/60 px-3 py-2 text-xs font-medium text-rose-300 mb-2">
+            <AlertCircle size={14} className="shrink-0" />
+            {formState.errors.root.message}
+          </div>
         )}
 
         <form className="flex flex-col gap-3 sm:gap-4" onSubmit={handleSubmit(onSubmit, onError)}>
           
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 w-full min-w-0">
             <Label htmlFor="carro" className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">
               Veículo
             </Label>
@@ -164,12 +173,10 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
                   </option>
                 ))}
             </select>
-            {formState.errors.vehicleId && (
-              <span className="text-[10px] sm:text-xs text-red-500">{formState.errors.vehicleId.message}</span>
-            )}
+            {fieldError(formState.errors.vehicleId?.message)}
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 w-full min-w-0">
             <Label htmlFor="motorista" className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">
               Motorista
             </Label>
@@ -184,12 +191,10 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
                   </option>
                 ))}
             </select>
-            {formState.errors.driverId && (
-              <span className="text-[10px] sm:text-xs text-red-500">{formState.errors.driverId.message}</span>
-            )}
+            {fieldError(formState.errors.driverId?.message)}
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 w-full min-w-0">
             <Label htmlFor="posto" className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">
               Posto de Combustível
             </Label>
@@ -204,12 +209,10 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
                   </option>
                 ))}
             </select>
-            {formState.errors.gasStationId && (
-              <span className="text-[10px] sm:text-xs text-red-500">{formState.errors.gasStationId.message}</span>
-            )}
+            {fieldError(formState.errors.gasStationId?.message)}
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 w-full min-w-0">
             <Label htmlFor="combustivel" className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">
               Tipo de Combustível
             </Label>
@@ -223,15 +226,11 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
                 </option>
               ))}
             </select>
-            {formState.errors.fuelType && (
-              <span className="text-[10px] sm:text-xs text-red-500">{formState.errors.fuelType.message}</span>
-            )}
+            {fieldError(formState.errors.fuelType?.message)}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            
-            
-            <div className="flex flex-col gap-1 justify-end">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full">
+            <div className="flex flex-col gap-1 justify-end w-full min-w-0">
               <label className="flex items-center gap-1.5 text-[11px] sm:text-[13px] font-bold uppercase tracking-wide text-emerald-400 cursor-pointer pb-0.5 select-none">
                 <input
                   checked={fullTank}
@@ -242,7 +241,7 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
                   }}
                   type="checkbox"
                   id="encher"
-                  className="h-4 w-4 sm:h-5 sm:w-5 accent-[#093a1c] cursor-pointer"
+                  className="h-4 w-4 sm:h-5 sm:w-5 accent-[#093a1c] cursor-pointer font-mono"
                 />
                 Completar tanque
               </label>
@@ -260,11 +259,9 @@ const AddRequest = ({ request }: { request?: GetFuelingRequestType }) => {
                   setValue('liters', Number(e.target.value), { shouldValidate: true });
                 }}
                 placeholder={fullTank ? "Tanque Cheio" : "Ex: 45.50"}
-                className="h-10 sm:h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-600 font-mono text-xs sm:text-base focus-visible:ring-[#093a1c] disabled:opacity-40 disabled:cursor-not-allowed"
+                className="h-10 sm:h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 font-mono placeholder:text-slate-600 font-mono text-base focus-visible:ring-[#093a1c] disabled:opacity-40 disabled:cursor-not-allowed w-full min-w-0"
               />
-              {formState.errors.liters && (
-                <span className="text-[10px] sm:text-xs text-red-500">{formState.errors.liters.message}</span>
-              )}
+              {fieldError(formState.errors.liters?.message)}
             </div>
           </div>
 

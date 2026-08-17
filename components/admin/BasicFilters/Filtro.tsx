@@ -179,7 +179,7 @@ const Filtro = <T extends OptionType>({ title, paramName, campos }: FiltroProps<
                       id={id}
                       checked={isChecked}
                       onChange={() => handleToggle(id)}
-                      className="peer appearance-none h-4 w-4 border border-slate-400 bg-white checked:bg-[#093a1c] checked:border-[#093a1c] cursor-pointer rounded-none transition-all"
+                      className="peer font-mono appearance-none h-4 w-4 border border-slate-400 bg-white checked:bg-[#093a1c] checked:border-[#093a1c] cursor-pointer rounded-none transition-all"
                     />
                     <Check
                       size={11}

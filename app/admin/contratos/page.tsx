@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import AddContrato from "@/components/admin/contratos/AddContrato";
+import AddContract from "@/components/admin/contratos/AddContract";
 import ContratosList from "@/components/admin/contratos/ContratosList";
 import HeaderTemplate from "@/components/admin/HeaderTemplate";
 import { getContracts } from "@/lib/actions/contract";
@@ -15,7 +15,7 @@ const Contratos = async () => {
     return (<>
         <HeaderTemplate title="Contratos">
             {
-                isAdmin && (<AddContrato postos={resPostos.success ? resPostos.data : []}/>)
+                isAdmin && (<AddContract postos={resPostos.success ? resPostos.data : []}/>)
             }
         </HeaderTemplate>
         {

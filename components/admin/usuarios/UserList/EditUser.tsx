@@ -40,7 +40,7 @@ const EditUser = ({ usuario }: { usuario: UserListItemType }) => {
   const selectStyles = `
     w-full h-11 px-3 text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-200 
     rounded-none cursor-pointer uppercase tracking-wider outline-none transition-all
-    focus:border-[#093a1c] focus:ring-1 focus:ring-[#093a1c]
+    focus:border-[#093a1c] focus:ring-1 focus:ring-[#093a1c] font-mono
   `
 
   const handleOpenChange = (isOpen: boolean) => {
@@ -73,7 +73,7 @@ const EditUser = ({ usuario }: { usuario: UserListItemType }) => {
             <Input
               {...register("name")}
               id="name"
-              className="h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 focus-visible:ring-[#093a1c]"
+              className="h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 focus-visible:ring-[#093a1c] font-mono"
             />
           </div>
 
@@ -86,7 +86,7 @@ const EditUser = ({ usuario }: { usuario: UserListItemType }) => {
               id="password"
               type="password"
               placeholder="••••••••"
-              className="h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-600 focus-visible:ring-[#093a1c]"
+              className="h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-600 font-mono focus-visible:ring-[#093a1c]"
             />
           </div>
 
@@ -104,7 +104,7 @@ const EditUser = ({ usuario }: { usuario: UserListItemType }) => {
             <input
               {...register("active")}
               type="checkbox"
-              className="h-4 w-4 accent-[#093a1c] cursor-pointer"
+              className="h-4 w-4 accent-[#093a1c] cursor-pointer font-mono"
             />
             Usuário ativo
           </label>

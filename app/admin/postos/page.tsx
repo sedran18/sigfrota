@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import HeaderTemplate from "@/components/admin/HeaderTemplate";
-import AddPosto from "@/components/admin/postos/AddPosto";
+import AddGasStation from "@/components/admin/postos/AddGasStation";
 import PostosList from "@/components/admin/postos/PostosList";
 import { getGasStations } from "@/lib/actions/gasStation";
 import {  Inbox } from "lucide-react";
@@ -13,7 +13,7 @@ const Postos = async () => {
     return (<>
         <HeaderTemplate title="Postos">
             {
-                isAdmin && (<AddPosto/>)
+                isAdmin && (<AddGasStation />)
             }
         </HeaderTemplate>
         {

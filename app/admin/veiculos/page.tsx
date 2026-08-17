@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import HeaderTemplate from "@/components/admin/HeaderTemplate";
-import AddVeiculo from "@/components/admin/veiculos/AddVeiculo";
+import AddVehicle from "@/components/admin/veiculos/AddVehicle";
 import VeiculosList from "@/components/admin/veiculos/VeiculosList";
 import { getVehicles } from "@/lib/actions/vehicle";
 import {Inbox } from "lucide-react";
@@ -15,7 +15,7 @@ const Veiculos = async () => {
     return (<>
         <HeaderTemplate title="Veículos">
         {
-            isAdmin && (<AddVeiculo />)
+            isAdmin && (<AddVehicle />)
         }
         </HeaderTemplate>
         {vehiclesRes.success && vehiclesRes.data.length > 0 ?

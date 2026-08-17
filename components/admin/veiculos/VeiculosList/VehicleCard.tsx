@@ -1,7 +1,7 @@
 import { Gauge, Fuel, ShieldAlert, FileText,  Calendar } from "lucide-react"
 import {ConservationStatusType } from "@/schemas/enums.schema"
 import DeleteVehicleBtn from "./DeleteVehicleBtn"
-import AddVeiculo from "../AddVeiculo"
+import AddVehicle from "../AddVehicle"
 import { VehicleWithUsageType } from "@/schemas/vehicle.schema"
 
 
@@ -80,7 +80,7 @@ const VeiculoCard = ({ vehicle, isAdmin }: {vehicle: VehicleWithUsageType, isAdm
       {
         isAdmin && (
           <div className="flex h-6 items-center justify-end sm:justify-end  text-xs">
-            <AddVeiculo vehicle={vehicle} />
+            <AddVehicle vehicle={vehicle} />
           </div>
         )
       }

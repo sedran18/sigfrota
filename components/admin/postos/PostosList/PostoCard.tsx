@@ -1,6 +1,6 @@
 import { FileText, MapPin } from "lucide-react"
 import {GasStationWithUsageType } from "@/schemas/gasStation.schema";
-import AddPosto from "../AddPosto";
+import AddGasStation from "../AddGasStation";
 import DeleteGasStationBtn from "./DeleteGasStationBtn";
 
 
@@ -44,7 +44,7 @@ const PostoCard = ({ gasStation, isAdmin }: {gasStation: GasStationWithUsageType
       {
         isAdmin && (
         <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:items-center gap-3 text-xs h-10">
-          <AddPosto gasStation={gasStation}/>
+          <AddGasStation gasStation={gasStation}/>
         </div>
         )
       }

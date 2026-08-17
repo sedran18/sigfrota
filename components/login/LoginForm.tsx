@@ -80,7 +80,7 @@ const LoginForm = () => {
                                 onChange={e => setUser(e.target.value)}
                                 disabled={isLoading}
                                 placeholder='Login'
-                                className="w-full pl-10  h-13 border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-base transition-all bg-white disabled:opacity-60 disabled:cursor-not-allowed"
+                                className="w-full pl-10 font-mono h-13 border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-base transition-all bg-white disabled:opacity-60 disabled:cursor-not-allowed"
                             />
                         </div>
                     </div>
@@ -101,7 +101,7 @@ const LoginForm = () => {
                                 onChange={e => setSenha(e.target.value)}
                                 disabled={isLoading}
                                 placeholder='********'
-                                className="w-full h-13 pl-10 pr-10 border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-base transition-all bg-white disabled:opacity-60 disabled:cursor-not-allowed"
+                                className="w-full h-13 pl-10 pr-10 font-mono border-slate-300 focus:border-emerald-700 focus:ring-emerald-700/20 rounded-sm shadow-none placeholder:text-slate-400 text-base transition-all bg-white disabled:opacity-60 disabled:cursor-not-allowed"
                             />
                             <button 
                                 type="button"

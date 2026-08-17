@@ -2,18 +2,17 @@
 
 import { Input } from "@/components/ui/input";
 import { FuelType, FuelTypeSchema } from "@/schemas/enums.schema";
-import {  useFieldArray, useFormContext } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { CreateContractType } from "@/schemas/contract.schema";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-
 const AddContractFuel = () => {
-    const form = useFormContext<CreateContractType>();
-    const { fields, append, remove } = useFieldArray({
-        control: form.control,
-        name: "contractFuels",
-    });
+  const form = useFormContext<CreateContractType>();
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "contractFuels",
+  });
 
   const fuelTypes: FuelType[] = FuelTypeSchema.options;
 
@@ -51,16 +50,15 @@ const AddContractFuel = () => {
         {fields.map((field, index) => (
           <div
             key={field.id}
-            className="grid grid-cols-1 sm:grid-cols-12 gap-3 p-3 bg-slate-900/50 border border-slate-900 items-end transition-all duration-200 hover:border-slate-800"
+            className="grid grid-cols-12 gap-2 sm:gap-3 p-3 bg-slate-900/50 border border-slate-900 items-end transition-all duration-200 hover:border-slate-800 w-full"
           >
-            {/* Combustível */}
-            <div className="sm:col-span-5 flex flex-col gap-1">
+            <div className="col-span-12 sm:col-span-5 flex flex-col gap-1 w-full min-w-0">
               <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
                 Combustível
               </label>
               <select
                 {...form.register(`contractFuels.${index}.fuelType`)}
-                className="w-full h-10 px-2 rounded-none border border-slate-800 bg-slate-950 text-xs font-semibold text-slate-200 focus:outline-none focus:border-[#093a1c] uppercase"
+                className="w-full h-10 px-2 rounded-none border font-mono border-slate-800 bg-slate-950 text-base font-semibold text-slate-200 focus:outline-none focus:border-[#093a1c] uppercase appearance-none"
               >
                 {fuelTypes.map((fuelType) => (
                   <option value={fuelType} key={fuelType} className="bg-slate-950">
@@ -70,8 +68,7 @@ const AddContractFuel = () => {
               </select>
             </div>
 
-            {/* Preço por Litro */}
-            <div className="sm:col-span-3 flex flex-col gap-1">
+            <div className="col-span-6 sm:col-span-3 flex flex-col gap-1 w-full min-w-0">
               <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
                 Preço / Litro
               </label>
@@ -79,30 +76,28 @@ const AddContractFuel = () => {
                 type="number"
                 step="0.01"
                 placeholder="R$ 0,00"
-                className="h-10 bg-slate-950 border-slate-800 text-slate-100 font-mono text-xs rounded-none focus-visible:ring-[#093a1c]"
+                className="h-10 bg-slate-950 border-slate-800 text-slate-100 text-base rounded-none focus-visible:ring-[#093a1c] w-full min-w-0 font-mono"
                 {...form.register(`contractFuels.${index}.pricePerLiter`, {
                   valueAsNumber: true,
                 })}
               />
             </div>
 
-            {/* Litros Contratados */}
-            <div className="sm:col-span-3 flex flex-col gap-1">
+            <div className="col-span-4 sm:col-span-3 flex flex-col gap-1 w-full min-w-0">
               <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
                 Litros
               </label>
               <Input
                 type="number"
                 placeholder="0"
-                className="h-10 bg-slate-950 border-slate-800 text-slate-100 font-mono text-xs rounded-none focus-visible:ring-[#093a1c]"
+                className="h-10 bg-slate-950 border-slate-800 text-slate-100 text-base rounded-none focus-visible:ring-[#093a1c] w-full min-w-0 font-mono"
                 {...form.register(`contractFuels.${index}.litersContracted`, {
                   valueAsNumber: true,
                 })}
               />
             </div>
 
-            {/* Remover */}
-            <div className="sm:col-span-1 flex justify-end">
+            <div className="col-span-2 sm:col-span-1 flex justify-end">
               <Button
                 type="button"
                 variant="ghost"

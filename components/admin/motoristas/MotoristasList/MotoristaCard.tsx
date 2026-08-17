@@ -1,7 +1,7 @@
 import { dateToStringDate } from "@/lib/utils";
 import { DriverWithUsageType } from "@/schemas/driver.schema";
 import { Phone, Calendar } from "lucide-react";
-import AddMotorista from "../AddMotorista";
+import AddDriver from "../AddDriver";
 import DeleteDriverBtn from "./DeleteDriverBtn";
 
 const MotoristaCard = ({
@@ -53,7 +53,7 @@ const MotoristaCard = ({
 
       {isAdmin && (
         <div className="flex items-center justify-end pt-1">
-          <AddMotorista driver={driver} />
+          <AddDriver driver={driver} />
         </div>
       )}
     </div>
