@@ -27,28 +27,24 @@ const MenuMobile = ({ userName, isAdmin }: { userName: string; isAdmin: boolean 
         bg-white border-b border-slate-200
       "
     >
-      <div className="flex items-center gap-2">
-        <div className="relative h-8 w-24">
+        <div className="relative h-8 w-10">
           <Image
             src="/logo.png"
             alt="Logo Institucional"
             fill
             sizes="96px"
-            className="object-contain object-left"
+            className="object-contain"
             priority
           />
         </div>
-      </div>
 
-      <div className="flex items-center gap-1">
         <span className="text-xs font-black uppercase tracking-widest text-[#093a1c]">
-          SIG<span className="text-slate-800">FROTA</span>
+          SIGFROTA
         </span>
-      </div>
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger 
-          className="p-2 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors outline-none cursor-pointer"
+          className="p-2 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors outline-none cursor-pointer "
           aria-label="Abrir Menu"
         >
           <MenuBtn size={20} />
