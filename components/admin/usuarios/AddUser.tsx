@@ -1,6 +1,6 @@
 "use client"
 
-import { Plus } from "lucide-react"
+import { AlertCircle, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -74,9 +74,10 @@ const selectStyles = `
         </DialogHeader>
 
         {formState.errors.root && (
-          <div className="border border-rose-900 bg-rose-950/40 px-3 py-2 text-xs font-semibold text-rose-400">
+          <span className="flex items-center gap-1.5 text-[11px] font-medium text-rose-400/90 mt-0.5">
+            <AlertCircle size={12} className="shrink-0" />
             {formState.errors.root.message}
-          </div>
+          </span>
         )}
 
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
@@ -91,7 +92,10 @@ const selectStyles = `
               className="h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-600 font-mono text-base focus-visible:ring-[#093a1c] w-full min-w-0"
             />
             {formState.errors.name && (
-              <span className="text-xs text-rose-400">{formState.errors.name.message}</span>
+              <span className="flex items-center gap-1.5 text-[11px] font-medium text-rose-400/90 mt-0.5">
+                <AlertCircle size={12} className="shrink-0" />
+                {formState.errors.name.message}
+              </span>
             )}
           </div>
 
@@ -107,7 +111,10 @@ const selectStyles = `
               className="h-11 rounded-none bg-slate-900 border-slate-800 text-slate-100 placeholder:text-slate-600 font-mono text-base focus-visible:ring-[#093a1c] w-full min-w-0"
             />
             {formState.errors.password && (
-              <span className="text-xs text-rose-400">{formState.errors.password.message}</span>
+              <span className="flex items-center gap-1.5 text-[11px] font-medium text-rose-400/90 mt-0.5">
+                <AlertCircle size={12} className="shrink-0" />
+                {formState.errors.password.message}
+              </span>
             )}
           </div>
 
@@ -120,7 +127,10 @@ const selectStyles = `
               <option value="ADMIN">Administrador</option>
             </select>
             {formState.errors.role && (
-              <span className="text-xs text-rose-400">{formState.errors.role.message}</span>
+              <span className="flex items-center gap-1.5 text-[11px] font-medium text-rose-400/90 mt-0.5">
+                <AlertCircle size={12} className="shrink-0" />
+                {formState.errors.role.message}
+              </span>
             )}
           </div>
 

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react";
-import { Plus } from "lucide-react";
+import { AlertCircle, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -66,9 +66,10 @@ const AddContract = ({ postos = [] }: { postos: GasStationWithUsageType[] }) => 
         </DialogHeader>
 
         {formState.errors.root && (
-          <div className="p-2.5 sm:p-3 bg-red-950/50 border border-red-800 text-red-300 text-[10px] sm:text-xs font-medium">
-            {formState.errors.root.message}
-          </div>
+          <span className="flex items-center gap-1.5 text-[11px] font-medium text-rose-400/90 mt-0.5">
+              <AlertCircle size={12} className="shrink-0" />
+              {formState.errors.root.message}
+          </span>
         )}
 
         <form className="flex flex-col gap-3 sm:gap-4 text-white" onSubmit={handleSubmit(onSubmit)}>
@@ -93,7 +94,8 @@ const AddContract = ({ postos = [] }: { postos: GasStationWithUsageType[] }) => 
               ))}
             </select>
             {formState.errors.gasStationId && (
-              <span className="text-[10px] sm:text-xs text-red-400 font-medium">
+              <span className="flex items-center gap-1.5 text-[11px] font-medium text-rose-400/90 mt-0.5">
+                <AlertCircle size={12} className="shrink-0" />
                 {formState.errors.gasStationId.message}
               </span>
             )}
@@ -111,7 +113,8 @@ const AddContract = ({ postos = [] }: { postos: GasStationWithUsageType[] }) => 
               className={inputStyles}
             />
             {formState.errors.contractNumber && (
-              <span className="text-[10px] sm:text-xs text-red-400 font-medium">
+              <span className="flex items-center gap-1.5 text-[11px] font-medium text-rose-400/90 mt-0.5">
+                <AlertCircle size={12} className="shrink-0" />
                 {formState.errors.contractNumber.message}
               </span>
             )}
@@ -129,7 +132,8 @@ const AddContract = ({ postos = [] }: { postos: GasStationWithUsageType[] }) => 
                 className={`${inputStyles} uppercase`}
               />
               {formState.errors.startDate && (
-                <span className="text-[10px] sm:text-xs text-red-400 font-medium">
+              <span className="flex items-center gap-1.5 text-[11px] font-medium text-rose-400/90 mt-0.5">
+                <AlertCircle size={12} className="shrink-0" />
                   {formState.errors.startDate.message}
                 </span>
               )}
@@ -146,7 +150,8 @@ const AddContract = ({ postos = [] }: { postos: GasStationWithUsageType[] }) => 
                 className={`${inputStyles} uppercase`}
               />
               {formState.errors.endDate && (
-                <span className="text-[10px] sm:text-xs text-red-400 font-medium">
+              <span className="flex items-center gap-1.5 text-[11px] font-medium text-rose-400/90 mt-0.5">
+                <AlertCircle size={12} className="shrink-0" />
                   {formState.errors.endDate.message}
                 </span>
               )}
@@ -157,7 +162,8 @@ const AddContract = ({ postos = [] }: { postos: GasStationWithUsageType[] }) => 
             <AddContractFuel />
           </FormProvider>
           {formState.errors.contractFuels && (
-            <span className="text-[10px] sm:text-xs text-red-400 font-medium">
+            <span className="flex items-center gap-1.5 text-[11px] font-medium text-rose-400/90 mt-0.5">
+              <AlertCircle size={12} className="shrink-0" />
               {formState.errors.contractFuels.message}
             </span>
           )}
