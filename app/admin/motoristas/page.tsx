@@ -6,8 +6,11 @@ import { getDrivers } from "@/lib/actions/driver";
 import { Inbox } from "lucide-react";
 
 const Motoristas = async () => {
-  const drivers = await getDrivers();
-  const session = await auth();
+  const [drivers, session] = await Promise.all([
+    await getDrivers(),
+    await auth()
+  ])
+
   const isAdmin = session?.user.role === "ADMIN";
 
   return (

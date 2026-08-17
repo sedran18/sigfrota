@@ -7,9 +7,12 @@ import { getGasStations } from "@/lib/actions/gasStation";
 import {  Inbox } from "lucide-react";
 
 const Contratos = async () => {
-    const resContratos = await getContracts();
-    const resPostos = await getGasStations();
-    const session = await auth();
+    const [resContratos, resPostos, session] = await Promise.all([
+        await getContracts(),
+        await getGasStations(),
+        await auth()
+    ]);
+
     const isAdmin = session?.user.role === 'ADMIN';
 
     return (<>

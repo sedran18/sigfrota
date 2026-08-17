@@ -12,10 +12,17 @@ const Admin = async ({ searchParams }: {
   searchParams: Promise<{ from?: DateType, to?: DateType }>
 }) => {
   const { from, to } = await searchParams;
-  const lineChartData = await getLineChartData(from, to); 
-  const kpiData = await getKPIData({ from, to });
-  const driverFuelData = await getDriverFuelData({ from, to });
-  const fuelEfficiencyByCarData = await getFuelEfficiencyByCarData({ from, to });
+  const [
+    lineChartData,
+    kpiData,
+    driverFuelData,
+    fuelEfficiencyByCarData,
+  ] = await Promise.all([
+    getLineChartData(from, to),
+    getKPIData({ from, to }),
+    getDriverFuelData({ from, to }),
+    getFuelEfficiencyByCarData({ from, to }),
+  ]);
   
   return (
     <>

@@ -6,8 +6,11 @@ import { getVehicles } from "@/lib/actions/vehicle";
 import {Inbox } from "lucide-react";
 
 const Veiculos = async () => {
-    const vehiclesRes = await getVehicles();
-    const session = await auth();
+    const [vehiclesRes, session] = await Promise.all([
+        await getVehicles(),
+        await auth()
+    ])
+
     const isAdmin = session?.user.role === 'ADMIN';
 
 

@@ -6,8 +6,11 @@ import { getGasStations } from "@/lib/actions/gasStation";
 import {  Inbox } from "lucide-react";
 
 const Postos = async () => {
-    const gasStations = await getGasStations();
-    const session = await auth();
+    const [gasStations, session] = await Promise.all([
+        await getGasStations(),
+        await auth()
+    ]) 
+
     const isAdmin = session?.user.role === 'ADMIN';
     
     return (<>
