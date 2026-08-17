@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import Menu from "@/components/admin/Menu";
+import PageTransition from "@/components/PageTransition";
 
 const AdminLayout = async ({
   children,
@@ -13,7 +14,9 @@ const AdminLayout = async ({
     <div>
       <Menu userName={session?.user.name ?? 'Não identificado'} isAdmin={isAdmin}/>
       <main className="mt-16 md:mt-0 md:ml-50 lg:ml-72">
+      <PageTransition>
         {children}
+      </PageTransition>
       </main>
     </div>
   )
